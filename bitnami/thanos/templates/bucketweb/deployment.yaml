@@ -20,7 +20,7 @@ spec:
       labels: {{- include "thanos.labels" . | nindent 8 }}
         app.kubernetes.io/component: bucketweb
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-configmap.yaml") . | sha256sum }}
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if .Values.bucketweb.podAnnotations }}
         {{- include "thanos.tplValue" (dict "value" .Values.bucketweb.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -49,6 +49,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           args:
+            - tools
             - bucket
             - web
             - --http-address=0.0.0.0:8080
@@ -78,10 +79,17 @@ spec:
           {{- end }}
           volumeMounts:
             - name: objstore-config
+              {{- if .Values.existingObjstoreSecretItems }}
+              mountPath: /conf
+              {{- else }}
               mountPath: /conf/objstore.yml
               subPath: objstore.yml
+              {{- end }}
       volumes:
         - name: objstore-config
-          configMap:
-            name: {{ include "thanos.objstoreConfigmapName" . }}
+          secret:
+            secretName: {{ include "thanos.objstoreSecretName" . }}
+            {{- if .Values.existingObjstoreSecretItems }}
+            items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
+            {{- end }}
 {{- end }}

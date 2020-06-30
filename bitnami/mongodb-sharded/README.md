@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -101,6 +101,7 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `service.loadBalancerIP`                      | Static IP Address to use for LoadBalancer service type                                                                                                    | `nil`                                                    |
 | `service.externalIPs`                         | External IP list to use with ClusterIP service type                                                                                                       | `[]`                                                     |
 | `service.loadBalancerSourceRanges`            | List of IP ranges allowed access to load balancer (if supported)                                                                                          | `[]` (does not add IP range restrictions to the service) |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                                                   |
 | `replicaSetKey`                               | Key used for authentication in the replica sets                                                                                                           | `random alphanumeric string (10)`                        |
 | `usePasswordFile`                             | Have the secrets mounted as a file instead of env vars                                                                                                    | `false`                                                  |
 | `securityContext.enabled`                     | Enable security context                                                                                                                                   | `true`                                                   |
@@ -136,6 +137,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.tolerations`                       | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
 | `configsvr.updateStrategy`                    | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `configsvr.schedulerName`                     | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
+| `configsvr.pdb.enabled`                       | Enable pod disruption budget                                                                                                                              | `false`                                                  |
+| `configsvr.pdb.minAvailable`                  | Minimum number of available config pods allowed (`0` to disable)                                                                                          | `0`                                                      |
+| `configsvr.pdb.maxUnavailable`                | Maximum number of unavailable config pods allowed (`0` to disable)                                                                                        | `1`                                                      |
 | `configsvr.sidecars`                          | Attach additional containers (evaluated as a template)                                                                                                    | `nil`                                                    |
 | `configsvr.initContainers`                    | Add additional init containers (evaluated as a template)                                                                                                  | `nil`                                                    |
 | `configsvr.config`                            | MongoDB configuration                                                                                                                                     | `nil`                                                    |
@@ -153,6 +157,10 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `configsvr.persistence.accessModes`           | Use volume as ReadOnly or ReadWrite                                                                                                                       | `[ReadWriteOnce]`                                        |
 | `configsvr.persistence.size`                  | Size of data volume                                                                                                                                       | `8Gi`                                                    |
 | `configsvr.persistence.annotations`           | Persistent Volume annotations                                                                                                                             | `{}`                                                     |
+| `configsvr.external.host`           | Primary node of an external config server replicaset                                                                                                                              | `nil`                                                     |
+| `configsvr.external.rootPassword`           | Root passworrd of the external config server replicaset                                                                                                                              | `nil`                                                     |
+| `configsvr.external.replicasetName`           | Replicaset name of an external config server                                                                                                                              | `nil`                                                     |
+| `configsvr.external.replicasetKey`           | Replicaset key of an external config server                                                                                                                              | `nil`                                                     |
 
 ### Mongos configuration
 
@@ -168,6 +176,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `mongos.tolerations`                          | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
 | `mongos.updateStrategy`                       | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `mongos.schedulerName`                        | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
+| `mongos.pdb.enabled`                          | Enable pod disruption budget                                                                                                                              | `false`                                                  |
+| `mongos.pdb.minAvailable`                     | Minimum number of available mongo pods allowed (`0` to disable)                                                                                           | `0`                                                      |
+| `mongos.pdb.maxUnavailable`                   | Maximum number of unavailable mongo pods allowed (`0` to disable)                                                                                         | `1`                                                      |
 | `mongos.sidecars`                             | Attach additional containers (evaluated as a template)                                                                                                    | `nil`                                                    |
 | `mongos.initContainers`                       | Add additional init containers (evaluated as a template)                                                                                                  | `nil`                                                    |
 | `mongos.config`                               | MongoDB configuration                                                                                                                                     | `nil`                                                    |
@@ -193,6 +204,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `shardsvr.dataNode.tolerations`               | Toleration labels for pod assignment (evaluated as a template)                                                                                            | `{}`                                                     |
 | `shardsvr.dataNode.updateStrategy`            | Statefulsets update strategy policy (evaluated as a template)                                                                                             | `RollingUpdate`                                          |
 | `shardsvr.dataNode.schedulerName`             | Name of the k8s scheduler (other than default)                                                                                                            | `nil`                                                    |
+| `shardsvr.dataNode.pdb.enabled`               | Enable pod disruption budget                                                                                                                              | `false`                                                  |
+| `shardsvr.dataNode.pdb.minAvailable`          | Minimum number of available data pods allowed (`0` to disable)                                                                                            | `0`                                                      |
+| `shardsvr.dataNode.pdb.maxUnavailable`        | Maximum number of unavailable data pods allowed (`0` to disable)                                                                                          | `1`                                                      |
 | `shardsvr.dataNode.sidecars`                  | Attach additional containers (evaluated as a template)                                                                                                    | `nil`                                                    |
 | `shardsvr.dataNode.initContainers`            | Add additional init containers (evaluated as a template)                                                                                                  | `nil`                                                    |
 | `shardsvr.dataNode.config`                    | MongoDB configuration                                                                                                                                     | `nil`                                                    |
@@ -327,6 +341,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 + metrics.enabled: true
 ```
 
+### Change MongoDB version
+
+To modify the MongoDB version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb-sharded/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
 ### Sharding
 
 This chart deploys a sharded cluster by default. Some characteristics of this chart are:
@@ -377,6 +395,10 @@ extraEnvVars:
 ```
 
 Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Using an external config server
+
+It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
 
 ## Persistence
 
