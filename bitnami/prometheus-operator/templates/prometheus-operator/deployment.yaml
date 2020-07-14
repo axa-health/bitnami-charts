@@ -32,6 +32,9 @@ spec:
       {{- if .Values.operator.tolerations }}
       tolerations: {{- include "prometheus-operator.tplValue" (dict "value" .Values.operator.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.operator.priorityClassName }}
+      priorityClassName: {{ .Values.operator.priorityClassName }}
+      {{- end }}
       affinity:
         {{- if .Values.operator.nodeAffinity }}
         nodeAffinity: {{- include "prometheus-operator.tplValue" (dict "value" .Values.operator.nodeAffinity "context" $) | nindent 10 }}
@@ -72,6 +75,12 @@ spec:
             - --localhost=127.0.0.1
             - --config-reloader-image={{ template "prometheus-operator.configmapReload.image" . }}
             - --prometheus-config-reloader={{ template "prometheus-operator.prometheusConfigReloader.image" . }}
+          {{- if .Values.operator.configReloaderCpu }}
+            - --config-reloader-cpu={{ .Values.operator.configReloaderCpu }}
+          {{- end }}
+          {{- if .Values.operator.configReloaderMemory }}
+            - --config-reloader-memory={{ .Values.operator.configReloaderMemory }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

@@ -18,7 +18,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 2.11+ or Helm 3.0-beta3+
+- Helm 2.12+ or Helm 3.0-beta3+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following tables lists the configurable parameters of the kibana chart and their default values.
 
-|               Parameter                |                                                                        Description                                                                        |                                                 Default                                                 |             |
+| Parameter                              | Description                                                                                                                                               | Default                                                                                                 |             |
 |----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------|
 | `global.imageRegistry`                 | Global Docker image registry                                                                                                                              | `nil`                                                                                                   |             |
 | `global.imagePullSecrets`              | Global Docker registry secret names as an array                                                                                                           | `[]` (does not add image pull secrets to deployed pods)                                                 |             |
@@ -114,7 +114,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `ingress.certManager`                  | Add annotations for cert-manager                                                                                                                          | `false`                                                                                                 |             |
 | `ingress.annotations`                  | Ingress annotations                                                                                                                                       | `[]`                                                                                                    |             |
 | `ingress.hosts[0].name`                | Hostname to your Kibana installation                                                                                                                      | `kibana.local`                                                                                          |             |
-| `ingress.hosts[0].path`                | Path within the url structure                                                                                                                             | `/`                                                                                                     |             |
+| `ingress.hosts[0].path`                | Path within the url structure (evaluated as a template)                                                                                                   | `/`                                                                                                     |             |
 | `ingress.hosts[0].tls`                 | Utilize TLS backend in ingress                                                                                                                            | `false`                                                                                                 |             |
 | `ingress.hosts[0].tlsHosts`            | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                                                                      | `nil`                                                                                                   |             |
 | `ingress.hosts[0].tlsSecret`           | TLS Secret (certificates)                                                                                                                                 | `kibana.local-tls`                                                                                      |             |
@@ -126,6 +126,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `tolerations`                          | Tolerations for pod assignment (evaluated as a template)                                                                                                  | `[]`                                                                                                    |             |
 | `affinity`                             | Affinity for pod assignment (evaluated as a template)                                                                                                     | `{}`                                                                                                    |             |
 | `podAnnotations`                       | Pod annotations (evaluated as a template)                                                                                                                 | `{}`                                                                                                    |             |
+| `podLabels`                            | Extra labels to add to Pod                                                                                                                                | `{}`                                                                                                    |             |
 | `sidecars`                             | Attach additional containers to the pod (evaluated as a template)                                                                                         | `nil`                                                                                                   |             |
 | `initContainers`                       | Add additional init containers to the pod (evaluated as a template)                                                                                       | `nil`                                                                                                   |             |
 | `metrics.enabled`                      | Start a side-car prometheus exporter                                                                                                                      | `false`                                                                                                 |             |
@@ -137,6 +138,8 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `nil`                                                                                                   |             |
 | `elasticsearch.hosts`                  | Array containing the hostnames for the already existing Elasticsearch instances                                                                           | `nil`                                                                                                   |             |
 | `elasticsearch.port`                   | Port for the accessing external Elasticsearch instances                                                                                                   | `nil`                                                                                                   |             |
+| `configuration.server.basePath`                   | Enables you to specify a path to mount Kibana at if you are running behind a proxy. Use the `configuration.server.rewriteBasePath` setting to tell Kibana if it should remove the basePath from requests it receives, and to prevent a deprecation warning at startup. This setting cannot end in a slash (/).  | `nil`                                                                                                   |             |
+| `configuration.server.rewriteBasePath`                   |  Specifies whether Kibana should rewrite requests that are prefixed with server.basePath or require that they are rewritten by your reverse proxy. This setting was effectively always false before Kibana 6.3 and will default to true starting in Kibana 7.0.   | `false`                                                                                                   |             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -173,6 +176,10 @@ This chart includes a `values-production.yaml` file where you can find some para
 - metrics.enabled: false
 + metrics.enabled: true
 ```
+
+### Change Kibana version
+
+To modify the Kibana version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/kibana/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Using custom configuration
 

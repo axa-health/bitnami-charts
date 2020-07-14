@@ -3,16 +3,19 @@ kind: Deployment
 metadata:
   name: {{ include "grafana.fullname" . }}
   labels: {{- include "grafana.labels" . | nindent 4 }}
+    app.kubernetes.io/component: grafana
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "grafana.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: grafana
   {{- if .Values.updateStrategy }}
   strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
       labels: {{- include "grafana.labels" . | nindent 8 }}
+        app.kubernetes.io/component: grafana
       annotations:
         {{- if (include "grafana.createAdminSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -26,8 +29,8 @@ spec:
         {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
     spec:
+      {{- include "grafana.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "grafana.serviceAccountName" . }}
-{{- include "grafana.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
@@ -47,7 +50,7 @@ spec:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: grafana
           image: {{ template "grafana.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
@@ -111,6 +114,9 @@ spec:
               subPath: {{ .subPath | default "" }}
               readOnly: {{ .readOnly }}
             {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
           ports:
             - name: dashboard
               containerPort: 3000
@@ -140,6 +146,9 @@ spec:
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "grafana.tplValue" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
@@ -194,4 +203,7 @@ spec:
         - name: {{ .name }}
           configMap:
             name: {{ .name }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}

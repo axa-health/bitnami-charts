@@ -144,22 +144,22 @@ imagePullSecrets:
 {{- end -}}
 
 {{/*
-Return the Thanos Objstore configuration configmap.
+Return the Thanos Objstore configuration secret.
 */}}
-{{- define "thanos.objstoreConfigmapName" -}}
-{{- if .Values.existingObjstoreConfigmap -}}
-    {{- printf "%s" (tpl .Values.existingObjstoreConfigmap $) -}}
+{{- define "thanos.objstoreSecretName" -}}
+{{- if .Values.existingObjstoreSecret -}}
+    {{- printf "%s" (tpl .Values.existingObjstoreSecret $) -}}
 {{- else -}}
-    {{- printf "%s-objstore-configmap" (include "thanos.fullname" .) -}}
+    {{- printf "%s-objstore-secret" (include "thanos.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return true if a configmap object should be created
+Return true if a secret object should be created
 */}}
-{{- define "thanos.createObjstoreConfigmap" -}}
-{{- if and .Values.objstoreConfig (not .Values.existingObjstoreConfigmap) }}
-    {- true -}}
+{{- define "thanos.createObjstoreSecret" -}}
+{{- if and .Values.objstoreConfig (not .Values.existingObjstoreSecret) }}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -180,7 +180,7 @@ Return true if a configmap object should be created
 */}}
 {{- define "thanos.querier.createSDConfigmap" -}}
 {{- if and .Values.querier.sdConfig (not .Values.querier.existingSDConfigmap) }}
-    {- true -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -201,7 +201,7 @@ Return true if a configmap object should be created
 */}}
 {{- define "thanos.ruler.createConfigmap" -}}
 {{- if and .Values.ruler.config (not .Values.ruler.existingConfigmap) }}
-    {- true -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -363,13 +363,13 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of Thanos - Objstore configuration */}}
 {{- define "thanos.validateValues.objstore" -}}
-{{- if and (or .Values.bucketweb.enabled .Values.compactor.enabled .Values.ruler.enabled .Values.storegateway.enabled) (not (include "thanos.createObjstoreConfigmap" .)) (not .Values.existingObjstoreConfigmap) -}}
+{{- if and (or .Values.bucketweb.enabled .Values.compactor.enabled .Values.ruler.enabled .Values.storegateway.enabled) (not (include "thanos.createObjstoreSecret" .)) ( not .Values.existingObjstoreSecret) -}}
 thanos: objstore configuration
     When enabling Bucket Web, Compactor, Ruler or Store Gateway component,
     you must provide a valid objstore configuration.
     There are three alternatives to provide it:
       1) Provide it using the 'objstoreConfig' parameter
-      2) Provide it using an existing Configmap and using the 'existingObjstoreConfigmap' parameter
+      2) Provide it using an existing Secret and using the 'existingObjstoreSecret' parameter
       3) Put your objstore.yml under the 'files/conf/' directory
 {{- end -}}
 {{- end -}}
@@ -391,5 +391,36 @@ thanos: ruler configuration
       1) Provide it using the 'ruler.config' parameter
       2) Provide it using an existing Configmap and using the 'ruler.existingConfigmap' parameter
       3) Put your ruler.yml under the 'files/conf/' directory
+{{- end -}}
+{{- end -}}
+
+{{/* Service account name
+Usage:
+{{ include "thanos.serviceaccount.name" (dict "component" "bucketweb" "context" $) }}
+*/}}
+{{- define "thanos.serviceaccount.name" -}}
+{{- $name := printf "%s-%s" (include "thanos.fullname" .context) .component -}}
+
+{{- if .context.Values.existingServiceAccount -}}
+    {{- $name = .context.Values.existingServiceAccount -}}
+{{- end -}}
+
+{{- $component := index .context.Values .component -}}
+{{- if $component.serviceAccount.existingServiceAccount -}}
+    {{- $name = $component.serviceAccount.existingServiceAccount -}}
+{{- end -}}
+
+{{- printf "%s" $name -}}
+{{- end -}}
+
+{{/* Service account use existing
+{{- include "thanos.serviceaccount.use-existing" (dict "component" "bucketweb" "context" $) -}}
+*/}}
+{{- define "thanos.serviceaccount.use-existing" -}}
+{{- $component := index .context.Values .component -}}
+{{- if .context.Values.existingServiceAccount -}}
+    {{- true -}}
+{{- else if $component.serviceAccount.existingServiceAccount -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}

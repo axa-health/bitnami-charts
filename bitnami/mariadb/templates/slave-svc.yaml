@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "slave.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: "{{ template "mariadb.name" . }}"
     chart: "{{ template "mariadb.chart" . }}"
@@ -26,21 +27,21 @@ spec:
   {{- end }}
   {{- end }}
   ports:
-  - name: mysql
-    port: {{ .Values.service.port }}
-    targetPort: mysql
-{{- if (eq .Values.service.type "NodePort") }}
-{{- if .Values.service.nodePort }}
-{{- if .Values.service.nodePort.slave }}
-    nodePort: {{ .Values.service.nodePort.slave }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- if .Values.metrics.enabled }}
-  - name: metrics
-    port: 9104
-    targetPort: metrics
-{{- end }}
+    - name: mysql
+      port: {{ .Values.service.port }}
+      targetPort: mysql
+  {{- if (eq .Values.service.type "NodePort") }}
+  {{- if .Values.service.nodePort }}
+  {{- if .Values.service.nodePort.slave }}
+      nodePort: {{ .Values.service.nodePort.slave }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
+  {{- if .Values.metrics.enabled }}
+    - name: metrics
+      port: 9104
+      targetPort: metrics
+  {{- end }}
   selector:
     app: "{{ template "mariadb.name" . }}"
     component: "slave"

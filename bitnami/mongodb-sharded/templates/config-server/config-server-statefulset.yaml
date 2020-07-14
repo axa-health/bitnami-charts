@@ -1,3 +1,4 @@
+{{- if not .Values.configsvr.external.host }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -88,7 +89,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: MONGODB_PRIMARY_HOST
+            - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ printf "%s-configsvr" ( include "mongodb-sharded.fullname" . ) }}
@@ -236,7 +237,7 @@ spec:
             - |-
               #!/bin/sh
               {{- if .Values.usePasswordFile }}
-              export MONGODB_ROOT_PASSWORD="$(< "${MONGODB_ROOT_PASSWORD_FILE}")"
+              export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
               /bin/mongodb_exporter --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin {{ .Values.metrics.extraArgs }}
           {{- if .Values.usePasswordFile }}
@@ -270,6 +271,12 @@ spec:
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
           {{- end }}
           resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+        {{- end }}
+        {{- with $.Values.configsvr.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- end }}
+        {{- with $.Values.common.sidecars }}
+        {{- include "mongodb-sharded.tplValue" ( dict "value" . "context" $ ) | nindent 8}}
         {{- end }}
       volumes:
         - name: replicaset-entrypoint-configmap
@@ -324,3 +331,4 @@ spec:
         - name: datadir
           emptyDir: {}
   {{- end }}
+{{- end }}
