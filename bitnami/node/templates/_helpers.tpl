@@ -42,18 +42,18 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "node.labels" -}}
-app: {{ include "node.name" . }}
-chart: {{ include "node.chart" . }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
+app.kubernetes.io/name: {{ include "node.name" . }}
+helm.sh/chart: {{ include "node.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
 Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 */}}
 {{- define "node.matchLabels" -}}
-app: {{ include "node.name" . }}
-release: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "node.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
@@ -247,4 +247,29 @@ Usage:
     {{- else }}
         {{- tpl (.value | toYaml) .context }}
     {{- end }}
+{{- end -}}
+
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "node.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "node.validateValues.database" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Node - Database */}}
+{{- define "node.validateValues.database" -}}
+{{- if and .Values.mongodb.install .Values.externaldb.enabled -}}
+node: Database
+    You can only use one database.
+    Please choose installing a MongoDB chart (--set mongodb.install=true) or
+    using an external database (--set externaldb.enabled=true)
+{{- end -}}
 {{- end -}}

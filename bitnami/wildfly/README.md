@@ -2,7 +2,7 @@
 
 [Wildfly](http://wildfly.org/) formerly known as JBoss AS, or simply JBoss, is an application server authored by JBoss, now developed by Red Hat. WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -90,6 +90,14 @@ The following tables lists the configurable parameters of the WildFly chart and 
 | `service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                                                      | `Cluster`                                               |
 | `service.loadBalancerIP`             | LoadBalancer service IP address                                                                                                                           | `""`                                                    |
 | `service.annotations`                | Service annotations                                                                                                                                       | `{}`                                                    |
+| `extraVolumes`                       | Extra Volumes                                                                                                                                             | `[]`                                                    |
+| `extraVolumeMounts`                  | Extra Volume Mounts (normally used with extraVolumes)                                                                                                     | `[]`                                                    |
+| `extraEnvVars`                       | Extra Environment Variables                                                                                                                               | `nil`                                                   |
+| `extraEnvVarsCM`                     | Extra Environment Variables ConfigMap                                                                                                                     | `nil`                                                   |
+| `extraEnvVarsSecret`                 | Extra Environment Variables Secret                                                                                                                        | `nil`                                                   | 
+| `sidecars`                           | Sidecar images to add to the pod. Evaluated as a template.                                                                                                | `[]`                                                    |      
+| `livenessProbe`                      | The Kubernetes livenssProbe. Evaluated as a template.                                                                                                     | `{"httpGet": {"path": "/", "port": "http"}, "initialDelaySeconds": 120, "timeoutSeconds": 5, "failureThreshold": 6}` |        
+| `readinessProbe`                     | The Kubernetes readinessProbe. Evaluated as a template.                                                                                                   | `{"httpGet": {"path": "/", "port": "http"}, "initialDelaySeconds": 30, "timeoutSeconds": 3, "periodSeconds": 5}`     |                 
 
 The above parameters map to the env variables defined in [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](http://github.com/bitnami/bitnami-docker-wildfly) image documentation.
 
@@ -119,6 +127,19 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Sidecars
+If you have a need for additional containers to run within the same pod as  Wildfly (e.g. an additional metrics or logging exporter), you can do so via the sidecars config parameter. Simply define your container according to the Kubernetes container spec.
+
+```
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+      containerPort: 1234
+```
+
 ## Persistence
 
 The [Bitnami WildFly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
@@ -134,6 +155,10 @@ By default, the chart is configured to use Kubernetes Security Context to automa
 As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

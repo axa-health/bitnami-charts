@@ -11,11 +11,14 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-    {{- if .Values.podAnnotations }}
-    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $ ) | nindent 6 }}
-    {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $ ) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "ghost.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}

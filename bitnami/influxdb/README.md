@@ -2,7 +2,7 @@
 
 [InfluxDB (TM)](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -89,6 +89,7 @@ The following tables lists the configurable parameters of the InfluxDB (TM) char
 | `influxdb.antiAffinity`                           | Pod anti-affinity policy                                                                                                                                                                  | `soft`                                                  |
 | `influxdb.nodeAffinity`                           | Node affinity policy                                                                                                                                                                      | `{}` (The value is evaluated as a template)             |
 | `influxdb.nodeSelector`                           | Node labels for pod assignment                                                                                                                                                            | `{}` (The value is evaluated as a template)             |
+| `infludb.podManagementPolicy`                     | [Pod Management Policy](https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy): can be `OrderedReady` or `Parallel`                              | `OrderedReady`                                     |
 | `influxdb.tolerations`                            | Tolerations for pod assignment                                                                                                                                                            | `[]` (The value is evaluated as a template)             |
 | `influxdb.securityContext.enabled`                | Enable security context for InfluxDB (TM)                                                                                                                                                      | `true`                                                  |
 | `influxdb.securityContext.fsGroup`                | Group ID for the InfluxDB (TM) filesystem                                                                                                                                                      | `1001`                                                  |
@@ -389,6 +390,10 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
 There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrade
 

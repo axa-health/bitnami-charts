@@ -12,7 +12,7 @@ For example, the following changes have been introduced:
   - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
-## TL;DR;
+## TL;DR
 
 ```
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -65,9 +65,11 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 | Parameter                             | Description                                                                                                                                               | Default                                                 |
 |---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `caBundleSecretName`                  | The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components. | `nil` |
+
 | `commonLabels`                        | Labels to add to all deployed objects                                                                                                                     | `nil`                                                   |
 | `commonAnnotations`                   | Annotations to add to all deployed objects                                                                                                                | `[]`                                                    |
-| `internalTLS.enabled`                   | Use TLS in all Harbor containers objects                                                                                                                | `false`                                                    |
+| `internalTLS.enabled`                 | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                 | `false`                                                 |
 | `logLevel`                            | The log level                                                                                                                                             | `debug`                                                 |
 | `forcePassword`                       | Option to ensure all passwords and keys are set by the user                                                                                               | `false`                                                 |
 | `harborAdminPassword`                 | The initial password of Harbor admin. Change it from portal after launching Harbor                                                                        | _random 10 character long alphanumeric string_          |
@@ -91,28 +93,28 @@ The following tables list the configurable parameters of the Harbor chart and th
 
 ### Traffic Exposure Parameters
 
-| **Parameter**                      | Description                                                                                                                                                                                                                                                                                                                                                                              | Default                |
-|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
-| `service.type`                     | The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer`                                                                                                                                                                                                                                                                                                  | `ClusterIP`            |
-| `service.tls.enabled`              | Enable the tls or not (for external access)                                                                                                                                                                                                                                                                                                                                                                   | `true`                 |
-| `service.tls.existingSecret`           | Fill the name of secret if you want to use your own TLS certificate. The secret contains keys named: `tls.crt` - the certificate (required), `tls.key` - the private key (required), `ca.crt` - the certificate of CA (optional), this enables the download link on portal to download the certificate of CA. These files will be generated automatically if the `secretName` is not set | `nil`                  |
-| `service.tls.notaryExistingSecret`     | By default, the Notary service will use the same cert and key as described above. Fill the name of secret if you want to use a separated one. Only needed when the `service.type` is `ingress`.                                                                                                                                                                                          | `nil`                  |
-| `service.tls.commonName`           | The common name used to generate the certificate, it's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.existingSecret` is null                                                                                                                                                                                                                               | `nil`                  |
-| `service.ports.http`               | The service port Harbor listens on when serving with HTTP                                                                                                                                                                                                                                                                                                                                | `80`                   |
-| `service.ports.https`              | The service port Harbor listens on when serving with HTTPS                                                                                                                                                                                                                                                                                                                               | `443`                  |
-| `service.ports.notary`             | The service port Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                                                                                                                                   | `4443`                 |
-| `service.nodePorts.http`           | The service nodePort Harbor listens on when serving with HTTP                                                                                                                                                                                                                                                                                                                            | `80`                   |
-| `service.nodePorts.https`          | The service nodePort Harbor listens on when serving with HTTPS                                                                                                                                                                                                                                                                                                                           | `443`                  |
-| `service.nodePorts.notaryPort`     | The service nodePort Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                                                                                                                               | `4443`                 |
-| `service.annotations`              | The annotations attached to the loadBalancer service                                                                                                                                                                                                                                                                                                                                     | {}                     |
-| `service.loadBalancerIP`           | Load Balancer IP                                                                                                                                                                                                                                                                                                                                                                         | `nil`                  |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                                                                                                                                                                                                                                                                                     | `Cluster`              |
-| `service.loadBalancerSourceRanges` | List of IP address ranges to assign to loadBalancerSourceRanges                                                                                                                                                                                                                                                                                                                          | []                     |
-| `ingress.enabled`                  | Deploy ingress rules                                                                                                                                                                                                                                                                                                                                                                     | `false`                |
-| `ingress.controller`               | The ingress controller type. Currently supports `default`, `gce` and `ncp`                                                                                                                                                                                                                                                                                                               | `default`              |
-| `ingress.hosts.core`               | The host of Harbor core service in ingress rule                                                                                                                                                                                                                                                                                                                                          | `core.harbor.domain`   |
-| `ingress.hosts.notary`             | The host of Harbor Notary service in ingress rule                                                                                                                                                                                                                                                                                                                                        | `notary.harbor.domain` |
-| `ingress.annotations`              | The annotations used in ingress                                                                                                                                                                                                                                                                                                                                                          | `nil`                  |
+| **Parameter**                      | Description                                                                                                                                                                                                                                                                     | Default                |
+|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| `service.type`                     | The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer`                                                                                                                                                                                         | `LoadBalancer`         |
+| `service.tls.enabled`              | Enable the tls or not (for external access)                                                                                                                                                                                                                                     | `true`                 |
+| `service.tls.existingSecret`       | Existing secret name containing your own TLS certificates. The secret must contain the keys: `tls.crt` - the certificate (required), `tls.key` - the private key (required), `ca.crt` - the certificate of CA (optional). Self-signed TLS certificates will be used otherwise.  | `nil`                  |
+| `service.tls.notaryExistingSecret` | By default, the Notary service will use the same cert and key as described above. Fill the name of secret if you want to use a separated one. Only needed when the `service.type` is `ingress`.                                                                                 | `nil`                  |
+| `service.tls.commonName`           | The common name used to generate the certificate, it's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.existingSecret` is null                                                                                                                  | `nil`                  |
+| `service.ports.http`               | The service port Harbor listens on when serving with HTTP                                                                                                                                                                                                                       | `80`                   |
+| `service.ports.https`              | The service port Harbor listens on when serving with HTTPS                                                                                                                                                                                                                      | `443`                  |
+| `service.ports.notary`             | The service port Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                          | `4443`                 |
+| `service.nodePorts.http`           | The service nodePort Harbor listens on when serving with HTTP                                                                                                                                                                                                                   | `nil`                  |
+| `service.nodePorts.https`          | The service nodePort Harbor listens on when serving with HTTPS                                                                                                                                                                                                                  | `nil`                  |
+| `service.nodePorts.notary`         | The service nodePort Notary listens on. Only needed when `notary.enabled` is set to `true`                                                                                                                                                                                      | `nil`                  |
+| `service.annotations`              | The annotations attached to the loadBalancer service                                                                                                                                                                                                                            | {}                     |
+| `service.loadBalancerIP`           | Load Balancer IP                                                                                                                                                                                                                                                                | `nil`                  |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                                                                                                                                                                            | `Cluster`              |
+| `service.loadBalancerSourceRanges` | List of IP address ranges to assign to loadBalancerSourceRanges                                                                                                                                                                                                                 | []                     |
+| `ingress.enabled`                  | Deploy ingress rules                                                                                                                                                                                                                                                            | `false`                |
+| `ingress.controller`               | The ingress controller type. Currently supports `default`, `gce` and `ncp`                                                                                                                                                                                                      | `default`              |
+| `ingress.hosts.core`               | The host of Harbor core service in ingress rule                                                                                                                                                                                                                                 | `core.harbor.domain`   |
+| `ingress.hosts.notary`             | The host of Harbor Notary service in ingress rule                                                                                                                                                                                                                               | `notary.harbor.domain` |
+| `ingress.annotations`              | The annotations used in ingress                                                                                                                                                                                                                                                 | `nil`                  |
 
 ### Persistence Parameters
 
@@ -278,7 +280,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `coreImage.pullPolicy`      | Harbor Core image pull policy                                                                                                                                                                                                                                                            | `IfNotPresent`                                          |
 | `coreImage.pullSecrets`     | Specify docker-registry secret names as an array                                                                                                                                                                                                                                         | `[]` (does not add image pull secrets to deployed pods) |
 | `coreImage.debug`           | Specify if debug logs should be enabled                                                                                                                                                                                                                                                  | `false`                                                 |
-| `core.secretKey`            | The key used for encryption. Must be a string of 16 chars                                                                                                                                                                                                                                | `not-a-secure-key`                                      |
+| `core.secretKey`            | The key used for encryption. Must be a string of 16 chars                                                                                                                                                                                                                                | Random 16 character long alphanumeric string            |
 | `core.uaaSecretName`        | If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.                                                                                                                                                      | ``                                                      |
 | `core.tls.existingSecret`                 | Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated                                                     | `nil`                                                   |
 | `core.csrfKey`              | CSRF key                                                                                                                                                                                                                                                                                 | ``                                                      |
@@ -327,7 +329,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `jobservice.tolerations`          | Tolerations for pod assignment                                                                                                                               | `[]` (The value is evaluated as a template)             |
 | `jobservice.affinity`             | Node/Pod affinities                                                                                                                                          | `{}` (The value is evaluated as a template)             |
 | `jobservice.podAnnotations`       | Annotations to add to the jobservice pod                                                                                                                     | `{}`                                                    |
-| `jobservice.secret`               | Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars. |                                                         |
+| `jobservice.secret`               | Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars. | Random 16 character long alphanumeric string            |
 | `jobservice.livenessProbe`        | Liveness probe configuration for Job Service                                                                                                                 | `Check values.yaml file`                                |
 | `jobservice.readinessProbe`       | Readines probe configuration for Job Service                                                                                                                 | `Check values.yaml file`                                |
 | `jobservice.extraEnvVars`         | Array containing extra env vars                                                                                                                              | `nil`                                                   |
@@ -548,7 +550,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `notary.signer.tolerations`          | Tolerations for pod assignment                                                                                                                                                                                                                                                                               | `[]`                                                    |
 | `notary.signer.affinity`             | Node/Pod affinities                                                                                                                                                                                                                                                                                          | `{}`                                                    |
 | `notary.signer.podAnnotations`       | Annotations to add to the notary pod                                                                                                                                                                                                                                                                         | `{}`                                                    |
-| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `tls.ca`, `tls.crt` and `tls.key` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
+| `notary.secretName`                  | Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `notary-signer-ca.crt`, `notary-signer.key` and `notary-signer.crt` that contain the CA, certificate and private key. They will be generated if not set. | `nil`                                                   |
 | `notary.server.extraEnvVars`         | Array containing extra env vars                                                                                                                                                                                                                                                                              | `nil`                                                   |
 | `notary.server.extraEnvVarsCM`       | ConfigMap containing extra env vars                                                                                                                                                                                                                                                                          | `nil`                                                   |
 | `notary.server.extraEnvVarsSecret`   | Secret containing extra env vars (in case of sensitive data)                                                                                                                                                                                                                                                 | `nil`                                                   |
@@ -638,6 +640,7 @@ The following tables list the configurable parameters of the Harbor chart and th
 | `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `nil`                            |
 | `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`                       |
 | `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `not-a-secure-database-password` |
+| `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{"maxConnections": "1024"}`     |
 | `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`                          |
 | `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`                           |
 | `postgresql.initdbScripts`              | Initdb scripts to create Harbor databases                                                                 | `See values.yaml file`           |
@@ -737,6 +740,12 @@ This chart includes a `values-production.yaml` file where you can find some para
 + postgresql.replication.enabled: true
 ```
 
+- Internal TLS is enabled by default:
+```diff
+- internalTLS.enabled: false
++ internalTLS.enabled: true
+```
+
 ### Configure the way how to expose Harbor service:
 
 - **Ingress**: The ingress controller must be installed in the Kubernetes cluster.
@@ -784,7 +793,7 @@ core:
       value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the .extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
 
 ### Configure the external URL:
 
@@ -824,20 +833,35 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
 ## Upgrade
 
 > NOTE: In you are upgrading an installation that contains a high amount of data, it is recommended to disable the liveness/readiness probes as the migration can take a substantial amount of time.
+
+## 8.0.0
+
+Redis dependency version was bumped to the new major version `11.x.x`, which introduced breaking changes regarding sentinel. By default, this Chart does not use of this feature and hence no issues are expected between upgrades. You may refer to [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1100) for further information.
+
+## 7.0.0
+
+This major version include a major change in the PostgreSQL subchart labeling. Backwards compatibility from previous versions to this one is not guarantee during the upgrade.
+
+You can find more information about the changes in the PostgreSQL subchart and a way to workaround the `helm upgrade` issue in the ["Upgrade to 9.0.0"](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#900) section of the PostgreSQL README.
 
 ## 6.0.0 to 6.0.2
 
 Due to an issue with Trivy volumeClaimTemplates, the upgrade needs to be done in two steps:
 
-  - Upgrade the chart to 6.0.2 with `trivy.enabled=false`
+- Upgrade the chart to 6.0.2 with `trivy.enabled=false`
 
 ```console
 $ helm upgrade bitnami/chart --version 6.0.2 --set trivy.enabled=false <REST OF THE UPGRADE PARAMETERS>
 ```
-  - Execute a new upgrade setting `trivy.enabled=true`
+
+- Execute a new upgrade setting `trivy.enabled=true`
 
 ```console
 $ helm upgrade bitnami/chart --set trivy.enabled=true <REST OF THE UPGRADE PARAMETERS>
@@ -849,8 +873,8 @@ The chart was changed to adapt to the common Bitnami chart standards. Now it inc
 
 No issues are expected between upgrades but please double check the updated parameter list as some of them could have been renamed. Please pay special attention to the following changes:
 
-  - `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
-  - `secretKey` has been moved to `core.secretKey`.
+- `service.type=ingress` is not allowed anymore. Instead, set the value `ingress.enabled=true`.
+- `secretKey` has been moved to `core.secretKey`.
 
 ## 4.0.0
 

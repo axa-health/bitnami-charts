@@ -3,7 +3,7 @@
 
 [Redis](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 # Testing configuration
@@ -440,8 +440,6 @@ tls.certKeyFilename="cert.key"
 tls.certCAFilename="ca.pem"
 ```
 
-> **Note TLS and Prometheus Metrics**: Current version of Redis Metrics Exporter (v1.6.1 at the time of writing) does not fully support the use of TLS. By enabling both features, the metric reporting pod may not work as expected. See Redis Metrics Exporter issue [387](https://github.com/oliver006/redis_exporter/issues/387) for more information.
-
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as Redis (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
@@ -513,7 +511,7 @@ Note that this will not disable transparent huge tables.
 
 ## Helm Upgrade
 
- By default `cluster.init` will be set to `true` in order to initialize the Redis Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
+By default `cluster.init` will be set to `true` in order to initialize the Redis Cluster in the first installation. If for testing purposes you only want to deploy or upgrade the nodes but avoiding the creation of the cluster you can set `cluster.init` to `false`.
 
 ## Persistence
 
@@ -544,6 +542,10 @@ networkPolicy:
   ingressNSPodMatchLabels:
     redis-client: true
 ```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 

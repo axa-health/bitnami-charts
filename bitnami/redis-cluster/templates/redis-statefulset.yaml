@@ -34,7 +34,7 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
       {{- if .Values.redis.podAnnotations }}
-      {{- toYaml .Values.podAnnotations | nindent 8 }}
+      {{- toYaml .Values.redis.podAnnotations | nindent 8 }}
       {{- end }}
       {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
       {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
@@ -73,7 +73,7 @@ spec:
           {{- end }}
           {{- if .Values.redis.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.redis.command "context" $) | nindent 12 }}
-          {{- else if .Values.cluster.externalAccess.enabled }}
+          {{- else }}
           command: ['/bin/bash', '-c']
           {{- end }}
           {{- if .Values.redis.args }}
@@ -81,12 +81,25 @@ spec:
           {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
               export REDIS_NODES="${ips[@]}"
-              /entrypoint.sh /run.sh
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
+          {{- else }}
+          args:
+            - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  echo COPYING FILE
+                  cp  /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
           {{- end }}
           {{- if .Values.redis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
@@ -147,8 +160,9 @@ spec:
               value: {{ .Values.redis.port | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 8 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.redis.extraEnvVarsCM .Values.redis.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.redis.extraEnvVarsCM }}
             - configMapRef:
@@ -158,6 +172,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.redis.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: tcp-redis
               containerPort: {{ .Values.redis.port }}
@@ -253,7 +268,10 @@ spec:
               value: {{ template "redis-cluster.tlsCertKey" . }}
             - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "redis-cluster.tlsCert" . }}
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             {{- end }}
+          {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
             {{- if .Values.usePasswordFile }}
             - name: redis-password
@@ -264,6 +282,7 @@ spec:
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
             {{- end }}
+          {{- end }}
           ports:
             - name: http-metrics
               containerPort: 9121
@@ -280,7 +299,7 @@ spec:
         - name: volume-permissions
           image: {{ include "redis-cluster.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.containerSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
+          command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
             runAsUser: 0
           resources:
@@ -308,7 +327,7 @@ spec:
             runAsUser: 0
         {{- end }}
         {{- if .Values.redis.initContainers }}
-        {{- toYaml .Values.redis.initContainers | nindent 10 }}
+        {{- toYaml .Values.redis.initContainers | nindent 8 }}
         {{- end }}
       {{- end }}
       volumes:
@@ -339,7 +358,7 @@ spec:
         - name: redis-tmp-conf
           emptyDir: {}
         {{- if .Values.redis.extraVolumes }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
@@ -360,6 +379,7 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
         {{- include "redis-cluster.storageClass" . | nindent 8 }}
+        {{- if or .Values.persistence.matchLabels .Values.persistence.matchExpressions }}
         selector:
         {{- if .Values.persistence.matchLabels }}
           matchLabels:
@@ -369,6 +389,7 @@ spec:
           matchExpressions:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
+        {{- end }}
   {{- end }}
   updateStrategy:
     type: {{ .Values.statefulset.updateStrategy }}

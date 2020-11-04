@@ -2,7 +2,7 @@
 
 [ownCloud](https://owncloud.org/) is a file sharing server that puts the control and security of your own data back into your hands.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -100,6 +100,7 @@ The following table lists the configurable parameters of the ownCloud chart and 
 | `resources`                          | CPU/Memory resource requests/limits                                                                   | Memory: `512Mi`, CPU: `300m`                                 |
 | `podAnnotations`                     | Pod annotations                                                                                       | `{}`                                                         |
 | `affinity`                           | Map of node/pod affinities                                                                            | `{}`                                                         |
+| `extraEnvVars`                       | Pass extra environment variables to the image                                                         | `[]`                                                         |
 | `metrics.enabled`                    | Start a side-car prometheus exporter                                                                  | `false`                                                      |
 | `metrics.image.registry`             | Apache exporter image registry                                                                        | `docker.io`                                                  |
 | `metrics.image.repository`           | Apache exporter image name                                                                            | `bitnami/apache-exporter`                                    |
@@ -108,6 +109,19 @@ The following table lists the configurable parameters of the ownCloud chart and 
 | `metrics.image.pullSecrets`          | Specify docker-registry secret names as an array                                                      | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`             | Additional annotations for Metrics exporter pod                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9117"}` |
 | `metrics.resources`                  | Exporter resource requests/limit                                                                      | {}                                                           |
+| `certificates.customCertificate.certificateSecret`| Secret containing the certificate and key to add                                         | `""`                                                         |
+| `certificates.customCertificate.chainSecret.name` | Name of the secret containing the certificate chain                                      | `""`                                                         |
+| `certificates.customCertificate.chainSecret.key`  | Key of the certificate chain file inside the secret                                      | `""`                                                         |
+| `certificates.customCertificate.certificateLocation`| Location in the container to store the certificate                                     | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
+| `certificates.customCertificate.keyLocation`| Location in the container to store the private key                                             | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
+| `certificates.customCertificate.chainLocation`| Location in the container to store the certificate chain                                     | `/etc/ssl/certs/chain.pem`                                   |
+| `certificates.customCAs`             | Defines a list of secrets to import into the container trust store                                    | `[]`                                                         |
+| `certificates.image.registry`        | Container sidecar registry                                                                            | `docker.io`                                                  |
+| `certificates.image.repository`      | Container sidecar image                                                                               | `bitnami/minideb`                                            |
+| `certificates.image.tag`             | Container sidecar image tag                                                                           | `buster`                                                     |
+| `certificates.image.pullPolicy`      | Container sidecar image pull policy                                                                   | `IfNotPresent`                                               |
+| `certificates.image.pullSecrets`     | Container sidecar image pull secrets                                                                  | `image.pullSecrets`                                          |
+| `certificates.extraEnvVars`          | Container sidecar extra environment variables (eg proxy)                                              | `[]`                                                         |
 
 The above parameters map to the env variables defined in [bitnami/owncloud](http://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](http://github.com/bitnami/bitnami-docker-owncloud) image documentation.
 
@@ -158,6 +172,26 @@ The [Bitnami ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) image
 Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
 
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+## CA Certificates
+
+Custom CA certificates not included in the base docker image can be added by means of existing secrets. The secret must exist in the same namespace and contain the desired CA certificates to import. By default, all found certificate files will be loaded.
+
+```yaml
+certificates:
+  customCAs:
+  - secret: my-ca-1
+  - secret: my-ca-2
+```
+
+> Tip! You can create a secret containing your CA certificates using the following command:
+```bash
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 

@@ -2,7 +2,7 @@
 
 [Apache Tomcat](http://tomcat.apache.org/), often referred to as Tomcat, is an open-source web server and servlet container developed by the Apache Software Foundation. Tomcat implements several Java EE specifications including Java Servlet, JavaServer Pages, Java EL, and WebSocket, and provides a "pure Java" HTTP web server environment for Java code to run in.
 
-## TL;DR;
+## TL;DR
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -59,6 +59,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `image.tag`                          | Tomcat Image tag                                                                                    | `{TAG_NAME}`                                            |
 | `image.pullPolicy`                   | Tomcat image pull policy                                                                            | `IfNotPresent`                                          |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                    | `[]` (does not add image pull secrets to deployed pods) |
+| `replicaCount`                       | Specify number of Tomcat replicas                                                                   | `1`                                                     |
 | `volumePermissions.enabled`          | Enable init container that changes volume permissions in the data directory                         | `false`                                                 |
 | `volumePermissions.image.registry`   | Init container volume-permissions image registry                                                    | `docker.io`                                             |
 | `volumePermissions.image.repository` | Init container volume-permissions image name                                                        | `bitnami/minideb`                                       |
@@ -67,6 +68,7 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `volumePermissions.resources`        | Init container resource requests/limit                                                              | `{}`                                                    |
 | `nameOverride`                       | String to partially override tomcat.fullname template with a string (will prepend the release name) | `nil`                                                   |
 | `fullnameOverride`                   | String to fully override tomcat.fullname template with a string                                     | `nil`                                                   |
+| `command`                            | Tomcat Image command to run                                                                         | `[]`                                                    |
 | `updateStrategy`                     | Set to Recreate if you use persistent volume that cannot be mounted by more than one pods           | `RollingUpdate`                                         |
 | `tomcatUsername`                     | Tomcat admin user                                                                                   | `user`                                                  |
 | `tomcatPassword`                     | Tomcat admin password                                                                               | _random 10 character alphanumeric string_               |
@@ -97,6 +99,21 @@ The following tables lists the configurable parameters of the Tomcat chart and t
 | `ingress.hosts[0].tls`               | Utilize TLS backend in ingress                                                                      | `false`                                                 |
 | `ingress.hosts[0].tlsHosts`          | Array of TLS hosts for ingress record (defaults to `ingress.hosts[0].name` if `nil`)                | `nil`                                                   |
 | `ingress.hosts[0].tlsSecret`         | TLS Secret (certificates)                                                                           | `tomcat.local-tls`                                      |
+| `extraEnvVars`                       | Extra environment variables to be set on tomcat container                                           | `[]`                                                    |
+| `livenessProbe.enabled`              | Enable liveness probe	                                                                             | `true`                                                  |
+| `livenessProbe.path`                 | HTTP Path to access on the HTTP server to check for liveness                                        | `/`                                                     |
+| `livenessProbe.port`                 | Name or number of the port to access on the container                                               | `http`                                                  |
+| `livenessProbe.initialDelaySeconds`  | Number of seconds after the container has started before probes are initiated                       | `120`                                                   |
+| `livenessProbe.periodSeconds`        | How often (in seconds) to perform the probe                                                         | `10`                                                    |
+| `livenessProbe.failureThreshold`     | Number of times probe can fail before giving up                                                     | `6`                                                     |
+| `livenessProbe.timeoutSeconds`       | Number of seconds after which the probe times out                                                   | `5`                                                     |
+| `readinessProbe.enabled`             | Enable readiness probe	                                                                             | `true`                                                  |
+| `readinessProbe.path`                | HTTP Path to access on the HTTP server to check for readiness                                       | `/`                                                     |
+| `readinessProbe.port`                | Name or number of the port to access on the container                                               | `http`                                                  |
+| `readinessProbe.initialDelaySeconds` | Number of seconds after the container has started before probes are initiated                       | `30`                                                    |
+| `readinessProbe.periodSeconds`       | How often (in seconds) to perform the probe                                                         | `51`                                                    |
+| `readinessProbe.failureThreshold`    | Number of times probe can fail before giving up                                                     | `3`                                                     |
+| `readinessProbe.timeoutSeconds`      | Number of seconds after which the probe times out                                                   | `3`                                                     |
 
 The above parameters map to the env variables defined in [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat). For more information please refer to the [bitnami/tomcat](http://github.com/bitnami/bitnami-docker-tomcat) image documentation.
 
@@ -145,13 +162,15 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
-## Notable changes
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
 
 ### 5.0.0
 
 This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which is based on Bash instead of Node.js.
-
-## Upgrading
 
 ### To 2.1.0
 

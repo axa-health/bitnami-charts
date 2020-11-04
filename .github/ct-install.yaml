@@ -10,4 +10,7 @@ excluded-charts:
   - kong
   - mariadb-galera
   - discourse
+  - ejbca
+  - wavefront
+  - harbor
 remote: origin

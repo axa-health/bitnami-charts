@@ -30,7 +30,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.5.2-debian-10-r0
+    tag: 2.6.3-debian-10-r21
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -43,6 +43,15 @@ server:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
+
+  composedTaskRunner:
+    ## Bitnami Spring Cloud Dataflow Composed Task Runner image
+    ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/spring-cloud-dataflow-composed-task-runner
+      tag: 2.6.3-debian-10-r20
 
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -67,6 +76,9 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
+    ## Endpoint to the grafana instance
+    ##
+    grafanaInfo:
 
   ## ConfigMap with Spring Cloud Dataflow Server Configuration
   ## NOTE: When it's set the server.configuration.* and deployer.*
@@ -311,6 +323,16 @@ server:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## Spring Cloud Skipper parameters.
 ##
@@ -326,7 +348,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.4.1-debian-10-r8
+    tag: 2.5.2-debian-10-r28
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -536,6 +558,16 @@ skipper:
     # targetCPU: 50
     # targetMemory: 50
 
+  ## Java Debug Wire Protocol (JDWP) parameters.
+  ##
+  jdwp:
+    ## Set to true to enable Java debugger.
+    ##
+    enabled: false
+    ## Specify port for remote debugging.
+    ##
+    port: 5005
+
 ##
 ## External Skipper Configuration
 ##
@@ -564,6 +596,26 @@ deployer:
     initialDelaySeconds: 120
   livenessProbe:
     initialDelaySeconds: 90
+  ## The node selectors to apply to the streaming applications deployments in "key:value" format.
+  ## Multiple node selectors are comma separated.
+  ##
+  nodeSelector: ''
+  tolerations: {}
+  ## Extra volume mounts.
+  ##
+  volumeMounts: {}
+  ## Extra volumes.
+  ##
+  volumes: {}
+  ## List of extra environment variables to set for any deployed app container. These environments will not override
+  ## RabbitMQ/Kafka envs. Multiple values are comma separated.
+  ##
+  environmentVariables: ''
+  ## Streams containers' Security Context. This security context will be use in every deployed stream.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ##
+  podSecurityContext:
+    runAsUser: 1001
 
 ## Init containers parameters:
 ## wait-for-backends: Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming
@@ -573,7 +625,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.18.4-debian-10-r6
+    tag: 1.18.10-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -590,10 +642,10 @@ waitForBackends:
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
     #   cpu: 100m
     #   memory: 128Mi
@@ -633,7 +685,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.0.0-debian-10-r6
+    tag: 1.2.1-debian-10-r58
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -653,9 +705,9 @@ metrics:
     ## Annotations for the Prometheus Rsocket Proxy service
     ##
     annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.httpPort }}"
-      prometheus.io/path: "/metrics/proxy"
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '{{ .Values.metrics.service.httpPort }}'
+      prometheus.io/path: '/metrics/proxy'
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -663,12 +715,10 @@ metrics:
     ## Namespace in which Prometheus is running
     ##
     # namespace: monitoring
-
     ## Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     # interval: 10s
-
     ## Timeout after which the scrape is ended
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -681,23 +731,28 @@ metrics:
 ##
 mariadb:
   enabled: true
-  ## Enable replication. This enables the creation of replicas of MariaDB. If false, only a
-  ## master statefulset would be created
+  ## MariaDB architecture. Allowed values: standalone or replication
   ##
-  replication:
-    enabled: false
+  architecture: standalone
   ## Custom user/db credentials
   ##
-  db:
-    ## MariaDB username and password
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
+  auth:
+    ## MariaDB root password
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
     ##
-    user: dataflow
+    rootPassword: ''
+    ## MariaDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ##
+    username: dataflow
     password: change-me
     ## Database to create
     ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
     ##
-    name: dataflow
+    database: dataflow
+    forcePassword: false
+    usePasswordFiles: false
   ## initdb scripts: specify dictionary of scripts to be run at first boot
   ## We can only create one database on MariaDB using parameters. However, when streaming
   ## is enabled we need a second database for Skipper.
@@ -716,6 +771,7 @@ mariadb:
 ## All of these values are ignored when mariadb.enabled is set to true
 ##
 externalDatabase:
+
   ## Database server host and port
   ##
   host: localhost
@@ -724,17 +780,33 @@ externalDatabase:
   ##
   # driver:
   # scheme:
-  password: ""
+  password: ''
+  # existingPasswordSecret: name-of-existing-secret
   ## Data Flow user and database
   ##
   dataflow:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: dataflow
-    user: dataflow
+    username: dataflow
   ## Skipper and database
   ##
   skipper:
+    ## Database JDBC URL
+    ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
+    ## derived from the common, individual attributes. This property, when defined, has precedence over the
+    ## individual attributes (scheme, host, port, database)
+    url: ""
     database: skipper
-    user: skipper
+    username: skipper
+  ## Hibernate Dialect
+  ## e.g: org.hibernate.dialect.MariaDB102Dialect
+  ##
+  hibernateDialect: ''
+
 ##
 ## RabbitMQ chart configuration
 ##
@@ -742,9 +814,28 @@ externalDatabase:
 ##
 rabbitmq:
   enabled: true
-  rabbitmq:
+  auth:
     username: user
-    password: ""
+
+##
+## External RabbitMQ Configuration
+##
+## All of these values are ignored when rabbitmq.enabled is set to true
+##
+externalRabbitmq:
+  ## Enables or disables external RabbitMQ, can be disabled when Kafka is using
+  ##
+  enabled: false
+  ## RabbitMQ host and port
+  ##
+  host: localhost
+  port: 5672
+  ## RabbitMQ username and password, password will be saved in a kubernetes secret
+  ##
+  username: guest
+  password: guest
+  # vhost: /
+  # existingPasswordSecret: name-of-existing-secret
 
 ##
 ## Kafka chart configuration
