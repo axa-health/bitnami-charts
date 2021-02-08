@@ -1,10 +1,4 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "scdf.name" -}}
-{{- include "common.names.name" . -}}
-{{- end }}
 
 {{/*
 Create a default fully qualified app name.
@@ -53,13 +47,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "scdf.chart" -}}
-{{- include "common.names.chart" . -}}
-{{- end }}
 
 {{/*
 Return the proper Spring Cloud Dataflow Server image name
@@ -379,10 +366,16 @@ scdf: features
 
 {{/* Validate values of Spring Cloud Dataflow - Messaging System */}}
 {{- define "scdf.validateValues.messagingSystem" -}}
-{{- if and .Values.kafka.enabled .Values.rabbitmq.enabled -}}
+{{- if and (or .Values.kafka.enabled .Values.externalKafka.enabled) .Values.rabbitmq.enabled -}}
 scdf: Messaging System
     You can only use one messaging system.
     Please enable only RabbitMQ or Kafka as messaging system.
+{{- else if and .Values.kafka.enabled .Values.externalKafka.enabled -}}
+scdf: Messaging System
+    You can only have one Kafka configuration enabled.
+    Please ensure only one of the following parameters is set to 'true'
+      - kafka.enabled
+      - externalKafka.enabled
 {{- end -}}
 {{- end -}}
 

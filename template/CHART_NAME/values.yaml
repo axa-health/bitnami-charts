@@ -42,6 +42,7 @@ service:
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
   ##   https: <to set explicitly, choose port between 30000-32767>
+  ##
   nodePorts:
     http: ""
     https: ""
@@ -72,9 +73,10 @@ service:
 
   ## Configure extra options for liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ##
   livenessProbe:
     enabled: true
-    path: "/path"
+    %%httpGet || command || etc%%
     initialDelaySeconds: foo
     periodSeconds: bar
     timeoutSeconds: foo
@@ -82,7 +84,7 @@ service:
     successThreshold: foo
   readinessProbe:
     enabled: true
-    path: "/path"
+    %%httpGet || command || etc%%
     initialDelaySeconds: foo
     periodSeconds: bar
     timeoutSeconds: foo
@@ -100,6 +102,11 @@ service:
   command: []
   args: []
 
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## %%MAIN_CONTAINER_NAME%% resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -115,14 +122,17 @@ service:
     #   cpu: 200m
     #   memory: 10Mi
 
-  ## SecurityContext configuration
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## %%MAIN_CONTAINER_NAME%% containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
 
+  ## %%MAIN_CONTAINER_NAME%% pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
@@ -146,6 +156,7 @@ service:
   nodeAffinityPreset:
     ## Node affinity type
     ## Allowed values: soft, hard
+    ##
     type: ""
     ## Node label key to match
     ## E.g.
@@ -210,12 +221,13 @@ service:
   updateStrategy:
     type: RollingUpdate
 
-  ## An array to add extra env vars
-  ## For example:
+  ## Additional environment variables to set
+  ## Example:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
 
   ## ConfigMap with extra environment variables
   ##

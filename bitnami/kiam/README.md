@@ -9,7 +9,7 @@
   helm install my-release bitnami/kiam
 ```
 
-> NOTE: This chart only works in Kubernetes clusters in AWS
+> NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
 
 ## Introduction
 
@@ -22,7 +22,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+ in AWS
-- Helm 3.0-beta3+
+- Helm 3.1.0
 
 ## Installing the Chart
 
@@ -97,17 +97,18 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `server.tlsFiles.cert`                      | Base64-encoded certificate to use with the container                                        | `nil`                                    |
 | `server.tlsFiles.key`                       | Base64-encoded key to use with the container                                                | `nil`                                    |
 | `server.tlsCerts.certFileName`              | Name of the certificate filename                                                            | `cert.pem`                               |
+| `server.hostAliases`                        | Add deployment host aliases                                                                 | `[]`                                     |
 | `server.tlsCerts.keyFileName`               | Name of the certificate filename                                                            | `key.pem`                                |
 | `server.tlsCerts.caFileName`                | Name of the certificate filename                                                            | `ca.pem`                                 |
 | `server.gatewayTimeoutCreation`             | Timeout when creating the kiam gateway                                                      | `1s`                                     |
 | `server.podSecurityPolicy.create`           | Create a PodSecurityPolicy resources                                                        | `true`                                   |
 | `server.podSecurityPolicy.allowedHostPaths` | Extra host paths to allow in the PodSecurityPolicy                                          | `[]`                                     |
 | `server.tlsSecret`                          | Name of a secret with TLS certificates for the container                                    | `nil`                                    |
-| `server.dnsPolicy`                          | Pod DNS policy                                                                              | `ClusterFirstWithHostNet`                |
+| `server.dnsPolicy`                          | Pod DNS policy                                                                              | `Default`                                |
 | `server.extraEnvVars`                       | Array containing extra env vars to configure kiam server                                    | `nil`                                    |
 | `server.extraEnvVarsCM`                     | ConfigMap containing extra env vars to configure kiam server                                | `nil`                                    |
 | `server.extraEnvVarsSecret`                 | Secret containing extra env vars to configure kiam server (in case of sensitive data)       | `nil`                                    |
-| `server.roleBaseArn`                        | Base ARN for IAM roles. If not set kiam will detect it automatically                        | `ClusterFirstWithHostNet`                |
+| `server.roleBaseArn`                        | Base ARN for IAM roles. If not set kiam will detect it automatically                        | `null`                                   |
 | `server.cacheSyncInterval`                  | Cache synchronization interval                                                              | `1m`                                     |
 | `server.containerSecurityContext`           | Container security podSecurityContext                                                       | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `server.podSecurityContext`                 | Pod security context                                                                        | `{}`                                     |
@@ -157,6 +158,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.extraArgs`                           | Extra arguments to add to the default kiam command                                         | `[]`                                     |
 | `agent.command`                             | Override kiam default command                                                              | `[]`                                     |
 | `agent.args`                                | Override kiam default args                                                                 | `[]`                                     |
+| `agent.hostAliases`                         | Add deployment host aliases                                                                | `[]`                                     |
 | `agent.logLevel`                            | Logging level                                                                              | `info`                                   |
 | `agent.sslCertHostPath`                     | Path to the host system SSL certificates (necessary for contacting the AWS metadata agent) | `/etc/ssl/certs`                         |
 | `agent.tlsFiles.ca`                         | Base64-encoded CA to use with the container                                                | `nil`                                    |
@@ -175,7 +177,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | `agent.extraEnvVarsSecret`                  | Secret containing extra env vars to configure kiam agent (in case of sensitive data)       | `nil`                                    |
 | `agent.containerSecurityContext`            | Container security podSecurityContext                                                      | `{ runAsUser: 1001, runAsNonRoot: true}` |
 | `agent.podSecurityContext`                  | Pod security context                                                                       | `{}`                                     |
-| `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `false`                                  |
+| `agent.useHostNetwork`                      | Use host networking (ports will be directly exposed in the host)                           | `true`                                   |
 | `agent.resources.limits`                    | The resources limits for the kiam container                                                | `{}`                                     |
 | `agent.resources.requests`                  | The requested resources for the kiam container                                             | `{}`                                     |
 | `agent.lifecycleHooks`                      | LifecycleHooks to set additional configuration at startup.                                 | `{}` (evaluated as a template)           |
@@ -206,7 +208,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | Parameter                                 | Description                                           | Default                        |
 |-------------------------------------------|-------------------------------------------------------|--------------------------------|
 | `server.service.type`                     | Kubernetes service type                               | `ClusterIP`                    |
-| `server.service.port`                     | Service HTTPS port                                    | `443`                          |
+| `server.service.port`                     | Service HTTPS port                                    | `8443`                         |
 | `server.service.nodePorts.http`           | Service HTTPS NodePort                                | `nil`                          |
 | `server.service.nodePorts.metrics`        | Service metrics NodePort                              | `nil`                          |
 | `server.service.clusterIP`                | kiam service clusterIP IP                             | `None`                         |
@@ -237,7 +239,7 @@ The following tables lists the configurable parameters of the kiam chart and the
 | Parameter                                         | Description                                                                  | Default                                                      |
 |---------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------|
 | `agent.metrics.enabled`                           | Enable exposing kiam statistics                                              | `false`                                                      |
-| `agent.metrics.port`                              | Service HTTP managemenet port                                                | `9990`                                                       |
+| `agent.metrics.port`                              | Service HTTP management port                                                 | `9990`                                                       |
 | `agent.metrics.syncInterval`                      | Metrics synchronization interval statistics                                  | `5s`                                                         |
 | `agent.metrics.annotations`                       | Annotations for enabling prometheus to access the metrics endpoints          | `{prometheus.io/scrape: "true", prometheus.io/port: "9990"}` |
 | `agent.metrics.serviceMonitor.enabled`            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                                                      |
@@ -330,7 +332,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` paremeters. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `server.affinity` and `agent.affinity` parameters. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `server.podAffinityPreset`, `agent.podAffinityPreset`, `server.podAntiAffinityPreset`, `agent.podAntiAffinityPreset`, or `server.nodeAffinityPreset` and `agent.nodeAffinityPreset` parameters.
 

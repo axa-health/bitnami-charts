@@ -20,7 +20,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 ## Prerequisites
 
 - Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Helm 3.1.0
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -70,9 +70,11 @@ The following table lists the configurable parameters of the OpenCart chart and 
 | `image.debug`       | Specify if debug logs should be enabled                                      | `false`                                                 |
 | `nameOverride`      | String to partially override opencart.fullname template                      | `nil`                                                   |
 | `fullnameOverride`  | String to fully override opencart.fullname template                          | `nil`                                                   |
+| `hostAliases`       | Add deployment host aliases                                                  | `Check values.yaml`                                     |
 | `commonLabels`      | Labels to add to all deployed objects                                        | `nil`                                                   |
 | `commonAnnotations` | Annotations to add to all deployed objects                                   | `[]`                                                    |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template). | `nil`                                                   |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)         | `nil`                                                   |
 
 ### OpenCart parameters
 
@@ -132,25 +134,29 @@ The following table lists the configurable parameters of the OpenCart chart and 
 
 ### Traffic Exposure Parameters
 
-| Parameter                        | Description                           | Default            |
-|----------------------------------|---------------------------------------|--------------------|
-| `service.type`                   | Kubernetes Service type               | `LoadBalancer`     |
-| `service.port`                   | Service HTTP port                     | `80`               |
-| `service.httpsPort`              | Service HTTPS port                    | `443`              |
-| `service.externalTrafficPolicy`  | Enable client source IP preservation  | `Cluster`          |
-| `service.nodePorts.http`         | Kubernetes http node port             | `""`               |
-| `service.nodePorts.https`        | Kubernetes https node port            | `""`               |
-| `ingress.enabled`                | Enable ingress controller resource    | `false`            |
-| `ingress.certManager`            | Add annotations for cert-manager      | `false`            |
-| `ingress.hostname`               | Default host for the ingress resource | `opencart.local`   |
-| `ingress.annotations`            | Ingress annotations                   | `{}`               |
-| `ingress.hosts[0].name`          | Hostname to your OpenCart installation  | `nil`            |
-| `ingress.hosts[0].path`          | Path within the url structure         | `nil`              |
-| `ingress.tls[0].hosts[0]`        | TLS hosts                             | `nil`              |
-| `ingress.tls[0].secretName`      | TLS Secret (certificates)             | `nil`              |
-| `ingress.secrets[0].name`        | TLS Secret Name                       | `nil`              |
-| `ingress.secrets[0].certificate` | TLS Secret Certificate                | `nil`              |
-| `ingress.secrets[0].key`         | TLS Secret Key                        | `nil`              |
+| Parameter                        | Description                                              | Default                        |
+|----------------------------------|----------------------------------------------------------|--------------------------------|
+| `service.type`                   | Kubernetes Service type                                  | `LoadBalancer`                 |
+| `service.port`                   | Service HTTP port                                        | `80`                           |
+| `service.httpsPort`              | Service HTTPS port                                       | `443`                          |
+| `service.externalTrafficPolicy`  | Enable client source IP preservation                     | `Cluster`                      |
+| `service.nodePorts.http`         | Kubernetes http node port                                | `""`                           |
+| `service.nodePorts.https`        | Kubernetes https node port                               | `""`                           |
+| `ingress.enabled`                | Enable ingress controller resource                       | `false`                        |
+| `ingress.certManager`            | Add annotations for cert-manager                         | `false`                        |
+| `ingress.hostname`               | Default host for the ingress resource                    | `opencart.local`               |
+| `ingress.path`                   | Default path for the ingress resource                    | `/`                            |
+| `ingress.tls`                    | Create TLS Secret                                        | `false`                        |
+| `ingress.annotations`            | Ingress annotations                                      | `[]` (evaluated as a template) |
+| `ingress.extraHosts[0].name`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraHosts[0].path`     | Additional hostnames to be covered                       | `nil`                          |
+| `ingress.extraPaths`             | Additional arbitrary path/backend objects                | `nil`                          |
+| `ingress.extraTls[0].hosts[0]`   | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.extraTls[0].secretName` | TLS configuration for additional hostnames to be covered | `nil`                          |
+| `ingress.secrets[0].name`        | TLS Secret Name                                          | `nil`                          |
+| `ingress.secrets[0].certificate` | TLS Secret Certificate                                   | `nil`                          |
+| `ingress.secrets[0].key`         | TLS Secret Key                                           | `nil`                          |
+| `ingress.pathType`               | Ingress path type                                        | `ImplementationSpecific`       |
 
 ### Database parameters
 
@@ -176,15 +182,15 @@ The following table lists the configurable parameters of the OpenCart chart and 
 
 ### Volume Permissions parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                      |
-| `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`                                                  |
-| `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                            |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `buster`                                                     |
-| `volumePermissions.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                     |
-| `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `nil`                                                        |
+| Parameter                             | Description                                                                                                                                               | Default                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                                                 |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`                                             |
+| `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/minideb`                                       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `buster`                                                |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                          | `[]` (does not add image pull secrets to deployed pods) |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `Always`                                                |
+| `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `nil`                                                   |
 
 ### Metrics parameters
 
@@ -201,25 +207,25 @@ The following table lists the configurable parameters of the OpenCart chart and 
 
 ### Certificate injection parameters
 
-| Parameter                                            | Description                                                                                                                                               | Default                                                      |
-|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                                                                                                          | `""`                                                         |
-| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                                                                       | `""`                                                         |
-| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                                                                                                        | `/etc/ssl/certs/ssl-cert-snakeoil.pem`                       |
-| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                                                                                                        | `/etc/ssl/private/ssl-cert-snakeoil.key`                     |
-| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain                                                                                                  | `/etc/ssl/certs/chain.pem`                                   |
-| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store                                                                                        | `[]`                                                         |
-| `certificates.image.registry`                        | Container sidecar registry                                                                                                                                | `docker.io`                                                  |
-| `certificates.image.repository`                      | Container sidecar image                                                                                                                                   | `bitnami/minideb`                                            |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                                                               | `buster`                                                     |
-| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                                                                       | `IfNotPresent`                                               |
-| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                                                                      | `image.pullSecrets`                                          |
-| `certificates.args`                                  | Override default container args (useful when using custom images)                                                                                         | `nil`                                                        |
-| `certificates.command`                               | Override default container command (useful when using custom images)                                                                                      | `nil`                                                        |
-| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)                                                                                                  | `[]`                                                         |
-| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                                                                       | `nil`                                                        |
-| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                                                              | `nil`                                                        |
+| Parameter                                            | Description                                                          | Default                                  |
+|------------------------------------------------------|----------------------------------------------------------------------|------------------------------------------|
+| `certificates.customCertificate.certificateSecret`   | Secret containing the certificate and key to add                     | `""`                                     |
+| `certificates.customCertificate.chainSecret.name`    | Name of the secret containing the certificate chain                  | `""`                                     |
+| `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                  | `""`                                     |
+| `certificates.customCertificate.certificateLocation` | Location in the container to store the certificate                   | `/etc/ssl/certs/ssl-cert-snakeoil.pem`   |
+| `certificates.customCertificate.keyLocation`         | Location in the container to store the private key                   | `/etc/ssl/private/ssl-cert-snakeoil.key` |
+| `certificates.customCertificate.chainLocation`       | Location in the container to store the certificate chain             | `/etc/ssl/certs/chain.pem`               |
+| `certificates.customCAs`                             | Defines a list of secrets to import into the container trust store   | `[]`                                     |
+| `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
+| `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/minideb`                        |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `buster`                                 |
+| `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
+| `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `image.pullSecrets`                      |
+| `certificates.args`                                  | Override default container args (useful when using custom images)    | `nil`                                    |
+| `certificates.command`                               | Override default container command (useful when using custom images) | `nil`                                    |
+| `certificates.extraEnvVars`                          | Container sidecar extra environment variables (eg proxy)             | `[]`                                     |
+| `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                  | `nil`                                    |
+| `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `nil`                                    |
 
 The above parameters map to the env variables defined in [bitnami/opencart](http://github.com/bitnami/bitnami-docker-opencart). For more information please refer to the [bitnami/opencart](http://github.com/bitnami/bitnami-docker-opencart) image documentation.
 
@@ -283,7 +289,7 @@ imagePullSecrets:
 
 ### Setting Pod's affinity
 
-This chart allows you to set your custom affinity using the `affinity` paremeter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -329,6 +335,10 @@ Find more information about how to deal with common errors related to Bitnami’
 
 ## Upgrading
 
+### To 10.0.0
+
+This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
+
 ### To 9.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
@@ -358,7 +368,7 @@ Find more information about how to deal with common errors related to Bitnami’
 
 This release includes several breaking changes which are listed below. To upgrade to `8.0.0`, we recommend to install a new OpenCart chart, and migrate your OpenCart site using the application's [Backup & Restore tool](http://docs.opencart.com/en-gb/tools/backup/).
 
-> NOTE: It is highly recommened to create a backup of your database before migrating your site. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
+> NOTE: It is highly recommended to create a backup of your database before migrating your site. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console

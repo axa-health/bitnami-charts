@@ -120,7 +120,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Get the Redis credentials secret.
+Get the Redis(TM) credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
 {{- if and (.Values.redis.enabled) (not .Values.redis.existingSecret) -}}
@@ -200,35 +200,35 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.host" -}}
 {{- ternary (include "airflow.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.user" -}}
 {{- ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.name" -}}
 {{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.database.port" -}}
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure database values
+Add environment variables to configure database values
 */}}
 {{- define "airflow.configure.database" -}}
 - name: AIRFLOW_DATABASE_NAME
@@ -247,9 +247,10 @@ Add environmnet variables to configure database values
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure redis values
+Add environment variables to configure redis values
 */}}
 {{- define "airflow.configure.redis" -}}
+{{- if (not (eq .Values.executor "KubernetesExecutor" )) }}
 - name: REDIS_HOST
   value: {{ ternary (include "airflow.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled | quote }}
 - name: REDIS_PORT_NUMBER
@@ -263,10 +264,11 @@ Add environmnet variables to configure redis values
     secretKeyRef:
       name: {{ include "airflow.redis.secretName" . }}
       key: redis-password
+{{- end }}
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure airflow common values
+Add environment variables to configure airflow common values
 */}}
 {{- define "airflow.configure.airflow.common" -}}
 - name: AIRFLOW_EXECUTOR
@@ -289,7 +291,7 @@ Add environmnet variables to configure airflow common values
 {{- end -}}
 
 {{/*
-Add environmnet variables to configure airflow kubernetes executor
+Add environment variables to configure airflow kubernetes executor
 */}}
 {{- define "airflow.configure.airflow.kubernetesExecutor" -}}
 {{- if eq .Values.executor "KubernetesExecutor" }}
@@ -364,7 +366,7 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Airflow - Atleast one repository details must be provided when "git.dags.enabled" is "true" */}}
+{{/* Validate values of Airflow - At least one repository details must be provided when "git.dags.enabled" is "true" */}}
 {{- define "airflow.validateValues.dags.repositories" -}}
   {{- if and .Values.git.dags.enabled (empty .Values.git.dags.repositories) -}}
 airflow: git.dags.repositories

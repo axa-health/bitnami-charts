@@ -42,6 +42,9 @@ spec:
         {{- end }}
     spec:
       {{- include "mysql.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.secondary.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
@@ -281,6 +284,10 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: secondary
+      {{- if .Values.secondary.persistence.annotations }}
+        annotations:
+          {{- toYaml .Values.secondary.persistence.annotations | nindent 10 }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.secondary.persistence.accessModes }}

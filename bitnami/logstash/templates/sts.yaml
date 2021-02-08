@@ -24,6 +24,9 @@ spec:
         {{- end }}
     spec:
       {{- include "logstash.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -79,7 +82,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
+          {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
             - name: configurations
               mountPath: /bitnami/logstash/config
           {{- end }}
@@ -111,7 +114,7 @@ spec:
           {{- end }}
         {{- end }}
       volumes:
-        {{- if or (.Files.Glob "files/conf/*") .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
+        {{- if or .Values.input .Values.filter .Values.output .Values.existingConfiguration }}
         - name: configurations
           configMap:
             name: {{ include "logstash.configmapName" . }}

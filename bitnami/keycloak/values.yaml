@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override aspnet-core.fullname template (will maintain the release name)
 ##
 # nameOverride:
@@ -15,6 +19,11 @@
 ## String to fully override aspnet-core.fullname template
 ##
 # fullnameOverride:
+
+## Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 
 ## Add labels to all the deployed resources
 ##
@@ -38,7 +47,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 11.0.3-debian-10-r27
+  tag: 12.0.2-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,11 +76,20 @@ auth:
   ##
   adminUser: user
   adminPassword: ""
-  ## Wildfly managemenet user and password
+  ## Wildfly management user and password
   ##
   managementUser: manager
   managementPassword: ""
-
+  ## An already existing secret containing auth info
+  ##
+  # existingSecret:
+  #   name: mySecret
+  #   keyMapping:
+  #     admin-password: myPasswordKey
+  #     management-password: myManagementPasswordKey
+  #     database-password: myDatabasePasswordKey
+  #     tls-keystore-password: myTlsKeystorePasswordKey
+  #     tls-truestore-password: myTlsTruestorePasswordKey
   ## TLS encryption parameters
   ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
   ##
@@ -92,6 +110,36 @@ auth:
     ## Password to access the truststore when it's password-protected.
     ##
     truststorePassword: ""
+    ## Init container parameters:
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/minideb
+      tag: buster
+      pullPolicy: Always
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ##
+      pullSecrets: []
+      ##   - myRegistryKeySecretName
+    ## Init containers' resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      ## We usually recommend not to specify default resources and to leave this as a conscious
+      ## choice for the user. This also increases chances charts run on environments with little
+      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      ##
+      limits: {}
+      ##   cpu: 100m
+      ##   memory: 128Mi
+      ##
+      requests: {}
+      ##   cpu: 100m
+      ##   memory: 128Mi
+      ##
 
 ## Enable Proxy Address Forwarding
 ## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy
@@ -133,7 +181,7 @@ cache:
 ## Keycloak Configuration
 ## Specify content for standalone-ha.xml
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
-## The standalone-ha.xml is auto-generated based on other parameters when this paremeter is not specified
+## The standalone-ha.xml is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## configuration: |-
@@ -367,7 +415,7 @@ initContainers: {}
 ##
 sidecars: {}
 
-## Service configuratiom
+## Service configuration
 ##
 service:
   ## Service type.
@@ -407,7 +455,7 @@ service:
   ##
   annotations: {}
 
-## Ingress configuratiom
+## Ingress configuration
 ##
 ingress:
   ## Set to true to enable ingress record generation
@@ -421,6 +469,18 @@ ingress:
   ## When the ingress is enabled, a host pointing to this will be created
   ##
   hostname: keycloak.local
+
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path
+  ##
+  path: /
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
 
   ## Ingress annotations done as key:value pairs
   ## For a full list of possible ingress annotations, please see
@@ -557,7 +617,7 @@ metrics:
   ## Keycloak metrics service parameters
   ##
   service:
-    ## HTTP managemenet port
+    ## HTTP management port
     ##
     port: 9990
     ## Annotations for the Prometheus exporter service
@@ -615,6 +675,9 @@ postgresql:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
   ##
   postgresqlDatabase: bitnami_keycloak
+  ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
+  ##
+  existingSecret:
   ## PostgreSQL data Persistent Volume Storage Class
   ##
   persistence:

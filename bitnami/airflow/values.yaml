@@ -8,6 +8,10 @@
 #     - myRegistryKeySecretName
 #   storageClass: myStorageClass
 
+## Force target Kubernetes version (using Helm capabilites if not set)
+##
+kubeVersion:
+
 ## String to partially override airflow.fullname template (will maintain the release name)
 ##
 nameOverride:
@@ -35,10 +39,10 @@ auth:
   ## If it is not forced, a random password will be generated.
   ##
   forcePassword: false
-  ## Specify username to acccess web UI
+  ## Specify username to access web UI
   ##
   username: user
-  ## Specify password to acccess web UI
+  ## Specify password to access web UI
   ##
   password:
   ## Specify a fernet key to secure airflow connections
@@ -61,7 +65,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 1.10.13-debian-10-r0
+    tag: 2.0.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -81,6 +85,12 @@ web:
   ## Number of web replicas
   ##
   replicaCount: 1
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+
   ## URL used to access to airflow web ui
   ##
   baseUrl:
@@ -187,6 +197,10 @@ web:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Scheculer component related properties
 ##
@@ -197,7 +211,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 1.10.12-debian-10-r87
+    tag: 2.0.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -223,6 +237,10 @@ scheduler:
   ## Override args
   ##
   args:
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Add extra labels to the web's pods
   ##
   podLabels:
@@ -297,6 +315,10 @@ scheduler:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Worker component related properties
 ##
@@ -307,7 +329,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 1.10.12-debian-10-r76
+    tag: 2.0.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -330,6 +352,10 @@ worker:
   ## Number of worker replicas
   ##
   replicaCount: 1
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## Template to replace the default one to be use when `executor=KubernetesExecutor` to create worker pods
   ##
   podTemplate:
@@ -415,7 +441,7 @@ worker:
     ## Whether enabled horizontal pod autoscale
     ##
     enabled: false
-    ## Configure a minimun/maximun amount of pods
+    ## Configure a minimum/maximum amount of pods
     ##
     replicas:
       min: 1
@@ -459,6 +485,10 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ''
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Add labels to all the deployed resources
 ##
@@ -515,7 +545,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.29.2-debian-10-r25
+    tag: 2.30.0-debian-10-r27
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -710,6 +740,14 @@ ingress:
   ##
   enabled: false
 
+  ## Override API Version (automatically detected if not set)
+  ##
+  apiVersion:
+
+  ## Ingress Path type
+  ##
+  pathType: ImplementationSpecific
+
   ## Set this to true in order to add the corresponding annotations for cert-manager
   ##
   certManager: false
@@ -779,6 +817,7 @@ podAntiAffinityPreset: soft
 nodeAffinityPreset:
   ## Node affinity type
   ## Allowed values: soft, hard
+  ##
   type: ''
   ## Node label key to match
   ## E.g.
@@ -799,15 +838,15 @@ nodeAffinityPreset:
 ##
 affinity: {}
 
-## Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-
 ## Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
 
 ##
 ## PostgreSQL chart configuration
@@ -845,7 +884,7 @@ externalDatabase:
   port: 5432
 
 ##
-## Redis chart configuration
+## Redis(TM) chart configuration
 ##
 ## https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
@@ -862,20 +901,20 @@ redis:
 
 externalRedis:
   ## All of these values are only used when redis.enabled is set to false
-  ## Redis host
+  ## Redis(TM) host
   ##
   host: localhost
-  ## Redis port number
+  ## Redis(TM) port number
   ##
   port: 6379
-  ## Redis password
+  ## Redis(TM) password
   ##
   password:
-  ## Name of an existing secret resource containing the Redis password in a 'redis-password' key
+  ## Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
   ##
   existingSecret:
-  ## Redis username
-  ## Most Redis implementnations do not require a username to authenticate
+  ## Redis(TM) username
+  ## Most Redis(TM) implementnations do not require a username to authenticate
   ## and it should be enough with the password
   ##
   username:
@@ -888,7 +927,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20180711.0-debian-10-r283
+    tag: 0.20210126.0-debian-10-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -896,6 +935,11 @@ metrics:
     ##
     pullSecrets: []
     #   - myRegistryKeySecretName
+
+  ## Deployment pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
 
   ## Metrics exporter resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -913,6 +957,11 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9112'
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
 
 ## Array with extra yaml to deploy with the chart. Evaluated as a template
 ##

@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 8.0.22
+appVersion: 8.0.23
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,7 +17,7 @@ keywords:
   - database
   - sql
   - cluster
-  - high availablity
+  - high availability
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
@@ -25,4 +25,4 @@ name: mysql
 sources:
   - https://github.com/bitnami/bitnami-docker-mysql
   - https://mysql.com
-version: 8.1.1
+version: 8.3.0
