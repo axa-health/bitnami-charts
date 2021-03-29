@@ -188,10 +188,15 @@ spec:
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc/
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}
+            {{- if .Values.master.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.master.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
   {{- if .Values.metrics.enabled }}
         - name: metrics
@@ -326,6 +331,11 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        {{- if .Values.master.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.master.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:

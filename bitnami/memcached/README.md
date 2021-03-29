@@ -45,24 +45,40 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Memcached chart and their default values.
+The following tables lists the configurable parameters of the Memcached chart and their default values per section/component:
+
+### Global parameters
+
+| Parameter                 | Description                                     | Default                                                 |
+|---------------------------|-------------------------------------------------|---------------------------------------------------------|
+| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+
+### Common parameters
+
+| Parameter           | Description                                                          | Default                        |
+|---------------------|----------------------------------------------------------------------|--------------------------------|
+| `nameOverride`      | String to partially override common.names.fullname                   | `nil`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname                       | `nil`                          |
+| `commonLabels`      | Labels to add to all deployed objects                                | `{}`                           |
+| `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`                           |
+| `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local`                |
+| `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]` (evaluated as a template) |
+
+### Memcached parameters
 
 | Parameter                                | Description                                                                               | Default                                                      |
 |------------------------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `global.imageRegistry`                   | Global Docker image registry                                                              | `nil`                                                        |
-| `global.imagePullSecrets`                | Global Docker registry secret names as an array                                           | `[]` (does not add image pull secrets to deployed pods)      |
 | `image.registry`                         | Memcached image registry                                                                  | `docker.io`                                                  |
 | `image.repository`                       | Memcached Image name                                                                      | `bitnami/memcached`                                          |
 | `image.tag`                              | Memcached Image tag                                                                       | `{TAG_NAME}`                                                 |
 | `image.pullPolicy`                       | Memcached image pull policy                                                               | `IfNotPresent`                                               |
 | `image.pullSecrets`                      | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
-| `nameOverride`                           | String to partially override common.names.fullname template with a string                 | `nil`                                                        |
-| `fullnameOverride`                       | String to fully override common.names.fullname template with a string                     | `nil`                                                        |
-| `clusterDomain`                          | Kubernetes cluster domain                                                                 | `cluster.local`                                              |
 | `architecture`                           | Memcached architecture. Allowed values: standalone or high-availability                   | `standalone`                                                 |
 | `replicaCount`                           | Number of containers                                                                      | `1`                                                          |
+| `command`                                | Default container command (useful when using custom images)                               | `[]`                                                         |
+| `arguments`                              | Default container args (useful when using custom images)                                  | `["/run.sh"]`                                                |
 | `extraEnv`                               | Additional env vars to pass                                                               | `{}`                                                         |
-| `arguments`                              | Arguments to pass                                                                         | `["/run.sh"]`                                                |
 | `hostAliases`                            | Add deployment host aliases                                                               | `[]`                                                         |
 | `memcachedUsername`                      | Memcached admin user                                                                      | `nil`                                                        |
 | `memcachedPassword`                      | Memcached admin password                                                                  | `nil`                                                        |
@@ -74,6 +90,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `service.annotations`                    | Additional annotations for Memcached service                                              | `{}`                                                         |
 | `resources.requests`                     | CPU/Memory resource requests                                                              | `{memory: "256Mi", cpu: "250m"}`                             |
 | `resources.limits`                       | CPU/Memory resource limits                                                                | `{}`                                                         |
+| `portName`                               | Name of the main port exposed by memcached                                                | `memcache`                                                   |
 | `persistence.enabled`                    | Enable persistence using PVC (Requires architecture: "high-availability")                 | `true`                                                       |
 | `persistence.storageClass`               | PVC Storage Class for Memcached volume                                                    | `nil` (uses alpha storage class annotation)                  |
 | `persistence.accessMode`                 | PVC Access Mode for Memcached volume                                                      | `ReadWriteOnce`                                              |
@@ -85,6 +102,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `podAnnotations`                         | Pod annotations                                                                           | `{}`                                                         |
 | `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                                         |
 | `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                                       |
+| `podLabels`                              | Add additional labels to the pod (evaluated as a template)                                | `nil`                                                        |
 | `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                                         |
 | `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                                         |
 | `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                                         |
@@ -92,6 +110,8 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `nodeSelector`                           | Node labels for pod assignment                                                            | `{}` (evaluated as a template)                               |
 | `tolerations`                            | Tolerations for pod assignment                                                            | `[]` (evaluated as a template)                               |
 | `priorityClassName`                      | Controller priorityClassName                                                              | `nil`                                                        |
+| `serviceAccount.create` | Enable creation of ServiceAccount for memcached pods                                               | `true`                                                  |
+| `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `memcached.serviceAccountName` template |
 | `metrics.enabled`                        | Start a side-car prometheus exporter                                                      | `false`                                                      |
 | `metrics.image.registry`                 | Memcached exporter image registry                                                         | `docker.io`                                                  |
 | `metrics.image.repository`               | Memcached exporter image name                                                             | `bitnami/memcached-exporter`                                 |
@@ -100,6 +120,7 @@ The following tables lists the configurable parameters of the Memcached chart an
 | `metrics.image.pullSecrets`              | Specify docker-registry secret names as an array                                          | `[]` (does not add image pull secrets to deployed pods)      |
 | `metrics.podAnnotations`                 | Additional annotations for Metrics exporter                                               | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
 | `metrics.resources`                      | Exporter resource requests/limit                                                          | `{}`                                                         |
+| `metrics.portName`                       | Memcached exporter port name                                                              | `metrics`                                                    |
 | `metrics.service.type`                   | Kubernetes service type for Prometheus metrics                                            | `ClusterIP`                                                  |
 | `metrics.service.port`                   | Prometheus metrics service port                                                           | `9150`                                                       |
 | `metrics.service.annotations`            | Prometheus exporter svc annotations                                                       | `{prometheus.io/scrape: "true", prometheus.io/port: "9150"}` |
@@ -113,6 +134,8 @@ $ helm install my-release --set memcachedUsername=user,memcachedPassword=passwor
 ```
 
 The above command sets the Memcached admin account username and password to `user` and `password` respectively.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 

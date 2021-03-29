@@ -85,7 +85,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `heapOpts`                                | Kafka's Java Heap size                                                                                                                               | `-Xmx1024m -Xms1024m`                                   |
 | `deleteTopicEnable`                       | Switch to enable topic deletion or not                                                                                                               | `false`                                                 |
 | `autoCreateTopicsEnable`                  | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments                    | `false`                                                 |
-| `logFlushIntervalMessages`                | The number of messages to accept before forcing a flush of data to disk                                                                              | `10000`                                                 |
+| `logFlushIntervalMessages`                | The number of messages to accept before forcing a flush of data to disk                                                                              | `_10000`                                                |
 | `logFlushIntervalMs`                      | The maximum amount of time a message can sit in a log before we force a flush                                                                        | `1000`                                                  |
 | `logRetentionBytes`                       | A size-based retention policy for logs                                                                                                               | `_1073741824`                                           |
 | `logRetentionCheckIntervalMs`             | The interval at which log segments are checked to see if they can be deleted                                                                         | `300000`                                                |
@@ -110,34 +110,30 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `extraVolumeMounts`                       | Extra volumeMount(s) to add to Kafka containers                                                                                                      | `[]`                                                    |
 | `auth.clientProtocol`                     | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                        | `plaintext`                                             |
 | `auth.interBrokerProtocol`                | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                        | `plaintext`                                             |
-| `auth.saslMechanisms`                     | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`                     |
-| `auth.saslInterBrokerMechanism`           | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                                         | `plain`                                                 |
-| `auth.jksSecret`                          | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster                                      | `nil`                                                   |
-| `auth.jksPassword`                        | Password to access the JKS files when they are password-protected                                                                                    | `nil`                                                   |
-| `auth.tlsEndpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                                                           | `https`                                                 |
-| `auth.jaas.interBrokerUser`               | Kafka inter broker communication user for SASL authentication                                                                                        | `admin`                                                 |
-| `auth.jaas.interBrokerPassword`           | Kafka inter broker communication password for SASL authentication                                                                                    | `nil`                                                   |
-| `auth.jaas.zookeeperUser`                 | Kafka Zookeeper user for SASL authentication                                                                                                         | `nil`                                                   |
-| `auth.jaas.zookeeperPassword`             | Kafka Zookeeper password for SASL authentication                                                                                                     | `nil`                                                   |
-| `auth.jaas.existingSecret`                | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                                                 | `nil`                                                   |
-| `auth.jaas.clientUsers`                   | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                                      | `[]`                                                    |
-| `auth.jaas.clientPasswords`               | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`                           | `[]`                                                    |
+| `auth.sasl.mechanisms`                    | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512`                     |
+| `auth.sasl.interBrokerMechanism`          | SASL mechanism to use as inter broker protocol, it must be included at `auth.saslMechanisms`                                                         | `plain`                                                 |
+| `auth.sasl.jaas.interBrokerUser`          | Kafka inter broker communication user for SASL authentication                                                                                        | `admin`                                                 |
+| `auth.sasl.jaas.interBrokerPassword`      | Kafka inter broker communication password for SASL authentication                                                                                    | `nil`                                                   |
+| `auth.sasl.jaas.zookeeperUser`            | Kafka Zookeeper user for SASL authentication                                                                                                         | `nil`                                                   |
+| `auth.sasl.jaas.zookeeperPassword`        | Kafka Zookeeper password for SASL authentication                                                                                                     | `nil`                                                   |
+| `auth.sasl.jaas.clientUsers`              | List of Kafka client users to be created, separated by commas. This values will override `auth.jaas.clientUser`                                      | `["user"]`                                              |
+| `auth.sasl.jaas.clientPasswords`          | List of passwords for `auth.jaas.clientUsers`. It is mandatory to provide the passwords when using `auth.jaas.clientUsers`                           | `[]`                                                    |
+| `auth.sasl.jaas.existingSecret`           | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                                                 | `nil`                                                   |
+| `auth.tls.type`                           | Format to use for TLS certificates. Allowed types: `jks` and `pem`                                                                                   | `jks`                                                   |
+| `auth.tls.existingSecret`                 | Name of the existing secret containing the TLS certificates for the Kafka brokers                                                                    | `nil`                                                   |
+| `auth.tls.autoGenerated`                  | Generate automatically self-signed TLS certificates for Kafka brokers. Currently only supported if `auth.tls.type` is `pem`                          | `false`                                                 |
+| `auth.tls.password`                       | Password to access the JKS files or PEM key when they are password-protected.                                                                        | `nil`                                                   |
+| `auth.tls.jksTruststoreSecret`            | Name of the existing secret containing your truststore if truststore not existing or different from the one in the `auth.tls.existingSecret`         | `nil`                                                   |
+| `auth.tls.jksKeystoreSAN`                 | The secret key from the `auth.tls.existingSecret` containing the keystore with a SAN certificate                                                     | `nil`                                                   |
+| `auth.tls.jksTruststore`                  | The secret key from the `auth.tls.existingSecret` or `auth.tls.jksTruststoreSecret` containing the truststore                                        | `nil`                                                   |
+| `auth.tls.endpointIdentificationAlgorithm`| The endpoint identification algorithm to validate server hostname using server certificate                                                           | `https`                                                 |
 | `listeners`                               | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                                             | `[]`                                                    |
 | `advertisedListeners`                     | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array                     | `[]`                                                    |
 | `listenerSecurityProtocolMap`             | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `nil`                                                   |
 | `allowPlaintextListener`                  | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                                                  |
 | `interBrokerListenerName`                 | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                                              |
-| `initContainers`                          | Add extra init containers    | `[]`                                                    |
-| `podManagementPolicy`                             | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                         | `Parallel`                                              |
-
-### Kafka provisioning parameters
-
-| Parameter                | Description                      | Default                  |
-|--------------------------|----------------------------------|--------------------------|
-| `provisioning.enabled`   | Enable kafka provisioning Job    | `false`                  |
-| `provisioning.image`     | Kafka provisioning Job image     | `Check values.yaml file` |
-| `provisioning.resources` | Kafka provisioning Job resources | `Check values.yaml file` |
-| `provisioning.topics`    | Kafka provisioning topics        | `[]`                     |
+| `initContainers`                          | Add extra init containers                                                                                                                            | `[]`                                                    |
+| `podManagementPolicy`                     | Management Policy for Kafka StatefulSet (either Parallel or OrderedReady)                                                                            | `Parallel`                                              |
 
 ### Statefulset parameters
 
@@ -162,6 +158,7 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `containerSecurityContext`  | Kafka containers' Security Context                                                        | `{}`                                               |
 | `resources.limits`          | The resources limits for Kafka containers                                                 | `{}`                                               |
 | `resources.requests`        | The requested resources for Kafka containers                                              | `{}`                                               |
+| `schedulerName`             | Name of the k8s scheduler (other than default)                                            | `nil`                                              |
 | `livenessProbe`             | Liveness probe configuration for Kafka                                                    | `Check values.yaml file`                           |
 | `readinessProbe`            | Readiness probe configuration for Kafka                                                   | `Check values.yaml file`                           |
 | `customLivenessProbe`       | Custom Liveness probe configuration for Kafka                                             | `{}`                                               |
@@ -222,11 +219,11 @@ The following tables lists the configurable parameters of the Kafka chart and th
 
 ### RBAC parameters
 
-| Parameter               | Description                                      | Default                                       |
-|-------------------------|--------------------------------------------------|-----------------------------------------------|
-| `serviceAccount.create` | Enable creation of ServiceAccount for Kafka pods | `true`                                        |
-| `serviceAccount.name`   | Name of the created serviceAccount               | Generated using the `kafka.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not    | `false`                                       |
+| Parameter               | Description                                                                                    | Default                                                 |
+|-------------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| `serviceAccount.create` | Enable creation of ServiceAccount for Kafka pods                                               | `true`                                                  |
+| `serviceAccount.name`   | The name of the service account to use. If not set and `create` is `true`, a name is generated | Generated using the `kafka.serviceAccountName` template |
+| `rbac.create`           | Whether to create & use RBAC resources or not                                                  | `false`                                                 |
 
 ### Volume Permissions parameters
 
@@ -234,8 +231,8 @@ The following tables lists the configurable parameters of the Kafka chart and th
 |----------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
@@ -254,8 +251,16 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.kafka.image.pullSecrets`      | Specify docker-registry secret names as an array                                                                                 | `[]` (does not add image pull secrets to deployed pods) |
 | `metrics.kafka.extraFlags`             | Extra flags to be passed to Kafka exporter                                                                                       | `{}`                                                    |
 | `metrics.kafka.certificatesSecret`     | Name of the existing secret containing the optional certificate and key files                                                    | `nil`                                                   |
+| `metrics.kafka.tlsCert`                | The secret key from the certificatesSecret if `client-cert` key different from the default                                       | `cert-file`                                             |
+| `metrics.kafka.tlsKey`                 | The secret key from the certificatesSecret if `client-key` key different from the default                                        | `key-file`                                              |
+| `metrics.kafka.tlsCaCert`              | The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default                            | `ca-file`                                               |
+| `metrics.kafka.tlsCaSecret`            | Name of the existing secret containing the ca certificate file, if the ca cert can not be found in `metrics.kafka.certificatesSecret`   | `nil`                                            |
 | `metrics.kafka.resources.limits`       | Kafka Exporter container resource limits                                                                                         | `{}`                                                    |
 | `metrics.kafka.resources.requests`     | Kafka Exporter container resource requests                                                                                       | `{}`                                                    |
+| `metrics.kafka.affinity`               | Affinity for Kafka Exporter pod assignment                                                                                       | `{}`                                                    |
+| `metrics.kafka.nodeSelector`           | Node labels for Kafka Exporter pod assignment                                                                                    | `{}`                                                    |
+| `metrics.kafka.tolerations`            | Tolerations for Kafka Exporter pod assignment                                                                                    | `[]`                                                    |
+| `metrics.kafka.schedulerName`          | Name of the k8s scheduler (other than default) for Kafka Exporter                                                                | `nil`                                                   |
 | `metrics.kafka.service.type`           | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`                                             |
 | `metrics.kafka.service.port`           | Kafka Exporter Prometheus port                                                                                                   | `9308`                                                  |
 | `metrics.kafka.service.nodePort`       | Kubernetes HTTP node port                                                                                                        | `""`                                                    |
@@ -284,6 +289,18 @@ The following tables lists the configurable parameters of the Kafka chart and th
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped                                                                                      | `nil`                                                   |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                          | `nil` (Prometheus Operator default value)               |
 | `metrics.serviceMonitor.selector`      | ServiceMonitor selector labels                                                                                                   | `nil` (Prometheus Operator default value)               |
+
+### Kafka provisioning parameters
+
+| Parameter                    | Description                                                           | Default                        |
+|------------------------------|-----------------------------------------------------------------------|--------------------------------|
+| `provisioning.enabled`       | Enable kafka provisioning Job                                         | `false`                        |
+| `provisioning.image`         | Kafka provisioning Job image                                          | `Check values.yaml file`       |
+| `provisioning.resources`     | Kafka provisioning Job resources                                      | `Check values.yaml file`       |
+| `provisioning.topics`        | Kafka provisioning topics                                             | `[]`                           |
+| `provisioning.schedulerName` | Name of the k8s scheduler (other than default) for kafka provisioning | `nil`                          |
+| `provisioning.command`       | Override provisioning container command                               | `[]` (evaluated as a template) |
+| `provisioning.args`          | Override provisioning container arguments                             | `[]` (evaluated as a template) |
 
 ### Zookeeper chart parameters
 
@@ -348,13 +365,15 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
+Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
+
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 
 - `auth.jaas.clientUsers`/`auth.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
 - `auth.jaas.interBrokerUser`/`auth.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
 - `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
-In order to configure TLS authentication/encryption, you **must** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
+In order to configure TLS authentication/encryption, you **can** create a secret containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster. Then, you need pass the secret name with the `--auth.jksSecret` parameter when deploying the chart.
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.jksPassword` parameter to provide your password.
 
@@ -367,6 +386,14 @@ kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --fro
 > **Note**: the command above assumes you already created the trustore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
 As an alternative to manually create the secret before installing the chart, you can put your JKS files inside the chart folder `files/jks`, an a secret including them will be generated. Please note this alternative requires to have the chart downloaded locally, so you will have to clone this repository or fetch the chart before installing it.
+
+If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
+
+- `auth.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.jksPassword`
+- `auth.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
+- `auth.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.jksSecret` with the `auth.jksKeystoreSAN`-value and use this as a keystore for **all** brokers
+
+> **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.jksPassword`
 
 You can deploy the chart with authentication using the following parameters:
 
@@ -491,26 +518,27 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Deploying extra resources
 
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB:
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
 
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
 ##
-extraDeploy: |-
-  - apiVersion: apps/v1
+extraDeploy:
+  - |
+    apiVersion: apps/v1
     kind: Deployment
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "kafka.matchLabels" . | nindent 8 }}
+        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "kafka.labels" . | nindent 10 }}
+          labels: {{- include "common.labels.standard" . | nindent 8 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -522,16 +550,17 @@ extraDeploy: |-
                   containerPort: 8083
               volumeMounts:
                 - name: configuration
-                  mountPath: /opt/bitnami/kafka/config
+                  mountPath: /bitnami/kafka/config
           volumes:
             - name: configuration
               configMap:
                 name: {{ include "kafka.fullname" . }}-connect
-  - apiVersion: v1
+  - |
+    apiVersion: v1
     kind: ConfigMap
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 4 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -540,18 +569,19 @@ extraDeploy: |-
       mongodb.properties: |-
         connection.uri=mongodb://root:password@mongodb-hostname:27017
         ...
-  - apiVersion: v1
+  - | 
+    apiVersion: v1
     kind: Service
     metadata:
       name: {{ include "kafka.fullname" . }}-connect
-      labels: {{- include "kafka.labels" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" . | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "kafka.matchLabels" . | nindent 6 }}
+      selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
         app.kubernetes.io/component: connector
 ```
 
@@ -559,7 +589,7 @@ You can create the Kafka Connect image using the Dockerfile below:
 
 ```Dockerfile
 FROM bitnami/kafka:latest
-# Download MongoDB Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+# Download MongoDB&reg; Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
 RUN mkdir -p /opt/bitnami/kafka/plugins && \
     cd /opt/bitnami/kafka/plugins && \
     curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar

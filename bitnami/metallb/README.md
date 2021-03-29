@@ -149,6 +149,7 @@ The following tables lists the configurable parameters of the metallb chart and 
 | `speaker.serviceAccount.name`                         | use the serviceAccount with the specified name                                               | ""                                                      |
 | `speaker.daemonset.hostPorts.metrics`                 | the tcp port to listen on for the openmetrics endpoint.                                      | `7472`                                                  |
 | `speaker.daemonset.terminationGracePeriodSeconds`     | The terminationGracePeriod in seconds for the daemonset to stop                              | `2`                                                     |
+| `speaker.initContainers`                              | Extra initContainers to add to the daemonset                                                 | `[]`                                                     |
 | `speaker.securityContext.enabled`                     | Enable pods' security context                                                                | `true`                                                  |
 | `speaker.securityContext.runAsUser`                   | User ID for the pods.                                                                        | `0`                                                     |
 | `speaker.securityContext.allowPrivilegeEscalation`    | Enables privilege Escalation context for the pod.                                            | `false`                                                 |
@@ -181,10 +182,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set livenessProbe.successThreshold=5 \
+  --set readinessProbe.successThreshold=5 \
     bitnami/metallb
 ```
-The above command sets the `livenessProbe.successThreshold` to `5`.
+The above command sets the `readinessProbe.successThreshold` to `5`.
 
 ## Configuration and installation details
 

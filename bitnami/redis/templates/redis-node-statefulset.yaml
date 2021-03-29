@@ -208,10 +208,15 @@ spec:
               mountPath: /opt/bitnami/redis/mounted-etc
             - name: redis-tmp-conf
               mountPath: /opt/bitnami/redis/etc
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}            
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- if and .Values.cluster.enabled .Values.sentinel.enabled }}
         - name: sentinel
@@ -294,6 +299,13 @@ spec:
           {{- else if .Values.sentinel.customReadinessProbe }}
           readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
           {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
           volumeMounts:
             - name: start-scripts
@@ -315,6 +327,9 @@ spec:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}
+            {{- if .Values.sentinel.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           {{- end }}
         {{- if .Values.metrics.enabled }}
@@ -439,6 +454,14 @@ spec:
           emptyDir: {}
         - name: redis-tmp-conf
           emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sentinel.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
     {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:

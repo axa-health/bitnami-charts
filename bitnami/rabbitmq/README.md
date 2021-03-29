@@ -136,6 +136,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
 | `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
 | `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
+| `topologySpreadConstraints` | Topology Spread Constraints for pod assignment                                            | `{}` (evaluated as a template) |
 | `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
 | `priorityClassName`         | Name of the existing priority class to be used by rabbitmq pods                           | `""`                           |
 | `podSecurityContext`        | RabbitMQ pods' Security Context                                                           | `{}`                           |
@@ -170,6 +171,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.distPort`                 | Erlang distribution server port                                                   | `25672`                        |
 | `service.distPortName`             | Erlang distribution service port name                                             | `dist`                         |
 | `service.distNodePort`             | Node port override for `dist` port, if serviceType NodePort                       | `nil`                          |
+| `service.managerPortEnable`        | Enable the RabbitMQ Manager port                                                  | `true`                         |
 | `service.managerPort`              | RabbitMQ Manager port                                                             | `15672`                        |
 | `service.managerPortName`          | RabbitMQ Manager service port name                                                | `http-stats`                   |
 | `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType NodePort                 | `nil`                          |
@@ -185,6 +187,7 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                              | `Cluster`                      |
 | `service.labels`                   | Service labels                                                                    | `{}` (evaluated as a template) |
 | `service.annotations`              | Service annotations                                                               | `{}` (evaluated as a template) |
+| `service.annotationsHeadless`      | Headless service annotations different from regular service                       | `{}` (evaluated as a template) |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                    | `false`                        |
 | `ingress.path`                     | Path for the default host                                                         | `/`                            |
 | `ingress.certManager`              | Add annotations for cert-manager                                                  | `false`                        |
@@ -230,8 +233,8 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 |----------------------------------------|----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                                                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`                                             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/minideb`                                       |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `buster`                                                |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell`                                 |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `"10"`                                                  |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `Always`                                                |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]` (does not add image pull secrets to deployed pods) |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                                                    |
@@ -268,6 +271,8 @@ $ helm install my-release \
 ```
 
 The above command sets the RabbitMQ admin username and password to `admin` and `secretpassword` respectively. Additionally the secure erlang cookie is set to `secretcookie`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -490,6 +495,38 @@ In addition to this, you can also use the `communityPlugins` parameter to indica
 communityPlugins="http://some-public-url/my-custom-plugin-X.Y.Z.ez"
 extraPlugins="my-custom-plugin"
 ```
+
+### Recovering the cluster from complete shutdown
+
+> IMPORTANT: Some of these procedures can lead to data loss, always make a backup beforehand.
+
+The RabbitMQ cluster is able to support multiple node failures but, in a situation in which all the nodes are brought down at the same time, the cluster might not be able to self-recover.
+
+This happens if the pod management policy of the statefulset is not `Parallel` and the last pod to be running wasn't the first pod of the statefulset. If that happens, update the pod management policy to recover a healthy state:
+
+```console
+$ kubectl delete statefulset STATEFULSET_NAME --cascade=false
+$ helm upgrade RELEASE_NAME bitnami/rabbitmq \
+    --set podManagementPolicy=Parallel \
+    --set replicaCount=NUMBER_OF_REPLICAS \
+    --set auth.password=PASSWORD \
+    --set auth.erlangCookie=ERLANG_COOKIE
+```
+
+For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
+
+If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
+
+```console
+$ helm upgrade RELEASE_NAME bitnami/rabbitmq \
+    --set podManagementPolicy=Parallel \
+    --set clustering.forceBoot=true \
+    --set replicaCount=NUMBER_OF_REPLICAS \
+    --set auth.password=PASSWORD \
+    --set auth.erlangCookie=ERLANG_COOKIE
+```
+
+More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
 
 ### Known issues
 
