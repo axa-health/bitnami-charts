@@ -30,15 +30,22 @@ spec:
       {{- if .Values.metrics.kafka.schedulerName }}
       schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
       {{- end }}
+      serviceAccountName: {{ template "kafka.serviceAccountName" . }}
+      {{- if .Values.metrics.kafka.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: kafka-exporter
           image: {{ include "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
             - |
-              read -r -a sasl_passwords <<< "$(tr ',;' ' ' <<< "${SASL_USER_PASSWORD}")"
               kafka_exporter \
               {{- range $i, $e := until $replicaCount }}
               --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
@@ -46,7 +53,8 @@ spec:
               {{- if (include "kafka.client.saslAuthentication" .) }}
               --sasl.enabled \
               --sasl.username="$SASL_USERNAME" \
-              --sasl.password="${sasl_passwords[0]}" \
+              --sasl.password="${SASL_USER_PASSWORD%%,*}" \
+              --sasl.mechanism="{{ include "kafka.metrics.kafka.saslMechanism" . }}" \
               {{- end }}
               {{- if (include "kafka.client.tlsEncryption" .) }}
               --tls.enabled \
@@ -65,7 +73,7 @@ spec:
               {{- end }}
               --web.listen-address=:9308
           {{- if (include "kafka.client.saslAuthentication" .) }}
-          {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers -}}
+          {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers }}
           env:
             - name: SASL_USERNAME
               value: {{ index $clientUsers 0 | quote }}
@@ -74,6 +82,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-passwords
+          {{- end }}
           {{- end }}
           ports:
             - name: metrics

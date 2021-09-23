@@ -56,7 +56,10 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       # yamllint enable rule:indentation
       {{- end }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      initContainers:
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "drupal.volumePermissions.image" . }}
@@ -168,7 +171,7 @@ spec:
             - name: DRUPAL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "drupal.secretName" . }}
                   key: drupal-password
             - name: DRUPAL_EMAIL
               value: {{ .Values.drupalEmail | quote }}
@@ -188,7 +191,7 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.names.fullname" . }}
+                  name: {{ include "drupal.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}
