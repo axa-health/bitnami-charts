@@ -32,6 +32,9 @@ fullnameOverride: ""
 ## @param clusterDomain Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 
 ## Enable diagnostic mode in the deployment
 ##
@@ -62,10 +65,10 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 7.15.1-debian-10-r5
+  tag: 7.15.2-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -267,6 +270,22 @@ master:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+  ## Pod Security Context for master-eligible pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.podSecurityContext.enabled Enable security context for master-eligible pods
+  ## @param master.podSecurityContext.fsGroup Group ID for the container for master-eligible pods
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Container Security Context for master-eligible pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.containerSecurityContext.enabled Enable security context for master-eligible pods
+  ## @param master.containerSecurityContext.runAsUser User ID for the container for master-eligible pods
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
   ## @param master.podAffinityPreset Master-eligible Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -315,7 +334,7 @@ master:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch master-eligible container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -396,7 +415,7 @@ master:
   ##
   sidecars: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -523,6 +542,22 @@ coordinating:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+  ## Pod Security Context for coordinating-only pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param coordinating.podSecurityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.podSecurityContext.fsGroup Group ID for the container for coordinating-only pods
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Container Security Context for coordinating-only pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param coordinating.containerSecurityContext.enabled Enable security context for coordinating-only pods
+  ## @param coordinating.containerSecurityContext.runAsUser User ID for the container for coordinating-only pods
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
   ## @param coordinating.podAffinityPreset Coordinating Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -571,7 +606,7 @@ coordinating:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch coordinating-only container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -746,6 +781,22 @@ data:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+  ## Pod Security Context for data pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param data.podSecurityContext.enabled Enable security context for data pods
+  ## @param data.podSecurityContext.fsGroup Group ID for the container for data pods
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Container Security Context for data pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param data.containerSecurityContext.enabled Enable security context for data pods
+  ## @param data.containerSecurityContext.runAsUser User ID for the container for data pods
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
   ## @param data.podAffinityPreset Data Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -795,7 +846,7 @@ data:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch data container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -876,7 +927,7 @@ data:
   ##
   sidecars: []
   ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
   persistence:
     ## @param data.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
@@ -988,6 +1039,22 @@ ingest:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
+  ## Pod Security Context for ingest pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param ingest.podSecurityContext.enabled Enable security context for ingest pods
+  ## @param ingest.podSecurityContext.fsGroup Group ID for the container for ingest pods
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Container Security Context for ingest pods.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param ingest.containerSecurityContext.enabled Enable security context for ingest pods
+  ## @param ingest.containerSecurityContext.runAsUser User ID for the container for ingest pods
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
   ## @param ingest.podAffinityPreset Ingest Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1037,7 +1104,7 @@ ingest:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch ingest container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1170,7 +1237,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r164
+    tag: 5.8.4-debian-10-r190
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1335,7 +1402,7 @@ curator:
       #   logformat: default
       #   blacklist: ['elasticsearch', 'urllib3']
   ## Curator resources requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1428,7 +1495,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.3.0-debian-10-r5
+    tag: 1.3.0-debian-10-r31
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1511,7 +1578,7 @@ metrics:
   ##
   topologySpreadConstraints: []
   ## Elasticsearch Prometheus exporter resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1615,10 +1682,10 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r233
+  tag: 10-debian-10-r259
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1630,7 +1697,7 @@ sysctlImage:
   ##
   pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1668,7 +1735,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r233
+    tag: 10-debian-10-r259
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1679,7 +1746,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

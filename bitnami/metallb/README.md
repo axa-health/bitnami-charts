@@ -12,7 +12,7 @@ $ helm install my-release bitnami/metallb
 ## Introduction
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [MetalLB Controller](https://metallb.universe.tf/community/) Controller Deployment and a [MetalLB Speaker](https://metallb.universe.tf/community/) Daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MetalLB Controller](https://metallb.universe.tf/community/) Controller Deployment and a [MetalLB Speaker](https://metallb.universe.tf/community/) Daemonset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -63,6 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`  | String to fully override metallb.fullname template                                     | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                               | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                          | `{}`  |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                      | `[]`  |
 
 
 ### MetalLB parameters
@@ -85,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                              | MetalLB Controller image registry                                                                                                           | `docker.io`                  |
 | `controller.image.repository`                            | MetalLB Controller image repository                                                                                                         | `bitnami/metallb-controller` |
-| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.11.0-debian-10-r0`        |
+| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.11.0-debian-10-r27`       |
 | `controller.image.pullPolicy`                            | MetalLB Controller image pull policy                                                                                                        | `IfNotPresent`               |
 | `controller.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                            | `[]`                         |
 | `controller.hostAliases`                                 | Deployment pod host aliases                                                                                                                 | `[]`                         |
@@ -141,7 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `speaker.image.registry`                              | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                            | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.11.0-debian-10-r0`     |
+| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.11.0-debian-10-r27`    |
 | `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                                                           | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                            | `[]`                      |
 | `speaker.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                                                     | `true`                    |
@@ -274,3 +275,11 @@ Find more information about how to deal with common errors related to Bitnami’
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+## Community supported solution
+
+Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
+
+The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
+
+New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.

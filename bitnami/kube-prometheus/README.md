@@ -11,7 +11,7 @@ $ helm install my-release bitnami/kube-prometheus
 
 ## Introduction
 
-This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 In the default configuration the chart deploys the following components on the Kubernetes cluster:
 
@@ -76,6 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------ | ---------------------------------------------------------------------------------------------------------- | ----- |
 | `nameOverride`     | String to partially override `kube-prometheus.name` template with a string (will prepend the release name) | `""`  |
 | `fullnameOverride` | String to fully override `kube-prometheus.fullname` template with a string                                 | `""`  |
+| `extraDeploy`      | Array of extra objects to deploy with the release                                                          | `[]`  |
 
 
 ### Prometheus Operator Parameters
@@ -85,9 +86,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.52.0-debian-10-r0`         |
+| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.52.1-debian-10-r0`         |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
+| `operator.extraArgs`                                                                  | Additional arguments passed to Prometheus Operator                                                                     | `[]`                          |
 | `operator.hostAliases`                                                                | Add deployment host aliases                                                                                            | `[]`                          |
 | `operator.serviceAccount.create`                                                      | Specify whether to create a ServiceAccount for Prometheus Operator                                                     | `true`                        |
 | `operator.serviceAccount.name`                                                        | The name of the ServiceAccount to create                                                                               | `""`                          |
@@ -169,7 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                   |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`              |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`     |
-| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.31.0-debian-10-r2`    |
+| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.31.1-debian-10-r10`   |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                   |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                         | `""`                     |
@@ -205,6 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.ingress.hostname`                                         | Default host for the ingress resource                                                                                            | `prometheus.local`       |
 | `prometheus.ingress.path`                                             | The Path to Prometheus. You may need to set this to '/*' in order to use this with ALB ingress controllers                       | `/`                      |
 | `prometheus.ingress.annotations`                                      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `prometheus.ingress.ingressClassName`                                 | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `prometheus.ingress.tls`                                              | Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter                                       | `false`                  |
 | `prometheus.ingress.extraHosts`                                       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `prometheus.ingress.extraPaths`                                       | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
@@ -293,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                  |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`              |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`         |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.23.1-scratch-r1`      |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.23.1-scratch-r3`      |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`           |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `prometheus.thanos.containerSecurityContext.enabled`                  | Enable container security context                                                                                                | `true`                   |
@@ -301,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off                                                                                 | `false`                  |
 | `prometheus.thanos.containerSecurityContext.runAsNonRoot`             | Force the container to run as a non root user                                                                                    | `true`                   |
 | `prometheus.thanos.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities which should be dropped                                                                                | `[]`                     |
-| `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url "http://localhost:9090"                                                                          | `""`                     |
+| `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url `http://localhost:9090`                                                                          | `""`                     |
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                      | `[]`                     |
 | `prometheus.thanos.objectStorageConfig`                               | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                  | `{}`                     |
 | `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                   | `[]`                     |
@@ -331,6 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.service.extraPorts`                                | Additional ports to expose from the Thanos sidecar container                                                                     | `[]`                     |
 | `prometheus.thanos.ingress.enabled`                                   | Enable ingress controller resource                                                                                               | `false`                  |
 | `prometheus.thanos.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `prometheus.thanos.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `prometheus.thanos.ingress.hosts`                                     | The list of hostnames to be covered with this ingress record.                                                                    | `[]`                     |
 | `prometheus.thanos.ingress.tls`                                       | The tls configuration for the ingress                                                                                            | `{}`                     |
 | `prometheus.portName`                                                 | Port name used for the pods and governing service. This defaults to web                                                          | `web`                    |
@@ -343,7 +347,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                               | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                        | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus Image repository                                                                                                      | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                            | `0.23.0-debian-10-r69`   |
+| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                            | `0.23.0-debian-10-r81`   |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                      | `true`                   |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                         | `""`                     |
@@ -378,6 +382,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.ingress.hostname`                                  | Default host for the ingress resource                                                                                            | `alertmanager.local`     |
 | `alertmanager.ingress.path`                                      | The Path to Alert Manager. You may need to set this to '/*' in order to use this with ALB ingress controllers.                   | `/`                      |
 | `alertmanager.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `alertmanager.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `alertmanager.ingress.tls`                                       | Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter                                     | `false`                  |
 | `alertmanager.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `alertmanager.ingress.extraPaths`                                | Additional arbitrary path/backend objects                                                                                        | `[]`                     |

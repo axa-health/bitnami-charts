@@ -11,7 +11,7 @@ $ helm install my-release bitnami/consul
 
 ## Introduction
 
-This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
@@ -80,7 +80,7 @@ $ helm delete --purge my-release
 | --------------------------- | -------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`            | HashiCorp Consul image registry                                                              | `docker.io`            |
 | `image.repository`          | HashiCorp Consul image repository                                                            | `bitnami/consul`       |
-| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.3-debian-10-r26` |
+| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.10.4-debian-10-r16` |
 | `image.pullPolicy`          | HashiCorp Consul image pull policy                                                           | `IfNotPresent`         |
 | `image.pullSecrets`         | HashiCorp Consul image pull secrets                                                          | `[]`                   |
 | `image.debug`               | Enable image debug mode                                                                      | `false`                |
@@ -207,7 +207,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r233`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r264`     |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -221,7 +221,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                   | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                 | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r433`    |
+| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r465`    |
 | `metrics.image.pullPolicy`                 | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.service.type`                     | Kubernetes Service type                                                                                                     | `ClusterIP`               |
