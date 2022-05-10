@@ -418,8 +418,7 @@ priorityClassName: ""
 runtimeClassName: ""
 ## MongoDB(&reg;) pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param 
-.enabled Enable MongoDB(&reg;) pod(s)' Security Context
+## @param podSecurityContext.enabled Enable MongoDB(&reg;) pod(s)' Security Context
 ## @param podSecurityContext.fsGroup Group ID for the volumes of the MongoDB(&reg;) pod(s)
 ## @param podSecurityContext.sysctls sysctl settings of the MongoDB(&reg;) pod(s)'
 ##
@@ -1127,7 +1126,6 @@ arbiter:
     ## - name: net.core.somaxconn
     ##   value: "10000"
     ##
-    sysctls: []
   ## MongoDB(&reg;) Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param arbiter.containerSecurityContext.enabled Enable Arbiter container(s)' Security Context
