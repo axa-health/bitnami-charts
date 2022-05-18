@@ -410,6 +410,9 @@ contour:
   ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
   kubernetesDebug: 0
 
+  ## @param contour.rootNamespaces Restrict Contour to searching these namespaces for root ingress routes.
+  rootNamespaces: ""
+
 ## @section Envoy parameters
 ##
 
@@ -1153,6 +1156,20 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section Metrics parameters
 ##
