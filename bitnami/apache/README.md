@@ -7,23 +7,23 @@ Apache HTTP Server is an open-source HTTP server. The goal of this project is to
 [Overview of Apache](https://httpd.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/apache
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/apache
 ```
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Apache](https://github.com/bitnami/containers/tree/main/bitnami/apache) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/apache
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/apache
 ```
 
 These commands deploy Apache on the Kubernetes cluster in the default configuration.
@@ -82,13 +82,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                        | Apache image registry                                                                                                    | `docker.io`            |
 | `image.repository`                      | Apache image repository                                                                                                  | `bitnami/apache`       |
-| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.53-debian-10-r36` |
+| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.54-debian-11-r42` |
+| `image.digest`                          | Apache image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `image.pullPolicy`                      | Apache image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                     | Apache image pull secrets                                                                                                | `[]`                   |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`                |
 | `git.registry`                          | Git image registry                                                                                                       | `docker.io`            |
 | `git.repository`                        | Git image name                                                                                                           | `bitnami/git`          |
-| `git.tag`                               | Git image tag                                                                                                            | `2.36.0-debian-10-r1`  |
+| `git.tag`                               | Git image tag (immutable tags are recommended)                                                                           | `2.38.0-debian-11-r0`  |
+| `git.digest`                            | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                   |
 | `git.pullPolicy`                        | Git image pull policy                                                                                                    | `IfNotPresent`         |
 | `git.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `replicaCount`                          | Number of replicas of the Apache deployment                                                                              | `1`                    |
@@ -222,7 +224,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-10-r120`   |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-11-r48`    |
+| `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                      |
 | `metrics.image.debug`                      | Apache Exporter image debug mode                                                                                                          | `false`                   |
@@ -249,7 +252,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set imagePullPolicy=Always \
-    bitnami/apache
+    my-repo/apache
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.
@@ -257,7 +260,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/apache
+$ helm install my-release -f values.yaml my-repo/apache
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -284,7 +287,7 @@ Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastru
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -294,7 +297,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### 7.4.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### 7.0.0
 
@@ -302,7 +305,7 @@ This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, whic
 
 ### 6.0.0
 
-This release allows you to use your custom static application. In order to do so, check [this section](#deploying-your-custom-web-application).
+This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
 
 ## Upgrading
 

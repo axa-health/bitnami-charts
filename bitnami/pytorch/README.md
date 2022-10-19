@@ -7,21 +7,21 @@ PyTorch is a deep learning platform that accelerates the transition from researc
 [Overview of PyTorch](https://pytorch.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/pytorch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/pytorch
 ```
 
 ## Introduction
 
-This chart bootstraps a [PyTorch](https://github.com/bitnami/bitnami-docker-pytorch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [PyTorch](https://github.com/bitnami/containers/tree/main/bitnami/pytorch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/pytorch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/pytorch
 ```
 
 These commands deploy PyTorch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
@@ -85,8 +85,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                                  | PyTorch image registry                                                                                                   | `docker.io`            |
 | `image.repository`                                | PyTorch image repository                                                                                                 | `bitnami/pytorch`      |
-| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-10-r24` |
-| `image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`         |
+| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.12.1-debian-11-r22` |
+| `image.digest`                                    | PyTorch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                   |
+| `image.pullPolicy`                                | PyTorch image pull policy                                                                                                | `IfNotPresent`         |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `worldSize`                                       | Number of nodes that will run the code                                                                                   | `1`                    |
 | `containerPorts.pytorch`                          | PyTorch master port. `MASTER_PORT` will be set to this value                                                             | `49875`                |
@@ -144,7 +145,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                             | Pytorch statefulset strategy type                                                                                        | `RollingUpdate`        |
 | `podManagementPolicy`                             | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                       | `OrderedReady`         |
 | `priorityClassName`                               | Pytorch pods' priorityClassName                                                                                          | `""`                   |
-| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                   |
+| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                   |
 | `schedulerName`                                   | Name of the k8s scheduler (other than default) for Pytorch pods                                                          | `""`                   |
 | `terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                   |
 | `lifecycleHooks`                                  | for the Pytorch container(s) to automate configuration before or after startup                                           | `{}`                   |
@@ -153,8 +154,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Pytorch nodes                                                      | `""`                   |
 | `extraVolumes`                                    | Optionally specify extra list of additional volumes for the Pytorch pod(s)                                               | `[]`                   |
 | `extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Pytorch container(s)                                    | `[]`                   |
-| `sidecars`                                        | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `{}`                   |
-| `initContainers`                                  | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `{}`                   |
+| `sidecars`                                        | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `[]`                   |
+| `initContainers`                                  | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `[]`                   |
 
 
 ### Traffic Exposure Parameters
@@ -180,13 +181,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `git.registry`                         | Git image registry                                                                                                                                        | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                                                                      | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.35.1-debian-10-r67`  |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.38.0-debian-11-r2`   |
+| `git.digest`                           | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                       | `""`                    |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                                                     | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r388`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r40`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -215,7 +218,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set mode=distributed \
   --set worldSize=4 \
-    bitnami/pytorch
+    my-repo/pytorch
 ```
 
 The above command create 4 pods for PyTorch: one master and three workers.
@@ -223,7 +226,7 @@ The above command create 4 pods for PyTorch: one master and three workers.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/pytorch
+$ helm install my-release -f values.yaml my-repo/pytorch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -260,7 +263,7 @@ cloneFilesFromGit.revision=master
 
 ## Persistence
 
-The [Bitnami PyTorch](https://github.com/bitnami/bitnami-docker-pytorch) image can persist data. If enabled, the persisted path is `/bitnami/pytorch` by default.
+The [Bitnami PyTorch](https://github.com/bitnami/containers/tree/main/bitnami/pytorch) image can persist data. If enabled, the persisted path is `/bitnami/pytorch` by default.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
@@ -277,7 +280,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -287,7 +290,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 2.1.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 2.0.0
 

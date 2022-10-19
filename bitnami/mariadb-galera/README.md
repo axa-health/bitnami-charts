@@ -7,19 +7,19 @@ MariaDB Galera is a multi-primary database cluster solution for synchronous repl
 [Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mariadb-galera
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mariadb-galera
 ```
 
 ## Introduction
 
-This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) cluster on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) cluster on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with fluentd and Prometheus on top of [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -32,13 +32,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 Add the `bitnami` charts repo to Helm:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
 ```
 
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/mariadb-galera
+$ helm install my-release my-repo/mariadb-galera
 ```
 
 The command deploys MariaDB Galera on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -96,7 +96,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                            | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.7-debian-10-r56`    |
+| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.10-debian-11-r0`    |
+| `image.digest`                                | MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                | `""`                      |
 | `image.pullPolicy`                            | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                                                                                       | `false`                   |
@@ -110,7 +111,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalIPs`                         | External IP list to use with ClusterIP service type                                                                                                                                           | `[]`                      |
 | `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                                            | `""`                      |
 | `service.loadBalancerSourceRanges`            | Addresses that are allowed when svc is `LoadBalancer`                                                                                                                                         | `[]`                      |
+| `service.externalTrafficPolicy`               | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                                                       | `Cluster`                 |
 | `service.annotations`                         | Additional annotations for MariaDB Galera service                                                                                                                                             | `{}`                      |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                          | `None`                    |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                                                   | `{}`                      |
 | `service.headless.annotations`                | Annotations for the headless service.                                                                                                                                                         | `{}`                      |
 | `service.headless.publishNotReadyAddresses`   | Publish not Ready MariaDB Galera pods' IPs in the headless service.                                                                                                                           | `true`                    |
 | `serviceAccount.create`                       | Specify whether a ServiceAccount should be created                                                                                                                                            | `false`                   |
@@ -180,7 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                                    | Affinity for pod assignment                                                                                                                                                                   | `{}`                      |
 | `nodeSelector`                                | Node labels for pod assignment                                                                                                                                                                | `{}`                      |
 | `tolerations`                                 | Tolerations for pod assignment                                                                                                                                                                | `[]`                      |
-| `topologySpreadConstraints`                   | Topology Spread Constraints for pods assignment                                                                                                                                               | `{}`                      |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pods assignment                                                                                                                                               | `[]`                      |
 | `lifecycleHooks`                              | for the galera container(s) to automate configuration before or after startup                                                                                                                 | `{}`                      |
 | `containerPorts.mysql`                        | mariadb database container port                                                                                                                                                               | `3306`                    |
 | `containerPorts.galera`                       | galera cluster container port                                                                                                                                                                 | `4567`                    |
@@ -198,7 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                            | Persistent Volume Size                                                                                                                                                                        | `8Gi`                     |
 | `priorityClassName`                           | Priority Class Name for Statefulset                                                                                                                                                           | `""`                      |
 | `initContainers`                              | Additional init containers (this value is evaluated as a template)                                                                                                                            | `[]`                      |
-| `extraContainers`                             | Additional containers (this value is evaluated as a template)                                                                                                                                 | `[]`                      |
+| `sidecars`                                    | Add additional sidecar containers (this value is evaluated as a template)                                                                                                                     | `[]`                      |
 | `extraVolumes`                                | Extra volumes                                                                                                                                                                                 | `[]`                      |
 | `extraVolumeMounts`                           | Mount extra volume(s)                                                                                                                                                                         | `[]`                      |
 | `resources.limits`                            | The resources limits for the container                                                                                                                                                        | `{}`                      |
@@ -230,7 +234,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                      | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                    | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-10-r45`    |
+| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-11-r37`    |
+| `metrics.image.digest`                        | MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                   | `""`                      |
 | `metrics.image.pullPolicy`                    | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                   | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
 | `metrics.extraFlags`                          | MariaDB Prometheus exporter additional command line flags                                                                                                                                     | `[]`                      |
@@ -258,7 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRules.rules`               | PrometheusRule rules to configure                                                                                                                                                             | `{}`                      |
 
 
-The above parameters map to the env variables defined in [bitnami/mariadb-galera](https://github.com/bitnami/bitnami-docker-mariadb-galera). For more information please refer to the [bitnami/mariadb-galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image documentation.
+The above parameters map to the env variables defined in [bitnami/mariadb-galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera). For more information please refer to the [bitnami/mariadb-galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -266,7 +271,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set rootUser.password=secretpassword,
   --set db.user=app_database \
-    bitnami/mariadb-galera
+    my-repo/mariadb-galera
 ```
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
@@ -276,7 +281,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/mariadb-galera
+$ helm install my-release -f values.yaml my-repo/mariadb-galera
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -290,7 +295,7 @@ For example, if you want to enable the PAM cleartext plugin, specify the command
 ```bash
 $ helm install my-release \
   --set extraFlags="--pam-use-cleartext-plugin=ON" \
-  bitnami/mariadb-galera
+  my-repo/mariadb-galera
 ```
 
 ## Configuration and installation details
@@ -377,7 +382,7 @@ tls.certCAFilename="ca.pem"
 
 ### Initialize a fresh instance
 
-The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+The [Bitnami MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
 
 Alternatively, you can specify custom scripts using the `initdbScripts` parameter as dict.
 
@@ -512,7 +517,7 @@ There are two possible scenarios:
 In this case you will need the node number `N` and run:
 
 ```bash
-helm install my-release bitnami/mariadb-galera \
+helm install my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -525,7 +530,7 @@ helm install my-release bitnami/mariadb-galera \
 In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```bash
-helm install my-release bitnami/mariadb-galera \
+helm install my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -539,7 +544,7 @@ helm install my-release bitnami/mariadb-galera \
 After you have started the cluster by forcing the bootstraping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
 
 ```
-helm upgrade my-release bitnami/mariadb-galera \
+helm upgrade my-release my-repo/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set podManagementPolicy=Parallel
@@ -547,7 +552,7 @@ helm upgrade my-release bitnami/mariadb-galera \
 
 ## Persistence
 
-The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
+The [Bitnami MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
 
@@ -555,7 +560,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -566,7 +571,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `rootUser.password`, `db.password` and `galera.mariabackup.password` parameters when upgrading the chart:
 
 ```bash
-$ helm upgrade my-release bitnami/mariadb-galera \
+$ helm upgrade my-release my-repo/mariadb-galera \
     --set rootUser.password=[ROOT_PASSWORD] \
     --set db.password=[MARIADB_PASSWORD] \
     --set galera.mariabackup.password=[GALERA_MARIABACKUP_PASSWORD]
@@ -588,7 +593,7 @@ Affected values:
 
 ### To 5.2.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 5.0.0
 
@@ -617,7 +622,7 @@ In this version the bootstraping was improved. Now it is possible to indicate a 
 
 ### To 1.0.0
 
-The [Bitnami MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the MySQL daemon was started as the `mysql` user. From now on, both the container and the MySQL daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
+The [Bitnami MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the MySQL daemon was started as the `mysql` user. From now on, both the container and the MySQL daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
 
 Consequences:
 

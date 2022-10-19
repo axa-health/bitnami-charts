@@ -7,21 +7,21 @@ MariaDB is an open source, community-developed SQL database server that is widel
 [Overview of MariaDB](https://mariadb.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mariadb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/mariadb
 ```
 
 ## Introduction
 
-This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MariaDB](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -34,7 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release bitnami/mariadb
+$ helm install my-release my-repo/mariadb
 ```
 
 The command deploys MariaDB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +85,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`            |
 | `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`      |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.7-debian-10-r62` |
+| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.10-debian-11-r6` |
+| `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                   |
 | `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`         |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                   |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`                |
@@ -108,6 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                            | Description                                                                                                       | Value               |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `primary.name`                                  | Name of the primary database (eg primary, master, leader, ...)                                                    | `primary`           |
 | `primary.command`                               | Override default container command on MariaDB Primary container(s) (useful when using custom images)              | `[]`                |
 | `primary.args`                                  | Override default container args on MariaDB Primary container(s) (useful when using custom images)                 | `[]`                |
 | `primary.lifecycleHooks`                        | for the MariaDB Primary container(s) to automate configuration before or after startup                            | `{}`                |
@@ -128,7 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.tolerations`                           | Tolerations for MariaDB primary pods assignment                                                                   | `[]`                |
 | `primary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                    | `""`                |
 | `primary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB primary pods                                           | `""`                |
-| `primary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `{}`                |
+| `primary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `[]`                |
 | `primary.priorityClassName`                     | Priority class for MariaDB primary pods assignment                                                                | `""`                |
 | `primary.podSecurityContext.enabled`            | Enable security context for MariaDB primary pods                                                                  | `true`              |
 | `primary.podSecurityContext.fsGroup`            | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
@@ -176,7 +178,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.initContainers`                        | Add additional init containers for the MariaDB Primary pod(s)                                                     | `[]`                |
 | `primary.sidecars`                              | Add additional sidecar containers for the MariaDB Primary pod(s)                                                  | `[]`                |
 | `primary.service.type`                          | MariaDB Primary Kubernetes service type                                                                           | `ClusterIP`         |
-| `primary.service.ports.mysql`                   | MariaDB Primary Kubernetes service port                                                                           | `3306`              |
+| `primary.service.ports.mysql`                   | MariaDB Primary Kubernetes service port for MariaDB                                                               | `3306`              |
+| `primary.service.ports.metrics`                 | MariaDB Primary Kubernetes service port for metrics                                                               | `9104`              |
 | `primary.service.nodePorts.mysql`               | MariaDB Primary Kubernetes service node port                                                                      | `""`                |
 | `primary.service.clusterIP`                     | MariaDB Primary Kubernetes service clusterIP IP                                                                   | `""`                |
 | `primary.service.loadBalancerIP`                | MariaDB Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`                |
@@ -196,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                              | Description                                                                                                           | Value               |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `secondary.name`                                  | Name of the secondary database (eg secondary, slave, ...)                                                             | `secondary`         |
 | `secondary.replicaCount`                          | Number of MariaDB secondary replicas                                                                                  | `1`                 |
 | `secondary.command`                               | Override default container command on MariaDB Secondary container(s) (useful when using custom images)                | `[]`                |
 | `secondary.args`                                  | Override default container args on MariaDB Secondary container(s) (useful when using custom images)                   | `[]`                |
@@ -215,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.affinity`                              | Affinity for MariaDB secondary pods assignment                                                                        | `{}`                |
 | `secondary.nodeSelector`                          | Node labels for MariaDB secondary pods assignment                                                                     | `{}`                |
 | `secondary.tolerations`                           | Tolerations for MariaDB secondary pods assignment                                                                     | `[]`                |
-| `secondary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `{}`                |
+| `secondary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `[]`                |
 | `secondary.priorityClassName`                     | Priority class for MariaDB secondary pods assignment                                                                  | `""`                |
 | `secondary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                |
 | `secondary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB secondary pods                                             | `""`                |
@@ -264,7 +268,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.initContainers`                        | Add additional init containers for the MariaDB secondary pod(s)                                                       | `[]`                |
 | `secondary.sidecars`                              | Add additional sidecar containers for the MariaDB secondary pod(s)                                                    | `[]`                |
 | `secondary.service.type`                          | MariaDB secondary Kubernetes service type                                                                             | `ClusterIP`         |
-| `secondary.service.ports.mysql`                   | MariaDB secondary Kubernetes service port                                                                             | `3306`              |
+| `secondary.service.ports.mysql`                   | MariaDB secondary Kubernetes service port for MariaDB                                                                 | `3306`              |
+| `secondary.service.ports.metrics`                 | MariaDB secondary Kubernetes service port for metrics                                                                 | `9104`              |
 | `secondary.service.nodePorts.mysql`               | MariaDB secondary Kubernetes service node port                                                                        | `""`                |
 | `secondary.service.clusterIP`                     | MariaDB secondary Kubernetes service clusterIP IP                                                                     | `""`                |
 | `secondary.service.loadBalancerIP`                | MariaDB secondary loadBalancerIP if service type is `LoadBalancer`                                                    | `""`                |
@@ -293,16 +298,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                          | Value                   |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r401`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |
+| Name                                   | Description                                                                                                                       | Value                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r38`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                               | `{}`                    |
 
 
 ### Metrics parameters
@@ -312,11 +318,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                                      | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                                                   | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-10-r46`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-11-r43`    |
+| `metrics.image.digest`                       | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                      |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
 | `metrics.annotations`                        | Annotations for the Exporter pod                                                                                                          | `{}`                      |
 | `metrics.extraArgs`                          | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                      |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                      |
 | `metrics.containerSecurityContext.enabled`   | Enable security context for MariaDB metrics container                                                                                     | `false`                   |
 | `metrics.resources.limits`                   | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                      |
 | `metrics.resources.requests`                 | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                      |
@@ -368,14 +376,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/bitnami-docker-mariadb) image documentation.
+The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
 $ helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
-    bitnami/mariadb
+    my-repo/mariadb
 ```
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
@@ -385,7 +393,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/mariadb
+$ helm install my-release -f values.yaml my-repo/mariadb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -404,7 +412,7 @@ To modify the MariaDB version used in this chart you can specify a [valid image 
 
 ### Initialize a fresh instance
 
-The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
+The [Bitnami MariaDB](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
@@ -422,7 +430,7 @@ Similarly, additional containers can be added to MariaDB pods using the `initCon
 
 ## Persistence
 
-The [Bitnami MariaDB](https://github.com/bitnami/bitnami-docker-mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
+The [Bitnami MariaDB](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can also be defined.
 
@@ -445,7 +453,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```bash
-$ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
+$ helm upgrade my-release my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
 ```
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
@@ -492,7 +500,7 @@ Affected values:
   - [Incompatible changes upgrading from MariaDB 10.3 to MariaDB 10.4](https://mariadb.com/kb/en/upgrading-from-mariadb-103-to-mariadb-104/#incompatible-changes-between-103-and-104).
   - [Incompatible changes upgrading from MariaDB 10.4 to MariaDB 10.5](https://mariadb.com/kb/en/upgrading-from-mariadb-104-to-mariadb-105/#incompatible-changes-between-104-and-105).
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 Consequences:
 
@@ -502,7 +510,7 @@ Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new 
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mariadb`:
 
 ```bash
-$ helm install mariadb bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
+$ helm install mariadb my-repo/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
 
 | Note: you need to substitute the placeholder _[EXISTING_PVC]_ with the name of the PVC used on your previous release, and _[ROOT_PASSWORD]_ with the root password used in your previous release.

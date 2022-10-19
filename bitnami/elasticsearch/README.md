@@ -7,19 +7,19 @@ Elasticsearch is a distributed search and analytics engine. It is used for web s
 [Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/elasticsearch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/elasticsearch
 ```
 
 ## Introduction
 
-This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/elasticsearch
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/elasticsearch
 ```
 
 These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -96,6 +96,7 @@ $ helm delete --purge my-release
 | `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
 | `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                           |
 | `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                           |
+| `extraHosts`                               | A list of external hosts which are part of this cluster                                                                                             | `[]`                           |
 | `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
 | `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
 | `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
@@ -108,7 +109,8 @@ $ helm delete --purge my-release
 | `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                           |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.2.0-debian-10-r1`           |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.4.3-debian-11-r2`           |
+| `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
 | `image.debug`                              | Enable Elasticsearch image debug mode                                                                                                               | `false`                        |
@@ -176,6 +178,8 @@ $ helm delete --purge my-release
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
 | `master.nameOverride`                                | String to partially override elasticsearch.master.fullname                                                                                         | `""`                |
 | `master.fullnameOverride`                            | String to fully override elasticsearch.master.fullname                                                                                             | `""`                |
+| `master.servicenameOverride`                         | String to fully override elasticsearch.master.servicename                                                                                          | `""`                |
+| `master.annotations`                                 | Annotations for the master statefulset                                                                                                             | `{}`                |
 | `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                     | `RollingUpdate`     |
 | `master.resources.limits`                            | The resources limits for the master-elegible containers                                                                                            | `{}`                |
 | `master.resources.requests`                          | The requested resources for the master-elegible containers                                                                                         | `{}`                |
@@ -258,6 +262,8 @@ $ helm delete --purge my-release
 | `data.replicaCount`                                | Number of data-only replicas to deploy                                                                                                           | `2`                 |
 | `data.nameOverride`                                | String to partially override elasticsearch.data.fullname                                                                                         | `""`                |
 | `data.fullnameOverride`                            | String to fully override elasticsearch.data.fullname                                                                                             | `""`                |
+| `data.servicenameOverride`                         | String to fully override elasticsearch.data.servicename                                                                                          | `""`                |
+| `data.annotations`                                 | Annotations for the data statefulset                                                                                                             | `{}`                |
 | `data.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                         | `RollingUpdate`     |
 | `data.resources.limits`                            | The resources limits for the data containers                                                                                                     | `{}`                |
 | `data.resources.requests`                          | The requested resources for the data containers                                                                                                  | `{}`                |
@@ -340,6 +346,8 @@ $ helm delete --purge my-release
 | `coordinating.replicaCount`                                | Number of coordinating-only replicas to deploy                                                                            | `2`             |
 | `coordinating.nameOverride`                                | String to partially override elasticsearch.coordinating.fullname                                                          | `""`            |
 | `coordinating.fullnameOverride`                            | String to fully override elasticsearch.coordinating.fullname                                                              | `""`            |
+| `coordinating.servicenameOverride`                         | String to fully override elasticsearch.coordinating.servicename                                                           | `""`            |
+| `coordinating.annotations`                                 | Annotations for the coordinating-only statefulset                                                                         | `{}`            |
 | `coordinating.updateStrategy.type`                         | Coordinating-only nodes statefulset stategy type                                                                          | `RollingUpdate` |
 | `coordinating.resources.limits`                            | The resources limits for the coordinating-only containers                                                                 | `{}`            |
 | `coordinating.resources.requests`                          | The requested resources for the coordinating-only containers                                                              | `{}`            |
@@ -411,9 +419,12 @@ $ helm delete --purge my-release
 
 | Name                                                 | Description                                                                                                                      | Value                        |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `true`                       |
 | `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
 | `ingest.nameOverride`                                | String to partially override elasticsearch.ingest.fullname                                                                       | `""`                         |
 | `ingest.fullnameOverride`                            | String to fully override elasticsearch.ingest.fullname                                                                           | `""`                         |
+| `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                         |
+| `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                         |
 | `ingest.containerPorts.restAPI`                      | Elasticsearch REST API port                                                                                                      | `9200`                       |
 | `ingest.containerPorts.transport`                    | Elasticsearch Transport port                                                                                                     | `9300`                       |
 | `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`              |
@@ -511,150 +522,88 @@ $ helm delete --purge my-release
 | `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
 
-### Elasticsearch curator parameters
-
-| Name                                                  | Description                                                                                                                                 | Value                           |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `curator.enabled`                                     | Enable Elasticsearch Curator cron job                                                                                                       | `false`                         |
-| `curator.nameOverride`                                | String to partially override elasticsearch.curator.fullname                                                                                 | `""`                            |
-| `curator.fullnameOverride`                            | String to fully override elasticsearch.curator.fullname                                                                                     | `""`                            |
-| `curator.hooks`                                       | Whether to run job on selected hooks                                                                                                        | `{}`                            |
-| `curator.dryRun`                                      | Run Curator in dry-run mode                                                                                                                 | `false`                         |
-| `curator.jobAnnotations`                              | Annotations to add to the job                                                                                                               | `{}`                            |
-| `curator.jobLabels`                                   | Annotations to add to the job                                                                                                               | `{}`                            |
-| `curator.image.registry`                              | Elasticsearch Curator image registry                                                                                                        | `docker.io`                     |
-| `curator.image.repository`                            | Elasticsearch Curator image repository                                                                                                      | `bitnami/elasticsearch-curator` |
-| `curator.image.tag`                                   | Elasticsearch Curator image tag                                                                                                             | `5.8.4-debian-10-r333`          |
-| `curator.image.pullPolicy`                            | Elasticsearch Curator image pull policy                                                                                                     | `IfNotPresent`                  |
-| `curator.image.pullSecrets`                           | Elasticsearch Curator image pull secrets                                                                                                    | `[]`                            |
-| `curator.cronjob.schedule`                            | Schedule for the CronJob                                                                                                                    | `0 1 * * *`                     |
-| `curator.cronjob.concurrencyPolicy`                   | `Allow,Forbid,Replace` concurrent jobs                                                                                                      | `""`                            |
-| `curator.cronjob.failedJobsHistoryLimit`              | Specify the number of failed Jobs to keep                                                                                                   | `""`                            |
-| `curator.cronjob.successfulJobsHistoryLimit`          | Specify the number of completed Jobs to keep                                                                                                | `""`                            |
-| `curator.cronjob.jobRestartPolicy`                    | Control the Job restartPolicy                                                                                                               | `Never`                         |
-| `curator.cronjob.cronjobAnnotations`                  | Annotations to add to the cronjob                                                                                                           | `{}`                            |
-| `curator.cronjob.cronjobLabels`                       | Annotations to add to the cronjob                                                                                                           | `{}`                            |
-| `curator.cronjob.jobAnnotations`                      | Annotations to add to the job template                                                                                                      | `{}`                            |
-| `curator.cronjob.jobLabels`                           | Annotations to add to the job template                                                                                                      | `{}`                            |
-| `curator.podSecurityContext.enabled`                  | Enabled Curator jobs' Security Context                                                                                                      | `true`                          |
-| `curator.podSecurityContext.fsGroup`                  | Set Curator pod's Security Context fsGroup                                                                                                  | `1001`                          |
-| `curator.containerSecurityContext.enabled`            | Enabled Curator containers' Security Context                                                                                                | `true`                          |
-| `curator.containerSecurityContext.runAsUser`          | Set Curator containers' Security Context runAsUser                                                                                          | `1001`                          |
-| `curator.containerSecurityContext.runAsNonRoot`       | Set Curator containers' Security Context runAsNonRoot                                                                                       | `true`                          |
-| `curator.hostAliases`                                 | Curator pods host aliases                                                                                                                   | `[]`                            |
-| `curator.podAnnotations`                              | Annotations to add to the pod                                                                                                               | `{}`                            |
-| `curator.podLabels`                                   | Extra labels to add to Pod                                                                                                                  | `{}`                            |
-| `curator.podAffinityPreset`                           | Curator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                            |
-| `curator.podAntiAffinityPreset`                       | Curator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                            | `""`                            |
-| `curator.nodeAffinityPreset.type`                     | Curator Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                           | `""`                            |
-| `curator.nodeAffinityPreset.key`                      | Curator Node label key to match Ignored if `affinity` is set.                                                                               | `""`                            |
-| `curator.nodeAffinityPreset.values`                   | Curator Node label values to match. Ignored if `affinity` is set.                                                                           | `[]`                            |
-| `curator.affinity`                                    | Curator Affinity for pod assignment                                                                                                         | `{}`                            |
-| `curator.nodeSelector`                                | Curator Node labels for pod assignment                                                                                                      | `{}`                            |
-| `curator.tolerations`                                 | Curator Tolerations for pod assignment                                                                                                      | `[]`                            |
-| `curator.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `[]`                            |
-| `curator.priorityClassName`                           | Curator Pods Priority Class Name                                                                                                            | `""`                            |
-| `curator.schedulerName`                               | Name of the k8s scheduler (other than default)                                                                                              | `""`                            |
-| `curator.resources.limits`                            | The resources limits for the container                                                                                                      | `{}`                            |
-| `curator.resources.requests`                          | The requested resources for the container                                                                                                   | `{}`                            |
-| `curator.configMaps.action_file_yml`                  | Contents of the Curator action_file.yml. Required if curator job is enabled.                                                                | `""`                            |
-| `curator.configMaps.config_yml`                       | Contents of the Curator config.yml (overrides config)                                                                                       | `""`                            |
-| `curator.command`                                     | Override default container command (useful when using custom images)                                                                        | `[]`                            |
-| `curator.args`                                        | Override default container args (useful when using custom images)                                                                           | `[]`                            |
-| `curator.lifecycleHooks`                              | for the Curator container(s) to automate configuration before or after startup                                                              | `{}`                            |
-| `curator.extraEnvVars`                                | Array with extra environment variables to add to Curator nodes                                                                              | `[]`                            |
-| `curator.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for Curator nodes                                                                      | `""`                            |
-| `curator.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for Curator nodes                                                                         | `""`                            |
-| `curator.extraVolumes`                                | Extra volumes                                                                                                                               | `[]`                            |
-| `curator.extraVolumeMounts`                           | Mount extra volume(s)                                                                                                                       | `[]`                            |
-| `curator.initContainers`                              | Extra init containers to add to the Elasticsearch coordinating-only pod(s)                                                                  | `[]`                            |
-| `curator.sidecars`                                    | Extra sidecar containers to add to the Elasticsearch ingest pod(s)                                                                          | `[]`                            |
-| `curator.rbac.enabled`                                | Enable RBAC resources                                                                                                                       | `false`                         |
-| `curator.rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`                            |
-| `curator.serviceAccount.create`                       | Create a default serviceaccount for elasticsearch curator                                                                                   | `true`                          |
-| `curator.serviceAccount.name`                         | Name for elasticsearch curator serviceaccount                                                                                               | `""`                            |
-| `curator.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`                          |
-| `curator.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                            |
-| `curator.psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`                         |
-
-
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                              | Value                            |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
-| `metrics.enabled`                               | Enable prometheus exporter                                                                                               | `false`                          |
-| `metrics.nameOverride`                          | Metrics pod name                                                                                                         | `""`                             |
-| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                           | `""`                             |
-| `metrics.image.registry`                        | Metrics exporter image registry                                                                                          | `docker.io`                      |
-| `metrics.image.repository`                      | Metrics exporter image repository                                                                                        | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                               | `1.3.0-debian-10-r188`           |
-| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                       | `IfNotPresent`                   |
-| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                      | `[]`                             |
-| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                   | `[]`                             |
-| `metrics.hostAliases`                           | Add deployment host aliases                                                                                              | `[]`                             |
-| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                           | `""`                             |
-| `metrics.priorityClassName`                     | Elasticsearch metrics exporter pods' priorityClassName                                                                   | `""`                             |
-| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                   | `ClusterIP`                      |
-| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                   | `9114`                           |
-| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                | `{}`                             |
-| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                             |
-| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`                             |
-| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                             |
-| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                            | `""`                             |
-| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                        | `[]`                             |
-| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                      | `{}`                             |
-| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                   | `{}`                             |
-| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                   | `[]`                             |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                             |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                                   | `{}`                             |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                                | `{}`                             |
-| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                          | `true`                           |
-| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                   | `60`                             |
-| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                             | `10`                             |
-| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                   | `5`                              |
-| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`                              |
-| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                | `1`                              |
-| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                         | `true`                           |
-| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                  | `5`                              |
-| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                             | `10`                             |
-| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                   | `1`                              |
-| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`                              |
-| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                | `1`                              |
-| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                           | `false`                          |
-| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                    | `5`                              |
-| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                             | `10`                             |
-| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                   | `1`                              |
-| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                | `5`                              |
-| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                | `1`                              |
-| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                              | `{}`                             |
-| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                              | `{}`                             |
-| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                             | `{}`                             |
-| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                               | `{}`                             |
-| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                               | `{}`                             |
-| `metrics.podSecurityContext.enabled`            | Enabled Elasticsearch metrics exporter pods' Security Context                                                            | `true`                           |
-| `metrics.podSecurityContext.fsGroup`            | Set Elasticsearch metrics exporter pod's Security Context fsGroup                                                        | `1001`                           |
-| `metrics.containerSecurityContext.enabled`      | Enabled Elasticsearch metrics exporter containers' Security Context                                                      | `true`                           |
-| `metrics.containerSecurityContext.runAsUser`    | Set Elasticsearch metrics exporter containers' Security Context runAsUser                                                | `1001`                           |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Elasticsearch metrics exporter container's Security Context runAsNonRoot                                             | `true`                           |
-| `metrics.command`                               | Override default container command (useful when using custom images)                                                     | `[]`                             |
-| `metrics.args`                                  | Override default container args (useful when using custom images)                                                        | `[]`                             |
-| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Elasticsearch metrics exporter nodes                                    | `[]`                             |
-| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes                            | `""`                             |
-| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes                               | `""`                             |
-| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)                        | `[]`                             |
-| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)             | `[]`                             |
-| `metrics.sidecars`                              | Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)                                           | `[]`                             |
-| `metrics.initContainers`                        | Add additional init containers to the Elasticsearch metrics exporter pod(s)                                              | `[]`                             |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                             | `false`                          |
-| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                 | `""`                             |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                        | `""`                             |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                              | `""`                             |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                  | `""`                             |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                       | `[]`                             |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                | `[]`                             |
-| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                           | `{}`                             |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                      | `{}`                             |
-| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                 | `false`                          |
+| Name                                            | Description                                                                                                                    | Value                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| `metrics.enabled`                               | Enable prometheus exporter                                                                                                     | `false`                          |
+| `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                             |
+| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
+| `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
+| `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r27`            |
+| `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
+| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
+| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
+| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                             |
+| `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                             |
+| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                             |
+| `metrics.priorityClassName`                     | Elasticsearch metrics exporter pods' priorityClassName                                                                         | `""`                             |
+| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                      |
+| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                           |
+| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                             |
+| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                             |
+| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                             |
+| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                             |
+| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                                  | `""`                             |
+| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                             |
+| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                            | `{}`                             |
+| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                         | `{}`                             |
+| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                         | `[]`                             |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                             |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                             |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                             |
+| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                                | `true`                           |
+| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                         | `60`                             |
+| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
+| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                         | `5`                              |
+| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
+| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
+| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                               | `true`                           |
+| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                        | `5`                              |
+| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
+| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                         | `1`                              |
+| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
+| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
+| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                                 | `false`                          |
+| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                          | `5`                              |
+| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
+| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                         | `1`                              |
+| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
+| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
+| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                                    | `{}`                             |
+| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                                    | `{}`                             |
+| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                             |
+| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                             |
+| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                             |
+| `metrics.podSecurityContext.enabled`            | Enabled Elasticsearch metrics exporter pods' Security Context                                                                  | `true`                           |
+| `metrics.podSecurityContext.fsGroup`            | Set Elasticsearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                           |
+| `metrics.containerSecurityContext.enabled`      | Enabled Elasticsearch metrics exporter containers' Security Context                                                            | `true`                           |
+| `metrics.containerSecurityContext.runAsUser`    | Set Elasticsearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                           |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Elasticsearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                           |
+| `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                             |
+| `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                             |
+| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Elasticsearch metrics exporter nodes                                          | `[]`                             |
+| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes                                  | `""`                             |
+| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes                                     | `""`                             |
+| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)                              | `[]`                             |
+| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)                   | `[]`                             |
+| `metrics.sidecars`                              | Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)                                                 | `[]`                             |
+| `metrics.initContainers`                        | Add additional init containers to the Elasticsearch metrics exporter pod(s)                                                    | `[]`                             |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                          |
+| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                             |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                             |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                    | `""`                             |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                             |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                             |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                             |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                             |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                            | `{}`                             |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                       | `false`                          |
+| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                          |
+| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                             |
+| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
+| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
 
 
 ### Init Container Parameters
@@ -664,7 +613,8 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r415`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r41`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -672,7 +622,8 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
 | `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
 | `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `10-debian-10-r415`     |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r41`      |
+| `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |
 | `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -692,7 +643,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
-  bitnami/elasticsearch
+  my-repo/elasticsearch
 ```
 
 The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
@@ -700,7 +651,7 @@ The above command sets the Elasticsearch cluster name to `my-elastic` and REST p
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/elasticsearch
+$ helm install my-release -f values.yaml my-repo/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml).
@@ -759,7 +710,7 @@ kibana:
         # Instruct kibana to connect to elastic over https
         enabled: true
         # Bit of a catch 22, as you will need to know the name upfront of your release
-        existingSecret: RELEASENAME-elasticsearch-coordinating-only-crt
+        existingSecret: RELEASENAME-elasticsearch-coordinating-crt # or just 'elasticsearch-coordinating-crt' if the release name happens to be 'elasticsearch'
         # As the certs are auto-generated, they are pemCerts so set to true
         usePemCerts: true
 ```
@@ -848,11 +799,11 @@ initContainers:
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Persistence
 
-The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
+The [Bitnami Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
 
 By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 
@@ -870,6 +821,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+The new version of this chart no longer supports elasticsearch-curator, this repository has been deprecated.
 
 ### To 18.0.0
 
@@ -897,18 +852,15 @@ The following values have been modified:
 - `global.coordinating.name` have been renamed as `global.elasticsaerch.service.name`.
 - `name` has been renamed as `clusterName`.
 - `extraEnvVarsConfigMap` has been renamed as `extraEnvVarsCM`.
-- `{master/data/ingest/coordinating/curator/metrics}.name` has been renamed as `{master/data/ingest/coordinating/curator}.nameOverride`.
 - `{master/data/ingest/coordinating}.replicas` has been renamed as `{master/data/ingest/coordinating}.replicaCount`.
 - `{master/data/ingest/coordinating}.securityContext` has been separated in two different values: `podSecurityContext` and `containerSecurityContext`.
 - `{master/data/ingest/coordinating}.updateStrategy` is now interpreted as an object. `rollingUpdatePartition` has been removed and has to be configured inside the updateStrategy object when needed.
-- `curator.env` renames as `curator.extraEnvVars`.
-- `curator.configMaps.action_file_yml` is now empty by default. Helm will fail to install if not provided. We considered that setting a 'Delete indices older than 90 days' as a default action was not a good practice and could lead to accidents.
-- `curator.dryrun` was renamed as `curator.dryRun`.
 - Default values for `kibana.elasticsearch.hosts` and `kibana.elasticsearch.port` have been modified to use the new helpers.
+- `{master/data/ingest/coordinating/curator/metrics}.name` has been renamed as `{master/data/ingest/coordinating/curator}.nameOverride`.
 
 ### To 17.0.0
 
-This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/master/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
+This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/main/bitnami/kibana#to-900) you can see the changes implemented in this Kibana major version.
 
 ### To 16.0.0
 
@@ -969,7 +921,7 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 $ kubectl delete statefulset elasticsearch-master
-$ helm upgrade <DEPLOYMENT_NAME> bitnami/elasticsearch
+$ helm upgrade <DEPLOYMENT_NAME> my-repo/elasticsearch
 ```
 
 ### TO 10.0.0
@@ -990,7 +942,7 @@ In [4dfac075aacf74405e31ae5b27df4369e84eb0b0](https://github.com/bitnami/charts/
 
 ### To 7.4.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 7.0.0
 

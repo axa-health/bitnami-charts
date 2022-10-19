@@ -211,6 +211,21 @@ SASL_PLAINTEXT
 {{- end -}}
 
 {{/*
+Return the protocol used with zookeeper
+*/}}
+{{- define "kafka.zookeeper.protocol" -}}
+{{- if and .Values.auth.zookeeper.tls.enabled .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser -}}
+SASL_SSL
+{{- else if and .Values.auth.zookeeper.tls.enabled -}}
+SSL
+{{- else if and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser -}}
+SASL
+{{- else -}}
+PLAINTEXT
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka JAAS credentials secret
 */}}
 {{- define "kafka.jaasSecretName" -}}
@@ -227,7 +242,7 @@ Return true if a JAAS credentials secret object should be created
 */}}
 {{- define "kafka.createJaasSecret" -}}
 {{- $secretName := .Values.auth.sasl.jaas.existingSecret -}}
-{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) (and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser)) (empty $secretName) -}}
+{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) (and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser)) (empty $secretName) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -346,6 +361,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kafka.validateValues.authProtocols" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.domainSpecified" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryIPsOrNames" .) -}}
@@ -383,11 +399,19 @@ kafka: .Values.externalAccess.service.nodePorts
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Kafka - domain must be defined if external service type ClusterIP */}}
+{{- define "kafka.validateValues.domainSpecified" -}}
+{{- if and (eq .Values.externalAccess.service.type "ClusterIP") (eq .Values.externalAccess.service.domain "") -}}
+kafka: .Values.externalAccess.service.domain
+    Domain must be specified if service type ClusterIP is set for external service
+{{- end -}}
+{{- end -}}
+
 {{/* Validate values of Kafka - service type for external access */}}
 {{- define "kafka.validateValues.externalAccessServiceType" -}}
-{{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) -}}
+{{- if and (not (eq .Values.externalAccess.service.type "NodePort")) (not (eq .Values.externalAccess.service.type "LoadBalancer")) (not (eq .Values.externalAccess.service.type "ClusterIP")) -}}
 kafka: externalAccess.service.type
-    Available service type for external access are NodePort or LoadBalancer.
+    Available service type for external access are NodePort, LoadBalancer or ClusterIP.
 {{- end -}}
 {{- end -}}
 
@@ -427,7 +451,7 @@ kafka: externalAccess.service.{{ .element }}
 
 {{/* Validate values of Kafka - SASL mechanisms must be provided when using SASL */}}
 {{- define "kafka.validateValues.saslMechanisms" -}}
-{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") (and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser)) (not .Values.auth.sasl.mechanisms) }}
+{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") (and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser)) (not .Values.auth.sasl.mechanisms) }}
 kafka: auth.sasl.mechanisms
     The SASL mechanisms are required when either auth.clientProtocol or auth.interBrokerProtocol use SASL or Zookeeper user is provided.
 {{- end }}

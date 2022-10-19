@@ -7,19 +7,19 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/influxdb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/influxdb
 ```
 
 ## Introduction
 
-This chart bootstraps a [influxdb](https://github.com/bitnami/bitnami-docker-influxdb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [influxdb](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/influxdb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/influxdb
 ```
 
 These commands deploy influxdb on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -84,7 +84,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                 | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                               | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`    |
-| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.2.0-debian-10-r30` |
+| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.4.0-debian-11-r11` |
+| `image.digest`                                   | InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                      | `""`                  |
 | `image.pullPolicy`                               | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                              | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                  |
 | `image.debug`                                    | Specify if debug logs should be enabled                                                                                                                                                                                                                              | `false`               |
@@ -219,114 +220,120 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                                                 | Value               |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                     | `false`             |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                         | `ClusterIP`         |
-| `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                                                             | `9122`              |
-| `metrics.service.nodePort`                 | Kubernetes HTTP node port                                                                                                                   | `""`                |
-| `metrics.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                                                                                            | `""`                |
-| `metrics.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                                       | `[]`                |
-| `metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                                                              | `""`                |
-| `metrics.service.annotations`              | Annotations for the Prometheus metrics service                                                                                              | `{}`                |
-| `metrics.service.externalTrafficPolicy`    | Service external traffic policy                                                                                                             | `Cluster`           |
-| `metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                |
-| `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`              |
-| `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                 | `{}`                |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                      | `false`             |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                    | `""`                |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                                | `""`                |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                     | `""`                |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                          | `[]`                |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                   | `[]`                |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                         | `{}`                |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                                    | `false`             |
-| `networkPolicy.enabled`                    | Enable NetworkPolicy                                                                                                                        | `false`             |
-| `networkPolicy.allowExternal`              | Don't require client label for connections                                                                                                  | `true`              |
-| `persistence.enabled`                      | Enable data persistence                                                                                                                     | `true`              |
-| `persistence.existingClaim`                | Use a existing PVC which must be created manually before bound                                                                              | `""`                |
-| `persistence.storageClass`                 | Specify the `storageClass` used to provision the volume                                                                                     | `""`                |
-| `persistence.accessModes`                  | Access mode of data volume                                                                                                                  | `["ReadWriteOnce"]` |
-| `persistence.size`                         | Size of data volume                                                                                                                         | `8Gi`               |
-| `persistence.annotations`                  | Persistent Volume Claim annotations                                                                                                         | `{}`                |
-| `serviceAccount.enabled`                   | Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)                       | `false`             |
-| `serviceAccount.name`                      | Name of an already existing service account. Setting this value disables the automatic service account creation                             | `""`                |
-| `psp.create`                               | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
-| `rbac.create`                              | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
+| Name                                          | Description                                                                                                                                 | Value               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                                                     | `false`             |
+| `metrics.service.type`                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                         | `ClusterIP`         |
+| `metrics.service.port`                        | InfluxDB&trade; Prometheus port                                                                                                             | `9122`              |
+| `metrics.service.nodePort`                    | Kubernetes HTTP node port                                                                                                                   | `""`                |
+| `metrics.service.loadBalancerIP`              | loadBalancerIP if service type is `LoadBalancer`                                                                                            | `""`                |
+| `metrics.service.loadBalancerSourceRanges`    | Address that are allowed when service is LoadBalancer                                                                                       | `[]`                |
+| `metrics.service.clusterIP`                   | Static clusterIP or None for headless services                                                                                              | `""`                |
+| `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                                                              | `{}`                |
+| `metrics.service.externalTrafficPolicy`       | Service external traffic policy                                                                                                             | `Cluster`           |
+| `metrics.service.extraPorts`                  | Extra ports to expose (normally used with the `sidecar` value)                                                                              | `[]`                |
+| `metrics.service.sessionAffinity`             | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`              |
+| `metrics.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                                                                                                 | `{}`                |
+| `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                      | `false`             |
+| `metrics.serviceMonitor.namespace`            | Namespace in which Prometheus is running                                                                                                    | `""`                |
+| `metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped.                                                                                                | `""`                |
+| `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                                     | `""`                |
+| `metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                                          | `[]`                |
+| `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                   | `[]`                |
+| `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                                         | `{}`                |
+| `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                    | `false`             |
+| `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                        | `false`             |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`              |
+| `persistence.enabled`                         | Enable data persistence                                                                                                                     | `true`              |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                                              | `""`                |
+| `persistence.storageClass`                    | Specify the `storageClass` used to provision the volume                                                                                     | `""`                |
+| `persistence.accessModes`                     | Access mode of data volume                                                                                                                  | `["ReadWriteOnce"]` |
+| `persistence.size`                            | Size of data volume                                                                                                                         | `8Gi`               |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                         | `{}`                |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`                |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`              |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`                |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
+| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
 
 
 ### Volume permissions parameters
 
-| Name                                          | Description                                                                                                       | Value                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r421`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]`                    |
-| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                     |
+| Name                                          | Description                                                                                                                       | Value                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`                 | `false`                 |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r37`      |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                 | `0`                     |
 
 
 ### InfluxDB&trade; backup parameters
 
-| Name                                              | Description                                                                                             | Value                      |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `backup.enabled`                                  | Enable InfluxDB&trade; backup                                                                           | `false`                    |
-| `backup.directory`                                | Directory where backups are stored                                                                      | `/backups`                 |
-| `backup.retentionDays`                            | Retention time in days for backups (older backups are deleted)                                          | `10`                       |
-| `backup.cronjob.schedule`                         | Schedule in Cron format to save snapshots                                                               | `0 2 * * *`                |
-| `backup.cronjob.historyLimit`                     | Number of successful finished jobs to retain                                                            | `1`                        |
-| `backup.cronjob.podAnnotations`                   | Pod annotations                                                                                         | `{}`                       |
-| `backup.cronjob.securityContext.enabled`          | Enable security context for InfluxDB&trade;                                                             | `true`                     |
-| `backup.cronjob.securityContext.fsGroup`          | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                     |
-| `backup.cronjob.securityContext.runAsUser`        | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                     |
-| `backup.podAffinityPreset`                        | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                       |
-| `backup.podAntiAffinityPreset`                    | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
-| `backup.nodeAffinityPreset.type`                  | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
-| `backup.nodeAffinityPreset.key`                   | Backup&trade; Node label key to match Ignored if `affinity` is set.                                     | `""`                       |
-| `backup.nodeAffinityPreset.values`                | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
-| `backup.affinity`                                 | Backup&trade; Affinity for backup pod assignment                                                        | `{}`                       |
-| `backup.nodeSelector`                             | Backup&trade; Node labels for backup pod assignment                                                     | `{}`                       |
-| `backup.tolerations`                              | Backup&trade; Tolerations for backup pod assignment                                                     | `[]`                       |
-| `backup.uploadProviders.google.enabled`           | enable upload to google storage bucket                                                                  | `false`                    |
-| `backup.uploadProviders.google.secret`            | json secret with serviceaccount data to access Google storage bucket                                    | `""`                       |
-| `backup.uploadProviders.google.secretKey`         | service account secret key name                                                                         | `key.json`                 |
-| `backup.uploadProviders.google.existingSecret`    | Name of existing secret object with Google serviceaccount json credentials                              | `""`                       |
-| `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                         | `gs://bucket/influxdb`     |
-| `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                         | `docker.io`                |
-| `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                             | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.384.0-debian-10-r6`     |
-| `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                      | `IfNotPresent`             |
-| `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                        | `[]`                       |
-| `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                | `false`                    |
-| `backup.uploadProviders.azure.secret`             | Secret with credentials to access Azure storage                                                         | `""`                       |
-| `backup.uploadProviders.azure.secretKey`          | Service account secret key name                                                                         | `connection-string`        |
-| `backup.uploadProviders.azure.existingSecret`     | Name of existing secret object                                                                          | `""`                       |
-| `backup.uploadProviders.azure.containerName`      | Destination container                                                                                   | `influxdb-container`       |
-| `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                | `docker.io`                |
-| `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                              | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.36.0-debian-10-r13`     |
-| `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                             | `IfNotPresent`             |
-| `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]`                       |
-| `backup.uploadProviders.aws.enabled`              | Enable upload to aws s3 bucket                                                                          | `false`                    |
-| `backup.uploadProviders.aws.accessKeyID`          | Access Key ID to access aws s3                                                                          | `""`                       |
-| `backup.uploadProviders.aws.secretAccessKey`      | Secret Access Key to access aws s3                                                                      | `""`                       |
-| `backup.uploadProviders.aws.region`               | Region of aws s3 bucket                                                                                 | `us-east-1`                |
-| `backup.uploadProviders.aws.existingSecret`       | Name of existing secret object                                                                          | `""`                       |
-| `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                      | `s3://bucket/influxdb`     |
-| `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                  | `docker.io`                |
-| `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                | `bitnami/aws-cli`          |
-| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                      | `2.4.7-debian-10-r4`       |
-| `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                               | `IfNotPresent`             |
-| `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                        | `[]`                       |
+| Name                                              | Description                                                                                                      | Value                      |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `backup.enabled`                                  | Enable InfluxDB&trade; backup                                                                                    | `false`                    |
+| `backup.directory`                                | Directory where backups are stored                                                                               | `/backups`                 |
+| `backup.retentionDays`                            | Retention time in days for backups (older backups are deleted)                                                   | `10`                       |
+| `backup.cronjob.schedule`                         | Schedule in Cron format to save snapshots                                                                        | `0 2 * * *`                |
+| `backup.cronjob.historyLimit`                     | Number of successful finished jobs to retain                                                                     | `1`                        |
+| `backup.cronjob.podAnnotations`                   | Pod annotations                                                                                                  | `{}`                       |
+| `backup.cronjob.securityContext.enabled`          | Enable security context for InfluxDB&trade;                                                                      | `true`                     |
+| `backup.cronjob.securityContext.fsGroup`          | Group ID for the InfluxDB&trade; filesystem                                                                      | `1001`                     |
+| `backup.cronjob.securityContext.runAsUser`        | Group ID for the InfluxDB&trade; filesystem                                                                      | `1001`                     |
+| `backup.podAffinityPreset`                        | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                       |
+| `backup.podAntiAffinityPreset`                    | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                     |
+| `backup.nodeAffinityPreset.type`                  | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                       |
+| `backup.nodeAffinityPreset.key`                   | Backup&trade; Node label key to match Ignored if `affinity` is set.                                              | `""`                       |
+| `backup.nodeAffinityPreset.values`                | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                          | `[]`                       |
+| `backup.affinity`                                 | Backup&trade; Affinity for backup pod assignment                                                                 | `{}`                       |
+| `backup.nodeSelector`                             | Backup&trade; Node labels for backup pod assignment                                                              | `{}`                       |
+| `backup.tolerations`                              | Backup&trade; Tolerations for backup pod assignment                                                              | `[]`                       |
+| `backup.uploadProviders.google.enabled`           | enable upload to google storage bucket                                                                           | `false`                    |
+| `backup.uploadProviders.google.secret`            | json secret with serviceaccount data to access Google storage bucket                                             | `""`                       |
+| `backup.uploadProviders.google.secretKey`         | service account secret key name                                                                                  | `key.json`                 |
+| `backup.uploadProviders.google.existingSecret`    | Name of existing secret object with Google serviceaccount json credentials                                       | `""`                       |
+| `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                                  | `gs://bucket/influxdb`     |
+| `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                                  | `docker.io`                |
+| `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                                      | `bitnami/google-cloud-sdk` |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.402.0-debian-11-r2`     |
+| `backup.uploadProviders.google.image.digest`      | Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                               | `IfNotPresent`             |
+| `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                                 | `[]`                       |
+| `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                         | `false`                    |
+| `backup.uploadProviders.azure.secret`             | Secret with credentials to access Azure storage                                                                  | `""`                       |
+| `backup.uploadProviders.azure.secretKey`          | Service account secret key name                                                                                  | `connection-string`        |
+| `backup.uploadProviders.azure.existingSecret`     | Name of existing secret object                                                                                   | `""`                       |
+| `backup.uploadProviders.azure.containerName`      | Destination container                                                                                            | `influxdb-container`       |
+| `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                         | `docker.io`                |
+| `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                                       | `bitnami/azure-cli`        |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.40.0-debian-11-r5`      |
+| `backup.uploadProviders.azure.image.digest`       | Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
+| `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                                      | `IfNotPresent`             |
+| `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                 | `[]`                       |
+| `backup.uploadProviders.aws.enabled`              | Enable upload to aws s3 bucket                                                                                   | `false`                    |
+| `backup.uploadProviders.aws.accessKeyID`          | Access Key ID to access aws s3                                                                                   | `""`                       |
+| `backup.uploadProviders.aws.secretAccessKey`      | Secret Access Key to access aws s3                                                                               | `""`                       |
+| `backup.uploadProviders.aws.region`               | Region of aws s3 bucket                                                                                          | `us-east-1`                |
+| `backup.uploadProviders.aws.existingSecret`       | Name of existing secret object                                                                                   | `""`                       |
+| `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`     |
+| `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                           | `docker.io`                |
+| `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                         | `bitnami/aws-cli`          |
+| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.4.7-debian-10-r4`       |
+| `backup.uploadProviders.aws.image.digest`         | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                       |
+| `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                                        | `IfNotPresent`             |
+| `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                                 | `[]`                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
-  --set auth.admin.username=admin-user bitnami/influxdb
+  --set auth.admin.username=admin-user my-repo/influxdb
 ```
 
 The above command sets the InfluxDB&trade; admin user to `admin-user`.
@@ -336,7 +343,7 @@ The above command sets the InfluxDB&trade; admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/influxdb
+$ helm install my-release -f values.yaml my-repo/influxdb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -402,7 +409,7 @@ extraEnvVars:
 
 ### Initialize a fresh instance
 
-The [Bitnami InfluxDB&trade;](https://github.com/bitnami/bitnami-docker-influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
 
 Alternatively, you can specify custom scripts using the `influxdb.initdbScripts` parameter.
 
@@ -414,7 +421,7 @@ The allowed extensions are `.sh`, and `.txt`.
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -440,7 +447,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, ` auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
 ```bash
-$ helm upgrade my-release bitnami/influxdb \
+$ helm upgrade my-release my-repo/influxdb \
     --set auth.admin.password=[ADMIN_USER_PASSWORD] \
     --set auth.user.password=[USER_PASSWORD] \
     --set auth.readUser.password=[READ_USER_PASSWORD] \
@@ -459,7 +466,7 @@ To update from the previous major, please follow this steps:
 
 ```
 $ kubectl delete deployments.apps influxdb
-$ helm upgrade influxdb bitnami/influxdb
+$ helm upgrade influxdb my-repo/influxdb
 ```
 
 ### To 4.0.0
@@ -490,7 +497,7 @@ However, you can use images for versions ~1.x.x taking into account the chart ma
 #### Installing InfluxDB&trade; v1 in chart v2.
 
 ```
-$ helm install bitnami/influxdb --set image.tag=1.8.3-debian-10-r88
+$ helm install my-repo/influxdb --set image.tag=1.8.3-debian-10-r88
 ```
 
 As a consecuece some breaking changes have been included in this version.
@@ -516,13 +523,13 @@ We actually recommend to backup all the data form a previous helm release, insta
 Having an already existing chart release called `influxdb` and deployed like
 
 ```console
-$ helm install influxdb bitnami/influxdb
+$ helm install influxdb my-repo/influxdb
 ```
 
 ##### Export secrets and required values to update
 
 ```console
-$ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb -o jsonpath="{.data.admin-user-password}" | base64 --decode)
+$ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb -o jsonpath="{.data.admin-user-password}" | base64 -d)
 ```
 
 ##### Upgrade the chart release
@@ -530,13 +537,13 @@ $ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influx
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `adminUser.pwd` -> `auth.admin.password`.
 
 ```console
-$ helm upgrade influxdb bitnami/influxdb --set image.tag=1.8.3-debian-10-r99 \
+$ helm upgrade influxdb my-repo/influxdb --set image.tag=1.8.3-debian-10-r99 \
   --set auth.admin.password=${INFLUXDB_ADMIN_PASSWORD}
 ```
 
 ### To 1.1.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 1.0.0
 

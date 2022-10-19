@@ -1,5 +1,9 @@
 /// <reference types="cypress" />
-import { random, getPageUrlFromTitle, getUserFromEmail } from './utils';
+import {
+  random,
+  getPageUrlFromTitle,
+  getUserFromEmail,
+} from '../support/utils';
 
 it('allows to log in and out', () => {
   cy.login();
@@ -20,20 +24,20 @@ it('allows to create and publish a new post', () => {
     cy.get('textarea[placeholder="Post title"]').type(
       `${$posts.newPost.title}-${random}`
     );
-    cy.get('article').type(`${$posts.newPost.content}-${random}`);
+    cy.get('article div[contenteditable="true"]').type(`${$posts.newPost.content}-${random}`, {force: true});
   });
   // Publishing a post needs 3 steps
   // Step 1: Open drop-down menu
   cy.contains('Publish').click();
   // Step 2: Select the option from the menu
-  cy.get('footer[class*=publishmenu]').within(() => {
-    cy.contains('Publish').click();
+  cy.get('div[class=gh-publish-cta]').within(() => {
+    cy.contains('Continue').click();
   });
   // Step 3: Confirmation pop-up
-  cy.get('div[class*=modal-content]').within(() => {
+  cy.get('div[class=gh-publish-cta]').within(() => {
     cy.contains('Publish').click();
   });
-  cy.contains('Published').should('be.visible');
+  cy.contains('It’s out there').should('be.visible');
   cy.visit('/');
   cy.fixture('posts').then(($posts) => {
     cy.contains(`${$posts.newPost.title}-${random}`);
@@ -49,16 +53,26 @@ it('allows to create a new page', () => {
     cy.get('textarea[placeholder="Page title"]').type(
       `${$pages.newPage.title}-${random}`
     );
+    // Clicking a different element to trigger save event
+    cy.get('article').click()
+    cy.contains('div[class=gh-editor-post-status]', 'Saved');
     cy.get('article').type(`${$pages.newPage.content}-${random}`);
+    // Ensure content has been saved before publishing
+    cy.get('textarea[placeholder="Page title"]').click()
+    cy.contains('div[class=gh-editor-post-status]', 'Saved');
   });
-  // Publishing a page needs 2 steps
+  // Publishing a page needs 3 steps
   // Step 1: Open drop down-menu
   cy.contains('Publish').click();
   // Step 2: Select the option from the menu
-  cy.get('footer[class*=publishmenu]').within(() => {
+  cy.get('div[class=gh-publish-cta]').within(() => {
+    cy.contains('Continue').click();
+  });
+  // Step 3: Confirmation pop-up
+  cy.get('div[class=gh-publish-cta]').within(() => {
     cy.contains('Publish').click();
   });
-  cy.contains('Published').should('be.visible');
+  cy.contains('It’s out there').should('be.visible');
   cy.fixture('pages').then(($pages) => {
     cy.visit(getPageUrlFromTitle(`${$pages.newPage.title}-${random}`));
     cy.contains(`${$pages.newPage.title}-${random}`);

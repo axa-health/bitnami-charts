@@ -65,19 +65,20 @@ diagnosticMode:
 ## @param image.registry etcd image registry
 ## @param image.repository etcd image name
 ## @param image.tag etcd image tag
-## @param image.pullPolicy etcd image pull policy
-## @param image.pullSecrets [array] etcd image pull secrets
-## @param image.debug Enable image debug mode
+## @param image.digest etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.4-debian-10-r21
+  tag: 3.5.5-debian-11-r1
+  digest: ""
+  ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
+  ## @param image.pullSecrets [array] etcd image pull secrets
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -86,6 +87,7 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## @param image.debug Enable image debug mode
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
@@ -201,6 +203,9 @@ autoCompactionRetention: ""
 ## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
 initialClusterState: ""
+## @param logLevel Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'
+##
+logLevel: "info"
 ## @param maxProcs Limits the number of operating system threads that can execute user-level
 ## Go code simultaneously by setting GOMAXPROCS environment variable
 ## ref: https://golang.org/pkg/runtime
@@ -286,11 +291,13 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled etcd containers' Security Context
 ## @param containerSecurityContext.runAsUser Set etcd container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set etcd container's Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
 ## etcd containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -453,6 +460,10 @@ schedulerName: ""
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
 ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 ## The value is evaluated as a template
@@ -585,14 +596,17 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image name
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
-  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
-  ## @param volumePermissions.image.pullSecrets [array] Specify docker-registry secret names as an array
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r427
+    tag: 11-debian-11-r35
+    digest: ""
+    ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+    ##
     pullPolicy: IfNotPresent
+    ## @param volumePermissions.image.pullSecrets [array] Specify docker-registry secret names as an array
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -719,6 +733,32 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
+  
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+      # - alert: ETCD has no leader
+      #   annotations:
+      #     summary: "ETCD has no leader"
+      #     description: "pod {{`{{`}} $labels.pod {{`}}`}} state error, can't connect leader"
+      #   for: 1m
+      #   expr: etcd_server_has_leader == 0
+      #   labels:
+      #     severity: critical
+      #     group: PaaS
+    ##
+    rules: []
+
 
 ## @section Snapshotting parameters
 ##

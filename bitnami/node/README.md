@@ -7,21 +7,21 @@ Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven
 [Overview of Node.js](http://nodejs.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node
 ```
 
 ## Introduction
 
-This chart bootstraps a [Node](https://github.com/bitnami/bitnami-docker-node) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Node](https://github.com/bitnami/containers/tree/main/bitnami/node) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It clones and deploys a Node.js application from a Git repository. Optionally, you can set up an Ingress resource to access your application and provision an external database using the Kubernetes service catalog and the Open Service Broker for Azure.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/node
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/node
 ```
 
 These commands deploy Node.js on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation. Also includes support for MariaDB chart out of the box.
@@ -108,7 +108,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.15.0-debian-10-r7` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.18.0-debian-11-r0` |
+| `image.digest`                                | NodeJS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `image.debug`                                 | Set to true if you would like to see extra information on logs                                                           | `false`                |
@@ -122,7 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                   |
 | `affinity`                                    | Affinity for pod assignment. Evaluated as a template.                                                                    | `{}`                   |
 | `nodeSelector`                                | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`                   |
-| `tolerations`                                 | Tolerations for pod assignment. Evaluated as a template.                                                                 | `{}`                   |
+| `tolerations`                                 | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`                   |
 | `podAnnotations`                              | Additional pod annotations                                                                                               | `{}`                   |
 | `podLabels`                                   | Additional labels for Node pods                                                                                          | `{}`                   |
 | `extraDeploy`                                 | Array of extra objects to deploy with the release (evaluated as a template)                                              | `[]`                   |
@@ -153,7 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                         | Override default liveness probe                                                                                          | `{}`                   |
 | `customReadinessProbe`                        | Override default readiness probe                                                                                         | `{}`                   |
 | `customStartupProbe`                          | Override default startup probe                                                                                           | `{}`                   |
-| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                   |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                   |
 | `priorityClassName`                           | Node priorityClassName                                                                                                   | `""`                   |
 | `schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                   |
 | `terminationGracePeriodSeconds`               | Seconds Airflow web pod needs to terminate gracefully                                                                    | `""`                   |
@@ -177,32 +178,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Node application parameters
 
-| Name                           | Description                                                    | Value                                        |
-| ------------------------------ | -------------------------------------------------------------- | -------------------------------------------- |
-| `git.image.registry`           | Git image registry                                             | `docker.io`                                  |
-| `git.image.repository`         | Git image repository                                           | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.36.0-debian-10-r14`                       |
-| `git.image.pullPolicy`         | Git image pull policy                                          | `IfNotPresent`                               |
-| `git.image.pullSecrets`        | Specify docker-registry secret names as an array               | `[]`                                         |
-| `git.image.debug`              | Set to true if you would like to see extra information on logs | `false`                                      |
-| `git.extraVolumeMounts`        | Add extra volume mounts for the Git container                  | `[]`                                         |
-| `getAppFromExternalRepository` | Enable to download app from external git repository            | `true`                                       |
-| `repository`                   | Git repository http/https url                                  | `https://github.com/bitnami/sample-mean.git` |
-| `revision`                     | Git repository revision to checkout                            | `master`                                     |
+| Name                           | Description                                                                                         | Value                                        |
+| ------------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `git.image.registry`           | Git image registry                                                                                  | `docker.io`                                  |
+| `git.image.repository`         | Git image repository                                                                                | `bitnami/git`                                |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                                                      | `2.38.0-debian-11-r2`                        |
+| `git.image.digest`             | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                         |
+| `git.image.pullPolicy`         | Git image pull policy                                                                               | `IfNotPresent`                               |
+| `git.image.pullSecrets`        | Specify docker-registry secret names as an array                                                    | `[]`                                         |
+| `git.image.debug`              | Set to true if you would like to see extra information on logs                                      | `false`                                      |
+| `git.extraVolumeMounts`        | Add extra volume mounts for the Git container                                                       | `[]`                                         |
+| `getAppFromExternalRepository` | Enable to download app from external git repository                                                 | `true`                                       |
+| `repository`                   | Git repository http/https url                                                                       | `https://github.com/bitnami/sample-mean.git` |
+| `revision`                     | Git repository revision to checkout                                                                 | `master`                                     |
 
 
 ### Volume permissions parameters
 
-| Name                                   | Description                                                                  | Value                   |
-| -------------------------------------- | ---------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r414`     |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                    | `{}`                    |
+| Name                                   | Description                                                                                                                       | Value                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                 |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                            | `{}`                    |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                         | `{}`                    |
 
 
 ### Persistence parameters
@@ -251,14 +254,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
-The above parameters map to the env variables defined in [bitnami/node](https://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](https://github.com/bitnami/bitnami-docker-node) image documentation.
+The above parameters map to the env variables defined in [bitnami/node](https://github.com/bitnami/containers/tree/main/bitnami/node). For more information please refer to the [bitnami/node](https://github.com/bitnami/containers/tree/main/bitnami/node) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
   --set repository=https://github.com/jbianquetti-nami/simple-node-app.git,replicaCount=2 \
-    bitnami/node
+    my-repo/node
 ```
 
 The above command clones the remote git repository to the `/app/` directory  of the container. Additionally it sets the number of `replicaCount` to `2`.
@@ -266,7 +269,7 @@ The above command clones the remote git repository to the `/app/` directory  of 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/node
+$ helm install my-release -f values.yaml my-repo/node
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -384,7 +387,7 @@ Deploying the helm chart enabling the Azure external database makes the followin
 
 ## Persistence
 
-The [Bitnami Node](https://github.com/bitnami/bitnami-docker-node) image stores the Node application and configurations at the `/app`  path of the container.
+The [Bitnami Node](https://github.com/bitnami/containers/tree/main/bitnami/node) image stores the Node application and configurations at the `/app`  path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -404,6 +407,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
+
 ### To 18.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -418,7 +425,7 @@ Affected values:
 
 Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1200
 
 ### To 17.0.0
 
@@ -440,7 +447,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- MongoDB&reg; dependency version was bumped to a new major version `10.X.X`. Check [MongoDB&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1000) for more information.
+- MongoDB&reg; dependency version was bumped to a new major version `10.X.X`. Check [MongoDB&reg; Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1000) for more information.
 - Inclusion of the`bitnami/common` library chart and standardization to include common features found on other charts.
 - `securityContext.*` is deprecated in favor of `podSecurityContext` and `containerSecurityContext`.
 - `replicas` is deprecated in favor of `replicaCount`.
@@ -461,17 +468,17 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-900
 
 ### To 12.0.0
 
 Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-800
 
 ### To 7.0.0
 
-This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/bitnami-docker-node#484-r1-6112-r1-7101-r1-and-830-r1).
+This release includes security contexts, so the containers in the chart are run as non-root. More information in [this link](https://github.com/bitnami/containers/tree/main/bitnami/node#484-r1-6112-r1-7101-r1-and-830-r1).
 
 ### To 6.0.0
 

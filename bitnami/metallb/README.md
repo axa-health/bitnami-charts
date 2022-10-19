@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/metallb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/metallb
 ```
 
 ## Introduction
@@ -20,7 +20,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [MetalLB Controller](https://metallb.universe.tf/community/) Controller Deployment and a [MetalLB Speaker](https://metallb.universe.tf/community/) Daemonset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/metallb
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/metallb
 ```
 
 These commands deploy metallb on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -80,8 +80,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                                                 | Value   |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `existingConfigMap`                     | Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option. | `""`    |
-| `configInline`                          | Specifies MetalLB's configuration directly, in yaml format.                                                                                 | `{}`    |
 | `rbac.create`                           | Specifies whether to install and use RBAC rules                                                                                             | `true`  |
 | `psp.create`                            | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
 | `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                                                                        | `false` |
@@ -96,7 +94,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                                    | MetalLB Controller image registry                                                                                                           | `docker.io`                  |
 | `controller.image.repository`                                  | MetalLB Controller image repository                                                                                                         | `bitnami/metallb-controller` |
-| `controller.image.tag`                                         | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.12.1-debian-10-r59`       |
+| `controller.image.tag`                                         | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.13.4-debian-11-r3`        |
+| `controller.image.digest`                                      | MetalLB Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                         |
 | `controller.image.pullPolicy`                                  | MetalLB Controller image pull policy                                                                                                        | `IfNotPresent`               |
 | `controller.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                            | `[]`                         |
 | `controller.updateStrategy.type`                               | Metallb controller deployment strategy type.                                                                                                | `RollingUpdate`              |
@@ -191,7 +190,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `speaker.image.registry`                                    | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                                  | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.12.1-debian-10-r59`    |
+| `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.13.4-debian-11-r7`     |
+| `speaker.image.digest`                                      | MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                             | `""`                      |
 | `speaker.image.pullPolicy`                                  | MetalLB Speaker image pull policy                                                                                                           | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                            | `[]`                      |
 | `speaker.updateStrategy.type`                               | Speaker daemonset strategy type                                                                                                             | `RollingUpdate`           |
@@ -285,7 +285,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 $ helm install my-release \
   --set readinessProbe.successThreshold=5 \
-    bitnami/metallb
+    my-repo/metallb
 ```
 The above command sets the `readinessProbe.successThreshold` to `5`.
 
@@ -299,28 +299,28 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
 
-### Example Layer 2 configuration
+### Example IP addresses to assing to the LoadBalancer configuration
 
 ```yaml
-configInline:
-  # The address-pools section lists the IP addresses that MetalLB is
-  # allowed to allocate, along with settings for how to advertise
-  # those addresses over BGP once assigned. You can have as many
-  # address pools as you want.
-  address-pools:
-  - # A name for the address pool. Services can request allocation
-    # from a specific address pool using this name, by listing this
-    # name under the 'metallb.universe.tf/address-pool' annotation.
-    name: generic-cluster-pool
-    # Protocol can be used to select how the announcement is done.
-    # Supported values are bgp and layer2.
-    protocol: layer2
-    # A list of IP address ranges over which MetalLB has
-    # authority. You can list multiple ranges in a single pool, they
-    # will all share the same settings. Each range can be either a
-    # CIDR prefix, or an explicit start-end range of IPs.
-    addresses:
-    - 10.27.50.30-10.27.50.35
+# The address-pools lists the IP addresses that MetalLB is
+# allowed to allocate. You can have as many
+# address pools as you want.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  # A name for the address pool. Services can request allocation
+  # from a specific address pool using this name.
+  name: first-pool
+  namespace: metallb-system
+spec:
+  # A list of IP address ranges over which MetalLB has
+  # authority. You can list multiple ranges in a single pool, they
+  # will all share the same settings. Each range can be either a
+  # CIDR prefix, or an explicit start-end range of IPs.
+  addresses:
+  - 192.168.10.0/24
+  - 192.168.9.1-192.168.9.5
+  - fc00:f853:0ccd:e799::/124
 ```
 
 ## Troubleshooting
@@ -328,6 +328,10 @@ configInline:
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major release includes the changes and features available in MetalLB from version 0.13.0. Those changes include the deprecation of configmaps for configuring the service and using CRDs instead. If you are upgrading from a previous version, you can follow the official documentation on [how to migrate the configuration from a configMap to CRDs](https://metallb.universe.tf/#backward-compatibility).
 
 ### To 3.0.0
 

@@ -7,19 +7,19 @@ Apache Geode is a data management platform that provides advanced capabilities f
 [Overview of Apache Geode](https://geode.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/geode
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/geode
 ```
 
 ## Introduction
 
-This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Geode](https://github.com/bitnami/containers/tree/main/bitnami/geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -32,7 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/geode
+helm install my-release my-repo/geode
 ```
 
 The command deploys geode on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -78,27 +78,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Apache Geode Common parameters
 
-| Name                                     | Description                                                                            | Value                                                       |
-| ---------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `image.registry`                         | Apache Geode image registry                                                            | `docker.io`                                                 |
-| `image.repository`                       | Apache Geode image repository                                                          | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.4-debian-10-r21`                                      |
-| `image.pullPolicy`                       | Apache Geode image pull policy                                                         | `IfNotPresent`                                              |
-| `image.pullSecrets`                      | Apache Geode image pull secrets                                                        | `[]`                                                        |
-| `image.debug`                            | Enable Apache Geode image debug mode                                                   | `false`                                                     |
-| `groups`                                 | List of Apache Geode member groups to belong to                                        | `[]`                                                        |
-| `auth.enabled`                           | Enable Apache Geode security                                                           | `true`                                                      |
-| `auth.securityManager`                   | Fully qualified name of the class that implements the SecurityManager interface        | `org.apache.geode.examples.security.ExampleSecurityManager` |
-| `auth.username`                          | Username credential to use to connect with locators                                    | `admin`                                                     |
-| `auth.password`                          | Password credential to use to connect with locators                                    | `""`                                                        |
-| `auth.existingSecret`                    | Name of the existing secret containing to use to connect with locators                 | `""`                                                        |
-| `auth.tls.enabled`                       | Enable TLS authentication                                                              | `false`                                                     |
-| `auth.tls.components`                    | List of components for which to enable TLS                                             | `[]`                                                        |
-| `auth.tls.existingSecret`                | Name of the existing secret containing the TLS certificates for the Apache Geode nodes | `""`                                                        |
-| `auth.tls.keystorePassword`              | Password to access they key stores when they are password-protected                    | `""`                                                        |
-| `auth.tls.truststorePassword`            | Password to access they trust store when it is password-protected                      | `""`                                                        |
-| `auth.tls.requireAuthentication`         | Enable two-way authentication                                                          | `false`                                                     |
-| `auth.tls.endpointIdentificationEnabled` | Enable server hostname validation using server certificates                            | `false`                                                     |
+| Name                                     | Description                                                                                                  | Value                                                       |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `image.registry`                         | Apache Geode image registry                                                                                  | `docker.io`                                                 |
+| `image.repository`                       | Apache Geode image repository                                                                                | `bitnami/geode`                                             |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                                      | `1.15.0-debian-11-r35`                                      |
+| `image.digest`                           | Apache Geode image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                        |
+| `image.pullPolicy`                       | Apache Geode image pull policy                                                                               | `IfNotPresent`                                              |
+| `image.pullSecrets`                      | Apache Geode image pull secrets                                                                              | `[]`                                                        |
+| `image.debug`                            | Enable Apache Geode image debug mode                                                                         | `false`                                                     |
+| `groups`                                 | List of Apache Geode member groups to belong to                                                              | `[]`                                                        |
+| `auth.enabled`                           | Enable Apache Geode security                                                                                 | `true`                                                      |
+| `auth.securityManager`                   | Fully qualified name of the class that implements the SecurityManager interface                              | `org.apache.geode.examples.security.ExampleSecurityManager` |
+| `auth.username`                          | Username credential to use to connect with locators                                                          | `admin`                                                     |
+| `auth.password`                          | Password credential to use to connect with locators                                                          | `""`                                                        |
+| `auth.existingSecret`                    | Name of the existing secret containing to use to connect with locators                                       | `""`                                                        |
+| `auth.tls.enabled`                       | Enable TLS authentication                                                                                    | `false`                                                     |
+| `auth.tls.components`                    | List of components for which to enable TLS                                                                   | `[]`                                                        |
+| `auth.tls.autoGenerated`                 | Generate automatically self-signed TLS certificates. Currently only supports PEM certificates                | `false`                                                     |
+| `auth.tls.existingSecret`                | Name of the existing secret containing the TLS certificates for the Apache Geode nodes                       | `""`                                                        |
+| `auth.tls.usePem`                        | Use PEM certificates as input instead of PKS12/JKS stores                                                    | `false`                                                     |
+| `auth.tls.keystorePassword`              | Password to access they key stores when they are password-protected                                          | `""`                                                        |
+| `auth.tls.truststorePassword`            | Password to access they trust store when it is password-protected                                            | `""`                                                        |
+| `auth.tls.passwordsSecretName`           | Set the name of the secret that contains the passwords for the certificate files                             | `""`                                                        |
+| `auth.tls.requireAuthentication`         | Enable two-way authentication                                                                                | `false`                                                     |
+| `auth.tls.endpointIdentificationEnabled` | Enable server hostname validation using server certificates                                                  | `false`                                                     |
+| `auth.tls.resources.limits`              | The resources limits for the TLS init container                                                              | `{}`                                                        |
+| `auth.tls.resources.requests`            | The requested resources for the TLS init container                                                           | `{}`                                                        |
 
 
 ### Apache Geode Locator parameters
@@ -302,60 +308,62 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r401`     |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                         | `true`                  |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+| Name                                                   | Description                                                                                                   | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r40`      |
+| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                       | `true`                  |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                      | Value                 |
-| ----------------------------------------------- | -------------------------------------------------------------------------------- | --------------------- |
-| `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`               |
-| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`           |
-| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`     |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.5-debian-10-r35` |
-| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`        |
-| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                  |
-| `metrics.containerPort`                         | Metrics container port                                                           | `9914`                |
-| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                       | `true`                |
-| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                          | `15`                  |
-| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                 | `10`                  |
-| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                | `5`                   |
-| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                              | `5`                   |
-| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                              | `1`                   |
-| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                      | `true`                |
-| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                         | `15`                  |
-| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                | `10`                  |
-| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                               | `5`                   |
-| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                             | `5`                   |
-| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                             | `1`                   |
-| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                              | `{}`                  |
-| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                             | `{}`                  |
-| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                     | `true`                |
-| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                               | `1001`                |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                            | `true`                |
-| `metrics.service.port`                          | Service HTTP management port                                                     | `9914`                |
-| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                  |
-| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`               |
-| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                  |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                              | `{}`                  |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                  |
-| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                  |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                  |
-| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                  |
-| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                  |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                  |
-| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels         | `false`               |
+| Name                                            | Description                                                                                                     | Value                |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `metrics.enabled`                               | Expose Apache Geode metrics                                                                                     | `false`              |
+| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                                                  | `docker.io`          |
+| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                                                | `bitnami/haproxy`    |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                                                      | `2.6.6-debian-11-r6` |
+| `metrics.image.digest`                          | Bitnami HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                                               | `IfNotPresent`       |
+| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                                                              | `[]`                 |
+| `metrics.containerPort`                         | Metrics container port                                                                                          | `9914`               |
+| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                                                      | `true`               |
+| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `15`                 |
+| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `10`                 |
+| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `5`                  |
+| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `5`                  |
+| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`                  |
+| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                                                     | `true`               |
+| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `15`                 |
+| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `10`                 |
+| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`                  |
+| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `5`                  |
+| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`                  |
+| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                             | `{}`                 |
+| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                            | `{}`                 |
+| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                                                    | `true`               |
+| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                                                              | `1001`               |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                                                           | `true`               |
+| `metrics.service.port`                          | Service HTTP management port                                                                                    | `9914`               |
+| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints                                             | `{}`                 |
+| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                            | `false`              |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                                                        | `""`                 |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                             | `{}`                 |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus                                | `""`                 |
+| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                                                | `""`                 |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                         | `""`                 |
+| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                                                        | `[]`                 |
+| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                                                      | `[]`                 |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                             | `{}`                 |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                        | `false`              |
 
 
 ### Other Parameters
@@ -370,7 +378,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                          | `true`  |
 
 
-The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode) image documentation.
+The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/containers/tree/main/bitnami/geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/containers/tree/main/bitnami/geode) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -378,7 +386,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
     --set auth.username=admin \
     --set auth.password=password \
-    bitnami/geode
+    my-repo/geode
 ```
 
 The above command sets the credentials to access Locator nodes to `admin` and `password` respectively.
@@ -386,7 +394,7 @@ The above command sets the credentials to access Locator nodes to `admin` and `p
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/geode
+helm install my-release -f values.yaml my-repo/geode
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -442,7 +450,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-ingress/).
 
@@ -475,13 +483,13 @@ If additional containers are needed in the same pod as geode (such as additional
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 > Note: XXX is placeholder you need to replace with the actual component(s).
 
 ## Persistence
 
-The [Bitnami geode](https://github.com/bitnami/bitnami-docker-geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami geode](https://github.com/bitnami/containers/tree/main/bitnami/geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 

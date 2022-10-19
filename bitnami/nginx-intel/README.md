@@ -7,21 +7,21 @@ NGINX Open Source for Intel is a lightweight server, combined with cryptography 
 [Overview of NGINX Open Source for Intel](https://github.com/intel/asynch_mode_nginx)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nginx-intel
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nginx-intel
 ```
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [NGINX Open Source with Intel Optimizations](https://github.com/bitnami/bitnami-docker-nginx-intel) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [NGINX Open Source with Intel Optimizations](https://github.com/bitnami/containers/tree/main/bitnami/nginx-intel) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Why use Intel optimized containers
 
@@ -41,8 +41,8 @@ It requires a 3rd gen Xeon Scalable Processor (Ice Lake) to get a breakthrough p
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/nginx-intel
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/nginx-intel
 ```
 
 These commands deploy NGINX Open Source on the Kubernetes cluster in the default configuration.
@@ -88,20 +88,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                          | Value                 |
-| -------------------- | -------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | NGINX image registry                                                 | `docker.io`           |
-| `image.repository`   | NGINX image repository                                               | `bitnami/nginx-intel` |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `0.4.7-debian-10-r93` |
-| `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
-| `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
-| `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
-| `command`            | Override default container command (useful when using custom images) | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                  |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                  |
-| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                  |
+| Name                 | Description                                                                                           | Value                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | NGINX image registry                                                                                  | `docker.io`           |
+| `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx-intel` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `0.4.8-debian-11-r2`  |
+| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                  |
+| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`               |
+| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                  |
+| `command`            | Override default container command (useful when using custom images)                                  | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                                     | `[]`                  |
+| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                  |
 
 
 ### NGINX deployment parameters
@@ -119,7 +120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
 | `affinity`                                    | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                                | Node labels for pod assignment. Evaluated as a template.                                  | `{}`            |
-| `tolerations`                                 | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`            |
+| `tolerations`                                 | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`            |
 | `priorityClassName`                           | Priority class name                                                                       | `""`            |
 | `schedulerName`                               | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `terminationGracePeriodSeconds`               | In seconds, time the given to the NGINX pod needs to terminate gracefully                 | `""`            |
@@ -177,27 +178,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Custom NGINX application parameters
 
-| Name                                       | Description                                                                                       | Value                  |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------- |
-| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
-| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
-| `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.36.0-debian-10-r10` |
-| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
-| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
-| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
-| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `""`                   |
-| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                       | `60`                   |
-| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                       | `[]`                   |
-| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `[]`                   |
-| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                            | `[]`                   |
-| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                   |
-| `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                   |
-| `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                   |
-| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                   |
-| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                   |
-| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                   |
-| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                   |
+| Name                                       | Description                                                                                         | Value                  |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------- | ---------------------- |
+| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                                 | `false`                |
+| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                  | `docker.io`            |
+| `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                                | `bitnami/git`          |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.37.3-debian-11-r10` |
+| `cloneStaticSiteFromGit.image.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                               | `IfNotPresent`         |
+| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                    | `[]`                   |
+| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                         | `""`                   |
+| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                              | `""`                   |
+| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                         | `60`                   |
+| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                         | `[]`                   |
+| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                            | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                              | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                                 | `[]`                   |
+| `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git   | `[]`                   |
+| `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                      | `[]`                   |
+| `serverBlock`                              | Custom server block to be added to NGINX configuration                                              | `""`                   |
+| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                   |
+| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                      | `""`                   |
+| `staticSitePVC`                            | Name of existing PVC with the server static site content                                            | `""`                   |
 
 
 ### Traffic Exposure parameters
@@ -248,32 +250,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                 | Value                    |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------ |
-| `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                               | `false`                  |
-| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
-| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
-| `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.10.0-debian-10-r125`  |
-| `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`           |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                            | `[]`                     |
-| `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{}`                     |
-| `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                         | `false`                  |
-| `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                   | `1001`                   |
-| `metrics.service.ports.metrics`            | NGINX Prometheus exporter service port                                                      | `9113`                   |
-| `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                             | `{}`                     |
-| `metrics.resources.limits`                 | The resources limits for the NGINX Prometheus exporter container                            | `{}`                     |
-| `metrics.resources.requests`               | The requested resources for the NGINX Prometheus exporter container                         | `{}`                     |
-| `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                  |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                    | `""`                     |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.           | `""`                     |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                | `""`                     |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                     | `""`                     |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                         | `{}`                     |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so PodMonitor will be discovered by Prometheus           | `{}`                     |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                          | `[]`                     |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                   | `[]`                     |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                    | `false`                  |
+| Name                                       | Description                                                                                                               | Value                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                                                             | `false`                  |
+| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                | `""`                     |
+| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                  | `docker.io`              |
+| `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                | `bitnami/nginx-exporter` |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                      | `0.11.0-debian-11-r5`    |
+| `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                               | `IfNotPresent`           |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                          | `[]`                     |
+| `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                               | `{}`                     |
+| `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                       | `false`                  |
+| `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                 | `1001`                   |
+| `metrics.service.ports.metrics`            | NGINX Prometheus exporter service port                                                                                    | `9113`                   |
+| `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                           | `{}`                     |
+| `metrics.resources.limits`                 | The resources limits for the NGINX Prometheus exporter container                                                          | `{}`                     |
+| `metrics.resources.requests`               | The requested resources for the NGINX Prometheus exporter container                                                       | `{}`                     |
+| `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                               | `false`                  |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                  | `""`                     |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                         | `""`                     |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                              | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                   | `""`                     |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                       | `{}`                     |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so PodMonitor will be discovered by Prometheus                                         | `{}`                     |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                        | `[]`                     |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`                     |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false`                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -281,7 +284,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```bash
 $ helm install my-release \
   --set imagePullPolicy=Always \
-    bitnami/nginx-intel
+    my-repo/nginx-intel
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.
@@ -289,7 +292,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install my-release -f values.yaml bitnami/nginx-intel
+$ helm install my-release -f values.yaml my-repo/nginx-intel
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -311,7 +314,7 @@ To modify the application version used in this chart, specify a different versio
 The NGINX chart allows you to deploy a custom web application using one of the following methods:
 
 - Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and  `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
-- Providing a ConfigMap: Set the `staticSiteConfigMap` value to mount a ConfigMap in the NGINX html folder.
+- Providing a ConfigMap: Set the `staticSiteConfigmap` value to mount a ConfigMap in the NGINX html folder.
 - Using an existing PVC: Set the `staticSitePVC` value to mount an PersistentVolumeClaim with the static site content.
 
 You can deploy a example web application using git deploying the chart with the following parameters:
@@ -358,7 +361,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinity) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ### Deploying extra resources
 
@@ -366,7 +369,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-intel-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 
@@ -400,7 +403,7 @@ This major release no longer uses the bitnami/nginx-ldap-auth-daemon container a
 
 *2022-04-12 edit*:
 
-Bitnami���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������s NGINX Intel Helm chart from version 0.0.1 to 0.1.11 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
+[Bitnami's reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
 
 On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022-04-12/) you can find more information from the Bitnami security team.**
 

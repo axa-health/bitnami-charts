@@ -7,21 +7,21 @@ Discourse is an open source discussion platform with built-in moderation and gov
 [Overview of Discourse&reg;](http://www.discourse.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/discourse
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/discourse
 ```
 
 ## Introduction
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis&trade;](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and [Bitnami Redis&reg;](https://github.com/bitnami/charts/tree/main/bitnami/redis) which are required as databases for the Discourse application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/discourse
+$ helm install my-release my-repo/discourse
 ```
 
 The command deploys Discourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,52 +81,53 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Discourse Common parameters
 
-| Name                            | Description                                                                                                              | Value                 |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
-| `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
-| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.3-debian-10-r27` |
-| `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
-| `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
-| `image.debug`                   | Enable image debug mode                                                                                                  | `false`               |
-| `auth.email`                    | Discourse admin user email                                                                                               | `user@example.com`    |
-| `auth.username`                 | Discourse admin user                                                                                                     | `user`                |
-| `auth.password`                 | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                  |
-| `auth.existingSecret`           | Name of an existing secret to use for Discourse credentials                                                              | `""`                  |
-| `host`                          | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                  |
-| `siteName`                      | Discourse site name                                                                                                      | `My Site!`            |
-| `smtp.enabled`                  | Enable/disable SMTP                                                                                                      | `false`               |
-| `smtp.host`                     | SMTP host name                                                                                                           | `""`                  |
-| `smtp.port`                     | SMTP port number                                                                                                         | `""`                  |
-| `smtp.user`                     | SMTP account user name                                                                                                   | `""`                  |
-| `smtp.password`                 | SMTP account password                                                                                                    | `""`                  |
-| `smtp.protocol`                 | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                  |
-| `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                  |
-| `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                  |
-| `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                   |
-| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `false`               |
-| `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                   |
-| `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                  |
-| `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                  |
-| `podLabels`                     | Additional pod labels                                                                                                    | `{}`                  |
-| `podAffinityPreset`             | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                  |
-| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                |
-| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                  |
-| `nodeAffinityPreset.key`        | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                  |
-| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                  |
-| `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                  |
-| `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                  |
-| `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                  |
-| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                  |
-| `priorityClassName`             | Priority Class Name                                                                                                      | `""`                  |
-| `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
-| `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                  |
-| `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`       |
-| `updateStrategy.rollingUpdate`  | Discourse deployment rolling update configuration parameters                                                             | `{}`                  |
-| `sidecars`                      | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                  |
-| `initContainers`                | Add additional init containers to the Discourse pods                                                                     | `[]`                  |
-| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                  |
-| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                  |
+| Name                            | Description                                                                                                              | Value                |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
+| `image.registry`                | Discourse image registry                                                                                                 | `docker.io`          |
+| `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`  |
+| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.9-debian-11-r3` |
+| `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                 |
+| `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`       |
+| `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                 |
+| `image.debug`                   | Enable image debug mode                                                                                                  | `false`              |
+| `auth.email`                    | Discourse admin user email                                                                                               | `user@example.com`   |
+| `auth.username`                 | Discourse admin user                                                                                                     | `user`               |
+| `auth.password`                 | Discourse admin password. WARNING: Minimum length of 10 characters                                                       | `""`                 |
+| `auth.existingSecret`           | Name of an existing secret to use for Discourse credentials                                                              | `""`                 |
+| `host`                          | Hostname to create application URLs (include the port if =/= 80)                                                         | `""`                 |
+| `siteName`                      | Discourse site name                                                                                                      | `My Site!`           |
+| `smtp.enabled`                  | Enable/disable SMTP                                                                                                      | `false`              |
+| `smtp.host`                     | SMTP host name                                                                                                           | `""`                 |
+| `smtp.port`                     | SMTP port number                                                                                                         | `""`                 |
+| `smtp.user`                     | SMTP account user name                                                                                                   | `""`                 |
+| `smtp.password`                 | SMTP account password                                                                                                    | `""`                 |
+| `smtp.protocol`                 | SMTP protocol (Allowed values: tls, ssl)                                                                                 | `""`                 |
+| `smtp.auth`                     | SMTP authentication method                                                                                               | `""`                 |
+| `smtp.existingSecret`           | Name of an existing Kubernetes secret. The secret must have the following key configured: `smtp-password`                | `""`                 |
+| `replicaCount`                  | Number of Discourse & Sidekiq replicas                                                                                   | `1`                  |
+| `podSecurityContext.enabled`    | Enabled Discourse pods' Security Context                                                                                 | `false`              |
+| `podSecurityContext.fsGroup`    | Set Discourse pod's Security Context fsGroup                                                                             | `0`                  |
+| `hostAliases`                   | Add deployment host aliases                                                                                              | `[]`                 |
+| `podAnnotations`                | Additional pod annotations                                                                                               | `{}`                 |
+| `podLabels`                     | Additional pod labels                                                                                                    | `{}`                 |
+| `podAffinityPreset`             | Pod affinity preset. Allowed values: soft, hard                                                                          | `""`                 |
+| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`               |
+| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                 |
+| `nodeAffinityPreset.key`        | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                 |
+| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                 |
+| `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                 |
+| `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                 |
+| `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                 |
+| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
+| `priorityClassName`             | Priority Class Name                                                                                                      | `""`                 |
+| `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                 |
+| `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                 |
+| `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`      |
+| `updateStrategy.rollingUpdate`  | Discourse deployment rolling update configuration parameters                                                             | `{}`                 |
+| `sidecars`                      | Add additional sidecar containers to the Discourse pods                                                                  | `[]`                 |
+| `initContainers`                | Add additional init containers to the Discourse pods                                                                     | `[]`                 |
+| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                 |
+| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                 |
 
 
 ### Discourse container parameters
@@ -225,6 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.http`               | Discourse service HTTP port                                                                                                      | `80`                     |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Discourse service Cluster IP                                                                                                     | `""`                     |
 | `service.loadBalancerIP`           | Discourse service Load Balancer IP                                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | Discourse service Load Balancer sources                                                                                          | `[]`                     |
@@ -249,17 +251,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                     | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r312`     |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                             | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
+| Name                                                   | Description                                                                                                                       | Value                   |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `10-debian-10-r312`     |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
 
 ### Other Parameters
@@ -315,31 +318,31 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the database admin user credentials                          | `postgres-password`   |
 
 
-### Redis&trade; parameters
+### Redis&reg; parameters
 
 | Name                                      | Description                                                                | Value            |
 | ----------------------------------------- | -------------------------------------------------------------------------- | ---------------- |
-| `redis.enabled`                           | Switch to enable or disable the Redis&trade; helm                          | `true`           |
+| `redis.enabled`                           | Switch to enable or disable the Redis&reg; helm                            | `true`           |
 | `redis.auth.enabled`                      | Enable password authentication                                             | `true`           |
-| `redis.auth.password`                     | Redis&trade; password                                                      | `""`             |
-| `redis.auth.existingSecret`               | The name of an existing secret with Redis&trade; credentials               | `""`             |
-| `redis.architecture`                      | Redis&trade; architecture. Allowed values: `standalone` or `replication`   | `standalone`     |
-| `externalRedis.host`                      | Redis&trade; host                                                          | `localhost`      |
-| `externalRedis.port`                      | Redis&trade; port number                                                   | `6379`           |
-| `externalRedis.username`                  | Redis&trade; username                                                      | `""`             |
-| `externalRedis.password`                  | Redis&trade; password                                                      | `""`             |
+| `redis.auth.password`                     | Redis&reg; password                                                        | `""`             |
+| `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials                 | `""`             |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`     | `standalone`     |
+| `externalRedis.host`                      | Redis&reg; host                                                            | `localhost`      |
+| `externalRedis.port`                      | Redis&reg; port number                                                     | `6379`           |
+| `externalRedis.username`                  | Redis&reg; username                                                        | `""`             |
+| `externalRedis.password`                  | Redis&reg; password                                                        | `""`             |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
 
 
-The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/bitnami-docker-discourse) image documentation.
+The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 $ helm install my-release \
   --set auth.username=admin,auth.password=password \
-    bitnami/discourse
+    my-repo/discourse
 ```
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively.
@@ -349,7 +352,7 @@ The above command sets the Discourse administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/discourse
+$ helm install my-release -f values.yaml my-repo/discourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -371,7 +374,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 1. Create a conventional release, that will be scaled later:
 
 ```console
-$ helm install my-release bitnami/discourse
+$ helm install my-release my-repo/discourse
 ...
 ```
 
@@ -388,7 +391,7 @@ my-release-redis-master-0               1/1     Running   0          5m11s
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 
 ```console
-$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true bitnami/discourse
+$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
 ```
 
 Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
@@ -444,7 +447,7 @@ Note also that if you disable PostgreSQL per above you MUST supply values for th
 
 In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
 
-Similarly, you can specify an external Redis&trade; instance rather than installing one inside your cluster. First, you may disable the Redis&trade; installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
+Similarly, you can specify an external Redis&reg; instance rather than installing one inside your cluster. First, you may disable the Redis&reg; installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
 
 ```console
 redis.enabled=false
@@ -455,7 +458,7 @@ externalRedis.port=5432
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve Discourse.
+This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve Discourse.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/discourse/configuration/configure-ingress/).
 
@@ -467,11 +470,11 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
-The [Bitnami Discourse](https://github.com/bitnami/bitnami-docker-discourse) image stores the Discourse data and configurations at the `/bitnami` path of the container.
+The [Bitnami Discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image stores the Discourse data and configurations at the `/bitnami` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.

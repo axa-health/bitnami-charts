@@ -7,21 +7,21 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 [Overview of Concourse](https://concourse-ci.org/)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/concourse
+$ helm repo add my-repo https://charts.bitnami.com/bitnami
+$ helm install my-release my-repo/concourse
 ```
 
 ## Introduction
 
 This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql)
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -35,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/concourse
+helm install my-release my-repo/concourse
 ```
 
 The command deploys concourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,27 +81,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Concourse Parameters
 
-| Name                            | Description                                                                                                                            | Value                 |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                | image registry                                                                                                                         | `docker.io`           |
-| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.7.1-debian-10-r43` |
-| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
-| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
-| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
-| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                  |
-| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                  |
-| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                  |
-| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                  |
-| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                  |
-| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                  |
-| `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                  |
-| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                  |
-| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
+| Name                            | Description                                                                                                                            | Value                |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`                | image registry                                                                                                                         | `docker.io`          |
+| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.3-debian-11-r0` |
+| `image.digest`                  | image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                        | `""`                 |
+| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
+| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
+| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`               |
+| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                 |
+| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                 |
+| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                 |
+| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                 |
+| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                 |
+| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                 |
+| `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                 |
+| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                 |
+| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                 |
+| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                 |
+| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                 |
+| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                 |
+| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                 |
 
 
 ### Concourse Web parameters
@@ -186,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.affinity`                                    | Affinity for web pods assignment                                                                                                            | `{}`                                            |
 | `web.nodeSelector`                                | Node labels for web pods assignment                                                                                                         | `{}`                                            |
 | `web.tolerations`                                 | Tolerations for web pods assignment                                                                                                         | `[]`                                            |
-| `web.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `{}`                                            |
+| `web.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `[]`                                            |
 | `web.priorityClassName`                           | Priority Class to use for each pod (Concourse web)                                                                                          | `""`                                            |
 | `web.schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                                   | `""`                                            |
 | `web.terminationGracePeriodSeconds`               | Seconds Concourse web pod needs to terminate gracefully                                                                                     | `""`                                            |
@@ -271,7 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.affinity`                                    | Affinity for pod assignment                                                                                                                 | `{}`                |
 | `worker.nodeSelector`                                | Node labels for pod assignment                                                                                                              | `{}`                |
 | `worker.tolerations`                                 | Tolerations for worker pod assignment                                                                                                       | `[]`                |
-| `worker.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `{}`                |
+| `worker.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `[]`                |
 | `worker.priorityClassName`                           | Priority Class to use for each pod (Concourse worker)                                                                                       | `""`                |
 | `worker.schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                                   | `""`                |
 | `worker.terminationGracePeriodSeconds`               | Seconds Concourse worker pod needs to terminate gracefully                                                                                  | `""`                |
@@ -320,6 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.web.nodePorts.http`                     | Node port for HTTP                                                                                                               | `""`                     |
 | `service.web.nodePorts.https`                    | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.web.sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.web.sessionAffinityConfig`              | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.web.clusterIP`                          | Concourse web service Cluster IP                                                                                                 | `""`                     |
 | `service.web.loadBalancerIP`                     | Concourse web service Load Balancer IP                                                                                           | `""`                     |
 | `service.web.loadBalancerSourceRanges`           | Concourse web service Load Balancer sources                                                                                      | `[]`                     |
@@ -330,6 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.workerGateway.ports.tsa`                | Concourse worker gateway service port                                                                                            | `2222`                   |
 | `service.workerGateway.nodePorts.tsa`            | Node port for worker gateway service                                                                                             | `""`                     |
 | `service.workerGateway.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.workerGateway.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.workerGateway.clusterIP`                | Concourse worker gateway service Cluster IP                                                                                      | `""`                     |
 | `service.workerGateway.loadBalancerIP`           | Concourse worker gateway service Load Balancer IP                                                                                | `""`                     |
 | `service.workerGateway.loadBalancerSourceRanges` | Concourse worker gateway service Load Balancer sources                                                                           | `[]`                     |
@@ -354,18 +357,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                     | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r424`     |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                             | `{}`                    |
-| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                         | `true`                  |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
+| Name                                                   | Description                                                                                                                       | Value                   |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r41`      |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
+| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                                           | `true`                  |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
 
 ### Concourse database parameters
@@ -396,14 +400,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse) image documentation.
+The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
   --set secrets.localUsers=admin:password \
-    bitnami/concourse
+    my-repo/concourse
 ```
 
 The above command sets the Concourse account username and password to `admin` and `password` respectively.
@@ -413,7 +417,7 @@ The above command sets the Concourse account username and password to `admin` an
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/concourse
+helm install my-release -f values.yaml my-repo/concourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -434,7 +438,7 @@ Refer to the [chart documentation on using an external database](https://docs.bi
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an Ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an Ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/concourse/configuration/configure-ingress/).
 
@@ -444,7 +448,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ## Persistence
 
-The [Bitnami Concourse](https://github.com/bitnami/bitnami-docker-concourse) image stores the concourse data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami Concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image stores the concourse data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Configure extra environment variables
 
@@ -468,7 +472,7 @@ If additional containers are needed in the same pod as Concourse (such as additi
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
