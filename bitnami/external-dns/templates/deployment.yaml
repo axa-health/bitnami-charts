@@ -219,6 +219,9 @@ spec:
             {{- if .Values.google.project }}
             - --google-project={{ .Values.google.project }}
             {{- end }}
+            {{- if .Values.google.batchChangeSize }}
+            - --google-batch-change-size={{ .Values.google.batchChangeSize }}
+            {{- end }}
             {{- if .Values.google.zoneVisibility }}
             - --google-zone-visibility={{ .Values.google.zoneVisibility }}
             {{- end }}
@@ -495,13 +498,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: scw_secret_key
-            {{- end }}
-            {{- if .Values.scaleway.scwDefaultOrganizationId }}
-            - name: SCW_DEFAULT_ORGANIZATION_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: scw_default_organization_id
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "infoblox" }}
