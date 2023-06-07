@@ -27,6 +27,22 @@ Return the proper Mastodon web fullname
 {{- end -}}
 
 {{/*
+Return the proper Mastodon tootctlMediaManagement fullname
+*/}}
+{{- define "mastodon.tootctlMediaManagement.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "tootctl-media" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Mastodon tootctl media option to include follows
+*/}}
+{{- define "mastodon.tootctlMediaManagement.includeFollows" -}}
+    {{- if .Values.tootctlMediaManagement.includeFollows -}}
+    	{{- print "--include-follows" -}}	
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Mastodon web domain
 */}}
 {{- define "mastodon.web.domain" -}}
@@ -52,7 +68,11 @@ Return the proper Mastodon streaming fullname
 Return Mastodon streaming url
 */}}
 {{- define "mastodon.streaming.url" -}}
-{{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- if .Values.useSecureWebSocket -}}
+    {{- printf "wss://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+    {{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- end -}}  
 {{- end -}}
 
 {{/*
@@ -157,6 +177,14 @@ Return the S3 protocol
         {{- ternary "https" "http" .Values.minio.tls.enabled  -}}
     {{- else -}}
         {{- print .Values.externalS3.protocol -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "mastodon.s3.protocol.setting" -}}
+    {{- if .Values.forceHttpsS3Protocol -}}
+        {{- print "https" -}}
+    {{- else -}}
+        {{- print (include "mastodon.s3.protocol" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -359,7 +387,7 @@ Return if Redis(TM) authentication is enabled
     {{- if .Values.redis.auth.enabled -}}
         {{- true -}}
     {{- end -}}
-{{- else if .Values.externalRedis.password -}}
+{{- else if or .Values.externalRedis.password .Values.externalRedis.existingSecret -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -480,6 +508,39 @@ Retrieve key of the PostgreSQL secret
 {{- end -}}
 
 {{/*
+Return the SMTP Secret Name
+*/}}
+{{- define "mastodon.smtp.secretName" -}}
+{{- if .Values.smtp.existingSecret -}}
+    {{- print .Values.smtp.existingSecret -}}
+{{- else -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) "smtp" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Retrieve SMTP login key
+*/}}
+{{- define "mastodon.smtp.loginKey" -}}
+{{- if .Values.smtp.existingSecretLoginKey -}}
+    {{- print .Values.smtp.existingSecretLoginKey -}}
+{{- else -}}
+    {{- print "login" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Retrieve SMTP password key
+*/}}
+{{- define "mastodon.smtp.passwordKey" -}}
+{{- if .Values.smtp.existingSecretPasswordKey -}}
+    {{- print .Values.smtp.existingSecretPasswordKey -}}
+{{- else -}}
+    {{- print "password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Init container definition for waiting for the database to be ready
 */}}
 {{- define "mastodon.waitForDBInitContainer" -}}
@@ -531,7 +592,7 @@ Init container definition for waiting for the database to be ready
 Init container definition for waiting for Redis(TM) to be ready
 */}}
 {{- define "mastodon.waitForRedisInitContainer" }}
-# We need to wait for the PostgreSQL database to be ready in order to start with Mastodon.
+# We need to wait for the Redis(TM) to be ready in order to start with Mastodon.
 # As it is a ReplicaSet, we need that all nodes are configured in order to start with
 # the application or race conditions can occur
 - name: wait-for-redis

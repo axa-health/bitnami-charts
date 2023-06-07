@@ -1,4 +1,4 @@
-{{- if and (include "mastodon.web.domain" .) (include "mastodon.s3.aliasHost" .) }}
+{{- if and (include "mastodon.web.domain" .) (or .Values.enableS3 .Values.persistence.enabled) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -131,6 +131,18 @@ spec:
                 secretKeyRef:
                   name: {{ include "mastodon.elasticsearch.secretName" . }}
                   key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+            {{- end }}
+            {{- if ne .Values.smtp.auth_method "none" }}
+            - name: SMTP_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.loginKey" . | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mastodon.smtp.secretName" . }}
+                  key: {{ include "mastodon.smtp.passwordKey" . | quote }}
             {{- end }}
             {{- if .Values.sidekiq.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraEnvVars "context" $) | nindent 12 }}

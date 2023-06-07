@@ -7,12 +7,11 @@ Logstash is an open source data processing engine. It ingests data from multiple
 [Overview of Logstash](http://logstash.net)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/logstash
+helm install my-release oci://registry-1.docker.io/bitnamicharts/logstash
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/logstash
+helm install my-release oci://registry-1.docker.io/bitnamicharts/logstash
 ```
 
 These commands deploy logstash on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -44,7 +42,7 @@ These commands deploy logstash on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` statefulset:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
@@ -58,7 +56,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -75,14 +72,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                     | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                        | `["infinity"]`  |
 
-
 ### Logstash parameters
 
 | Name                                          | Description                                                                                                                       | Value                    |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                              | Logstash image registry                                                                                                           | `docker.io`              |
 | `image.repository`                            | Logstash image repository                                                                                                         | `bitnami/logstash`       |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.5.3-debian-11-r9`     |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.8.0-debian-11-r0`     |
 | `image.digest`                                | Logstash image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                     |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                        | `IfNotPresent`           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
@@ -165,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`                         | Annotations for Logstash service                                                                                                  | `{}`                     |
 | `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                              | `None`                   |
 | `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                       | `{}`                     |
+| `service.headless.annotations`                | Annotations for the headless service.                                                                                             | `{}`                     |
 | `persistence.enabled`                         | Enable Logstash data persistence using PVC                                                                                        | `false`                  |
 | `persistence.existingClaim`                   | A manually managed Persistent Volume and Claim                                                                                    | `""`                     |
 | `persistence.storageClass`                    | PVC Storage Class for Logstash data volume                                                                                        | `""`                     |
@@ -177,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                  | `0`                      |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`              |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r68`       |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r119`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
@@ -201,12 +198,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                            | Minimum number / percentage of pods that should remain scheduled                                                                  | `1`                      |
 | `pdb.maxUnavailable`                          | Maximum number / percentage of pods that may be made unavailable                                                                  | `""`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
-  --set enableMonitoringAPI=false my-repo/logstash
+helm install my-release \
+  --set enableMonitoringAPI=false oci://registry-1.docker.io/bitnamicharts/logstash
 ```
 
 The above command disables the Logstash Monitoring API.
@@ -214,7 +210,7 @@ The above command disables the Logstash Monitoring API.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/logstash
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/logstash
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -328,13 +324,13 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

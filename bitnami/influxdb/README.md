@@ -7,12 +7,11 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/influxdb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/influxdb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
 These commands deploy influxdb on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +44,7 @@ These commands deploy influxdb on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-release` statefulset:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
@@ -60,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
-
 
 ### Common parameters
 
@@ -77,14 +74,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                  | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                     | `["infinity"]`  |
 
-
 ### InfluxDB&trade; parameters
 
 | Name                                             | Description                                                                                                                                                                                                                                                          | Value                |
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                                 | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`          |
 | `image.repository`                               | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`   |
-| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.6.1-debian-11-r0` |
+| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.7.1-debian-11-r8` |
 | `image.digest`                                   | InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                      | `""`                 |
 | `image.pullPolicy`                               | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`       |
 | `image.pullSecrets`                              | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                 |
@@ -96,6 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.admin.token`                               | InfluxDB&trade; admin user's token. Only valid with InfluxDB&trade; v2                                                                                                                                                                                               | `""`                 |
 | `auth.admin.org`                                 | InfluxDB&trade; admin user's org. Only valid with InfluxDB&trade; v2                                                                                                                                                                                                 | `primary`            |
 | `auth.admin.bucket`                              | InfluxDB&trade; admin user's bucket. Only valid with InfluxDB&trade; v2                                                                                                                                                                                              | `primary`            |
+| `auth.admin.retention`                           | InfluxDB&trade; admin user's bucket retention. Only valid with InfluxDB&trade; v2                                                                                                                                                                                    | `""`                 |
 | `auth.createUserToken`                           | Whether to create tokens for the different users. Take into account these tokens are going to be created by CLI randomly and they will not be accessible from a secret. See more influxdb 2.0 [auth ref](https://docs.influxdata.com/influxdb/v2.0/security/tokens/) | `false`              |
 | `auth.user.username`                             | Name for InfluxDB&trade; user with 'admin' privileges on the bucket specified at `auth.user.bucket` and `auth.user.org` or `auth.admin.org`                                                                                                                          | `""`                 |
 | `auth.user.password`                             | InfluxDB&trade; password for `user.name` user                                                                                                                                                                                                                        | `""`                 |
@@ -180,7 +177,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `influxdb.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                                                 | `None`               |
 | `influxdb.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                                                                                                                                          | `{}`                 |
 
-
 ### InfluxDB Collectd&trade; parameters
 
 | Name                                        | Description                                                                               | Value       |
@@ -197,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collectd.service.annotations`              | Annotations for InfluxDB Collectd&trade; service                                          | `{}`        |
 | `collectd.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`      |
 | `collectd.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                               | `{}`        |
-
 
 ### Exposing parameters
 
@@ -216,7 +211,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`          | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Metrics parameters
 
@@ -257,7 +251,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
 
-
 ### Volume permissions parameters
 
 | Name                                          | Description                                                                                                                       | Value                   |
@@ -265,12 +258,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`                 | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r66`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r118`     |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                 | `0`                     |
-
 
 ### InfluxDB&trade; backup parameters
 
@@ -300,7 +292,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                                  | `gs://bucket/influxdb`     |
 | `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                                  | `docker.io`                |
 | `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                                      | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.412.0-debian-11-r5`     |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.431.0-debian-11-r0`     |
 | `backup.uploadProviders.google.image.digest`      | Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                               | `IfNotPresent`             |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                                 | `[]`                       |
@@ -311,7 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.azure.containerName`      | Destination container                                                                                            | `influxdb-container`       |
 | `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                         | `docker.io`                |
 | `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                                       | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.43.0-debian-11-r7`      |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.48.1-debian-11-r9`      |
 | `backup.uploadProviders.azure.image.digest`       | Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
 | `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                                      | `IfNotPresent`             |
 | `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                 | `[]`                       |
@@ -323,17 +315,26 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`     |
 | `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                           | `docker.io`                |
 | `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                         | `bitnami/aws-cli`          |
-| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.9.11-debian-11-r0`      |
+| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.11.21-debian-11-r0`     |
 | `backup.uploadProviders.aws.image.digest`         | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                       |
 | `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                                        | `IfNotPresent`             |
 | `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                                 | `[]`                       |
 
+## RBAC Parameters
+
+| Name                                          | Description                                                                                                                                 | Value   |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`  |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`    |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
-  --set auth.admin.username=admin-user my-repo/influxdb
+helm install my-release \
+  --set auth.admin.username=admin-user oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
 The above command sets the InfluxDB&trade; admin user to `admin-user`.
@@ -343,7 +344,7 @@ The above command sets the InfluxDB&trade; admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/influxdb
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -358,7 +359,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 This chart installs a deployment with the following configuration:
 
-```
+```text
                 ------------------
                |     Ingress      |
                |    Controller    |
@@ -444,10 +445,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrade
 
-It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, ` auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
+It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, `auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
-```bash
-$ helm upgrade my-release my-repo/influxdb \
+```console
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/influxdb \
     --set auth.admin.password=[ADMIN_USER_PASSWORD] \
     --set auth.user.password=[USER_PASSWORD] \
     --set auth.readUser.password=[READ_USER_PASSWORD] \
@@ -464,9 +465,9 @@ This major release completely removes support for InfluxDB Relay&trade; because 
 
 To update from the previous major, please follow this steps:
 
-```
-$ kubectl delete deployments.apps influxdb
-$ helm upgrade influxdb my-repo/influxdb
+```console
+kubectl delete deployments.apps influxdb
+helm upgrade influxdb oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
 ### To 4.0.0
@@ -494,10 +495,10 @@ Affected values:
 This version adds support to InfluxDB&trade; +2.0, since this version the chart is only verified to work with InfluxDB&trade; +2.0 bitnami images.
 However, you can use images for versions ~1.x.x taking into account the chart may need some modification to run with them.
 
-#### Installing InfluxDB&trade; v1 in chart v2.
+#### Installing InfluxDB&trade; v1 in chart v2
 
-```
-$ helm install my-repo/influxdb --set image.tag=1.8.3-debian-10-r88
+```console
+helm install oci://registry-1.docker.io/bitnamicharts/influxdb --set image.tag=1.8.3-debian-10-r88
 ```
 
 As a consecuece some breaking changes have been included in this version.
@@ -516,20 +517,20 @@ Since this release could mean lot of concepts changes, we strongly recommend to 
 
 We actually recommend to backup all the data form a previous helm release, install new release using latest version of the chart and images and then restore data following their guides.
 
-#### Upgrading the chart form 1.x.x to 2.x.x using InfluxDB&trade; v1 images.
+#### Upgrading the chart form 1.x.x to 2.x.x using InfluxDB&trade; v1 images
 
 > NOTE: Please, create a backup of your database before running any of those actions.
 
 Having an already existing chart release called `influxdb` and deployed like
 
 ```console
-$ helm install influxdb my-repo/influxdb
+helm install influxdb oci://registry-1.docker.io/bitnamicharts/influxdb
 ```
 
 ##### Export secrets and required values to update
 
 ```console
-$ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb -o jsonpath="{.data.admin-user-password}" | base64 -d)
+export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb -o jsonpath="{.data.admin-user-password}" | base64 -d)
 ```
 
 ##### Upgrade the chart release
@@ -537,7 +538,7 @@ $ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influx
 > NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `adminUser.pwd` -> `auth.admin.password`.
 
 ```console
-$ helm upgrade influxdb my-repo/influxdb --set image.tag=1.8.3-debian-10-r99 \
+helm upgrade influxdb oci://registry-1.docker.io/bitnamicharts/influxdb --set image.tag=1.8.3-debian-10-r99 \
   --set auth.admin.password=${INFLUXDB_ADMIN_PASSWORD}
 ```
 
@@ -549,34 +550,35 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
+limitations under the License.

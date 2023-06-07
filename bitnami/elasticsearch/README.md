@@ -7,12 +7,11 @@ Elasticsearch is a distributed search and analytics engine. It is used for web s
 [Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/elasticsearch
+helm install my-release oci://registry-1.docker.io/bitnamicharts/elasticsearch
 ```
 
 ## Introduction
@@ -32,8 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/elasticsearch
+helm install my-release oci://registry-1.docker.io/bitnamicharts/elasticsearch
 ```
 
 These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,13 +43,13 @@ These commands deploy Elasticsearch on the Kubernetes cluster in the default con
 To uninstall/delete the `my-release` release:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Remove also the chart using `--purge` option:
 
 ```console
-$ helm delete --purge my-release
+helm delete --purge my-release
 ```
 
 ## Parameters
@@ -66,7 +64,6 @@ $ helm delete --purge my-release
 | `global.elasticsearch.service.name`          | Elasticsearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)         | `elasticsearch` |
 | `global.elasticsearch.service.ports.restAPI` | Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
 | `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
-
 
 ### Common parameters
 
@@ -83,7 +80,6 @@ $ helm delete --purge my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Elasticsearch cluster Parameters
 
@@ -110,7 +106,7 @@ $ helm delete --purge my-release
 | `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.5.3-debian-11-r9`           |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.8.0-debian-11-r0`           |
 | `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
@@ -136,7 +132,6 @@ $ helm delete --purge my-release
 | `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                                                             | `""`                           |
 | `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
 | `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
-
 
 ### Traffic Exposure Parameters
 
@@ -170,20 +165,23 @@ $ helm delete --purge my-release
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Master-elegible nodes parameters
 
 | Name                                                 | Description                                                                                                                                        | Value               |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `master.masterOnly`                                  | Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                      | `true`              |
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
+| `master.extraRoles`                                  | Append extra roles to the node role                                                                                                                | `[]`                |
+| `master.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                    | `false`             |
+| `master.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                     | `1`                 |
+| `master.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                     | `""`                |
 | `master.nameOverride`                                | String to partially override elasticsearch.master.fullname                                                                                         | `""`                |
 | `master.fullnameOverride`                            | String to fully override elasticsearch.master.fullname                                                                                             | `""`                |
 | `master.servicenameOverride`                         | String to fully override elasticsearch.master.servicename                                                                                          | `""`                |
 | `master.annotations`                                 | Annotations for the master statefulset                                                                                                             | `{}`                |
 | `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                     | `RollingUpdate`     |
-| `master.resources.limits`                            | The resources limits for the master-elegible containers                                                                                            | `{}`                |
-| `master.resources.requests`                          | The requested resources for the master-elegible containers                                                                                         | `{}`                |
+| `master.resources.limits`                            | The resources limits for elasticsearch containers                                                                                                  | `{}`                |
+| `master.resources.requests`                          | The requested resources for elasticsearch containers                                                                                               | `{}`                |
 | `master.heapSize`                                    | Elasticsearch master-eligible node heap size.                                                                                                      | `128m`              |
 | `master.podSecurityContext.enabled`                  | Enabled master-elegible pods' Security Context                                                                                                     | `true`              |
 | `master.podSecurityContext.fsGroup`                  | Set master-elegible pod's Security Context fsGroup                                                                                                 | `1001`              |
@@ -255,12 +253,15 @@ $ helm delete --purge my-release
 | `master.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                      | `""`                |
 | `master.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                   | `""`                |
 
-
 ### Data-only nodes parameters
 
 | Name                                               | Description                                                                                                                                      | Value               |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- |
 | `data.replicaCount`                                | Number of data-only replicas to deploy                                                                                                           | `2`                 |
+| `data.extraRoles`                                  | Append extra roles to the node role                                                                                                              | `[]`                |
+| `data.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                  | `false`             |
+| `data.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                   | `1`                 |
+| `data.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                   | `""`                |
 | `data.nameOverride`                                | String to partially override elasticsearch.data.fullname                                                                                         | `""`                |
 | `data.fullnameOverride`                            | String to fully override elasticsearch.data.fullname                                                                                             | `""`                |
 | `data.servicenameOverride`                         | String to fully override elasticsearch.data.servicename                                                                                          | `""`                |
@@ -339,12 +340,14 @@ $ helm delete --purge my-release
 | `data.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                    | `""`                |
 | `data.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                 | `""`                |
 
-
 ### Coordinating-only nodes parameters
 
 | Name                                                       | Description                                                                                                               | Value           |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `coordinating.replicaCount`                                | Number of coordinating-only replicas to deploy                                                                            | `2`             |
+| `coordinating.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                           | `false`         |
+| `coordinating.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                            | `1`             |
+| `coordinating.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                            | `""`            |
 | `coordinating.nameOverride`                                | String to partially override elasticsearch.coordinating.fullname                                                          | `""`            |
 | `coordinating.fullnameOverride`                            | String to fully override elasticsearch.coordinating.fullname                                                              | `""`            |
 | `coordinating.servicenameOverride`                         | String to fully override elasticsearch.coordinating.servicename                                                           | `""`            |
@@ -415,13 +418,16 @@ $ helm delete --purge my-release
 | `coordinating.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                             | `""`            |
 | `coordinating.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                          | `""`            |
 
-
 ### Ingest-only nodes parameters
 
 | Name                                                 | Description                                                                                                                      | Value                        |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `true`                       |
 | `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
+| `ingest.extraRoles`                                  | Append extra roles to the node role                                                                                              | `[]`                         |
+| `ingest.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                      |
+| `ingest.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                          |
+| `ingest.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                         |
 | `ingest.nameOverride`                                | String to partially override elasticsearch.ingest.fullname                                                                       | `""`                         |
 | `ingest.fullnameOverride`                            | String to fully override elasticsearch.ingest.fullname                                                                           | `""`                         |
 | `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                         |
@@ -522,7 +528,6 @@ $ helm delete --purge my-release
 | `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                         |
 | `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
-
 ### Metrics parameters
 
 | Name                                            | Description                                                                                                                    | Value                            |
@@ -532,7 +537,7 @@ $ helm delete --purge my-release
 | `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
 | `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
 | `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r55`            |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r102`           |
 | `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
 | `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
@@ -607,7 +612,6 @@ $ helm delete --purge my-release
 | `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
 | `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
 
-
 ### Init Container Parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -615,7 +619,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r68`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r119`     |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
@@ -624,13 +628,12 @@ $ helm delete --purge my-release
 | `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
 | `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
 | `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r68`      |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r119`     |
 | `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |
 | `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
 | `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
-
 
 ### Kibana Parameters
 
@@ -639,13 +642,12 @@ $ helm delete --purge my-release
 | `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
 | `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
-  my-repo/elasticsearch
+  oci://registry-1.docker.io/bitnamicharts/elasticsearch
 ```
 
 The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
@@ -653,7 +655,7 @@ The above command sets the Elasticsearch cluster name to `my-elastic` and REST p
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/elasticsearch
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/elasticsearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml).
@@ -775,7 +777,6 @@ snapshotRepoPath: "/snapshots"
 
 If you have a need for additional containers to run within the same pod as Elasticsearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
 
-
 ```yaml
 sidecars:
   - name: your-image-name
@@ -824,6 +825,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.6.0
+
+This version fixes the headless services creation. When upgrading you will need to manually delete the services first in order to get them created when upgrading.
+
 ### To 19.0.0
 
 The new version of this chart no longer supports elasticsearch-curator, this repository has been deprecated.
@@ -838,9 +843,9 @@ This major release refactors the bitnami/elasticsearch chart, adding some organi
 - Renamed several values to be in line with the rest of the catalog.
 
 This major release also upgrades Elasticsearch to its version 8.x.x and the updates Kibana subchart.
+
 - Upgrade to Elasticsearch 8
 - Upgrade Kibana subchart.
-
 
 In addition, several modifications have been performed adding missing features and renaming values, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
@@ -888,30 +893,30 @@ This version standardizes the way of defining Ingress rules in the Kibana subcha
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 12.0.0
 
 Several changes were introduced that breaks backwards compatibility:
 
-- Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
+- Ports names were prefixed with the protocol to comply with Istio (see <https://istio.io/docs/ops/deployment/requirements/>).
 - Labels are adapted to follow the Helm charts best practices.
 - Elasticsearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
@@ -922,8 +927,8 @@ Elasticsearch master pods are now deployed in parallel in order to bootstrap the
 The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
 
 ```console
-$ kubectl delete statefulset elasticsearch-master
-$ helm upgrade <DEPLOYMENT_NAME> my-repo/elasticsearch
+kubectl delete statefulset elasticsearch-master
+helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/elasticsearch
 ```
 
 ### TO 10.0.0
@@ -957,22 +962,22 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is elasticsearch:
 
 ```console
-$ kubectl patch deployment elasticsearch-coordinating --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment elasticsearch-ingest --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment elasticsearch-master --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment elasticsearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl delete statefulset elasticsearch-data --cascade=false
+kubectl patch deployment elasticsearch-coordinating --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment elasticsearch-ingest --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment elasticsearch-master --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment elasticsearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl delete statefulset elasticsearch-data --cascade=false
 ```
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

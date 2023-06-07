@@ -5,13 +5,15 @@ on:
     types:
       - created
       - moved
-permissions:
-  issues: write
-  pull-requests: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   get-issue:
     runs-on: ubuntu-latest
     name: Get issue info
+    permissions:
+      issues: read
+      pull-requests: read
     outputs:
       assignees: ${{ steps.get-issue-step.outputs.assignees }}
       author: ${{ steps.get-issue-step.outputs.author }}
@@ -39,6 +41,10 @@ jobs:
           echo "number=${number}" >> $GITHUB_OUTPUT
   label-card:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     needs:
       - get-issue
     steps:
@@ -54,43 +60,43 @@ jobs:
       - name: Triage labeling
         # Only if moved into triage
         if: ${{ github.event.project_card.column_id == env.TRIAGE_COLUMN_ID }}
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           add-labels: triage
           remove-labels: on-hold, in-progress, solved
       - name: From Bitnami labeling
         if: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID }}
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           add-labels: ${{ (needs.get-issue.outputs.author == 'bitnami-bot' && needs.get-issue.outputs.type == 'pull_request') && 'automated, auto-merge' || 'bitnami' }}
           remove-labels: on-hold, in-progress, triage, solved
       - name: Verify labeling
         # Only if moved into bitnami column and the PR is ready for review
-        # Consecutive calls were fixed in fmulero/labeler@1.0.5, see https://github.com/fmulero/labeler/pull/2
+        # Consecutive calls were fixed in fmulero/labeler@1.1.0, see https://github.com/fmulero/labeler/pull/2
         if: |
           github.event.project_card.column_id == env.BITNAMI_COLUMN_ID &&
           needs.get-issue.outputs.type == 'pull_request' && needs.get-issue.outputs.draft == 'false'
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           add-labels: verify
       - name: Build Maintenance labeling
         if: ${{ github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID }}
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           add-labels: review-required
           remove-labels: auto-merge
       - name: On hold labeling
         # Only if moved into on hold
         if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           add-labels: on-hold
           remove-labels: triage, in-progress, solved
       - name: In progress labeling
         # Only if moved into In progress
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           add-labels: in-progress
           remove-labels: on-hold, triage, solved
@@ -99,7 +105,7 @@ jobs:
         if: |
           github.event.project_card.column_id == env.SOLVED_COLUMN_ID &&
           (needs.get-issue.outputs.author != 'bitnami-bot')
-        uses: fmulero/labeler@1.0.5
+        uses: fmulero/labeler@1.1.0
         with:
           add-labels: solved
           # Triage is not on the list to know how many issues/PRs are solved
@@ -107,11 +113,11 @@ jobs:
           remove-labels: in-progress, on-hold
   assign-assignee-if-needed:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs:
       - get-issue
-    # The job shouldn't run for solved cards or new PRs created by bitnami-bot
-    if: |
-      (github.event.action != 'created' || needs.get-issue.outputs.type != 'pull_request' || needs.get-issue.outputs.author != 'bitnami-bot')
+    # The job shouldn't run for solved cards
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -124,20 +130,22 @@ jobs:
       - name: Assign to a person to work on it
         # Assign when there is nobody assigned or the card is new
         if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID && (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created') }}
-        uses: pozil/auto-assign-issue@v1.9.0
+        uses: pozil/auto-assign-issue@v1.11.0
         with:
           numOfAssignee: 1
           teams: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID && env.SUPPORT_TEAM_NAME || (github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID && env.BUILD_MAINTAINERS_TEAM_NAME || env.TRIAGE_TEAM_NAME) }}
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          allowSelfAssign: false
       - name: Reassign when moved into 'In progress' from 'Triage'
         # Reassigned when moved into In progress FROM Triage
         if: |
           github.event.action == 'moved' && needs.get-issue.outputs.assignees != '[]' &&
           github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID &&
           github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID
-        uses: pozil/auto-assign-issue@v1.9.0
+        uses: pozil/auto-assign-issue@v1.11.0
         with:
           numOfAssignee: 1
           removePreviousAssignees: true
           teams: ${{ env.SUPPORT_TEAM_NAME }}
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          allowSelfAssign: false

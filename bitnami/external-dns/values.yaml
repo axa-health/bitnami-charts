@@ -44,6 +44,10 @@ kubeVersion: ""
 ## @param watchReleaseNamespace Watch only namepsace used for the release
 ##
 watchReleaseNamespace: false
+## @param useDaemonset Use ExternalDNS in Daemonset mode
+## If set to false, Deployment will be used.
+##
+useDaemonset: false
 
 ## @section external-dns parameters
 ##
@@ -60,7 +64,7 @@ watchReleaseNamespace: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.13.1-debian-11-r19
+  tag: 0.13.4-debian-11-r19
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -198,6 +202,21 @@ aws:
     ## This ignores aws.credentials.secretKey, and aws.credentials.accessKey
     ##
     secretName: ""
+    ## AWS access key id stored in key-value secret.
+    ## If aws.credentials.accessKeyIDSecretRef and aws.credentials.secretAccessKeySecretRef defined aws.credentials.secretKey, aws.credentials.accessKey and aws.credentials.secretName are ignored
+    ## @param aws.credentials.accessKeyIDSecretRef.name Define the name of the secret that stores aws_access_key_id.
+    ## @param aws.credentials.accessKeyIDSecretRef.key Define the key of the secret that stores aws_access_key_id.
+    ##
+    accessKeyIDSecretRef:
+      name: ""
+      key: ""
+    ## AWS secret access key stored in key-value secret
+    ## @param aws.credentials.secretAccessKeySecretRef.name Define the name of the secret that stores aws_secret_access_key
+    ## @param aws.credentials.secretAccessKeySecretRef.key Define the key of the secret that stores aws_secret_access_key
+    ##
+    secretAccessKeySecretRef:
+      name: ""
+      key: ""
   ## @param aws.region When using the AWS provider, `AWS_DEFAULT_REGION` to set in the environment (optional)
   ##
   region: "us-east-1"
@@ -363,6 +382,21 @@ designate:
     content: ""
     mountPath: "/config/designate"
     filename: "designate-ca.pem"
+## Exoscale configuration to be set via arguments/env. variables
+##
+exoscale:
+  ## @param exoscale.apiKey When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APIKEY` to set (optional)
+  ##
+  apiKey: ""
+  ## @param exoscale.apiToken When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APISECRET` to set (optional)
+  ##
+  apiToken: ""
+  ## @param exoscale.secretName Use an existing secret with keys "exoscale_api_key" and "exoscale_api_token" defined.
+  ## This ignores exoscale.apiKey and exoscale.apiToken
+  ##
+  secretName: ""
+## Google configuration to be set via arguments/env. variables
+##
 ## DigitalOcean configuration to be set via arguments/env. variables
 ##
 digitalocean:
@@ -431,6 +465,10 @@ infoblox:
   ## @param infoblox.domainFilter When using the Infoblox provider, specify the domain (optional)
   ##
   domainFilter: ""
+  ##
+  ## @param infoblox.nameRegex When using the Infoblox provider, specify the name regex filter (optional)
+  ##
+  nameRegex: ""
   ## @param infoblox.noSslVerify When using the Infoblox provider, disable SSL verification (optional)
   ##
   noSslVerify: false
@@ -560,7 +598,7 @@ rfc2136:
   ## @param rfc2136.tsigAxfr When using the rfc2136 provider, enable AFXR to enable security (optional)
   ##
   tsigAxfr: true
-  ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more <https://golang.org/pkg/time/#ParseDuration>
   ##
   minTTL: "0s"
   ## @param rfc2136.rfc3645Enabled When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG
@@ -878,7 +916,7 @@ rbac:
 ## @param containerSecurityContext Security context for the container
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## Example:
-## securityContext:
+## containerSecurityContext:
 ##   allowPrivilegeEscalation: false
 ##   readOnlyRootFilesystem: true
 ##   capabilities:

@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.6-debian-11-r10
+  tag: 3.5.9-debian-11-r4
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -117,6 +117,9 @@ auth:
   ## ref: https://etcd.io/docs/latest/learning/design-auth-v3/#two-types-of-tokens-simple-and-jwt
   ##
   token:
+    ## @param auth.token.enabled Enables token authentication
+    ##
+    enabled: true
     ## @param auth.token.type Authentication token type. Allowed values: 'simple' or 'jwt'
     ## ref: https://etcd.io/docs/latest/op-guide/configuration/#--auth-token
     ##
@@ -212,7 +215,7 @@ logLevel: "info"
 ##
 maxProcs: ""
 ## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
-## they the containers are terminated
+## they the containers are terminated. Set to 'false' if appears an error-related member ID wasn't properly stored.
 ## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
 removeMemberOnContainerTermination: true
@@ -556,6 +559,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 
 ## @section Persistence parameters
 ##
@@ -579,6 +588,9 @@ persistence:
   ## @param persistence.annotations [object] Annotations for the PVC
   ##
   annotations: {}
+  ## @param persistence.labels [object] Labels for the PVC
+  ##
+  labels: {}
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
@@ -609,7 +621,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r63
+    tag: 11-debian-11-r118
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -741,7 +753,7 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
-  
+
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -804,6 +816,9 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.snapshotHistoryLimit Number of etcd snapshots to retain, tagged by date
     ##
     snapshotHistoryLimit: 1
+    ## @param disasterRecovery.cronjob.snapshotsDir Directory to store snapshots
+    ##
+    snapshotsDir: "/snapshots"
     ## @param disasterRecovery.cronjob.podAnnotations [object] Pod annotations for cronjob pods
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
@@ -847,6 +862,10 @@ disasterRecovery:
     ## @param disasterRecovery.pvc.storageClassName Storage Class for snapshots volume
     ##
     storageClassName: nfs
+    ## @param disasterRecovery.pvc.subPath Path within the volume from which to mount
+    ## Useful if snapshots should only be stored in a subdirectory of the volume
+    ##
+    subPath: ""
 
 ## @section Service account parameters
 ##

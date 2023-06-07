@@ -407,7 +407,7 @@ spec:
           {{- else }}
           args:
             - |
-              /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+              /bin/mongodb_exporter {{ include "mongodb.exporterArgs" $ }} --mongodb.direct-connect --mongodb.global-conn-pool --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           {{- end }}
           env:
             {{- if .Values.auth.enabled }}
@@ -434,6 +434,9 @@ spec:
             - name: certs
               mountPath: /certs
             {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9216
@@ -443,7 +446,7 @@ spec:
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}
@@ -451,7 +454,7 @@ spec:
           {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customStartupProbe }}

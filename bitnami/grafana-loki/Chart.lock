@@ -1,18 +1,18 @@
 dependencies:
 - name: memcached
-  repository: https://charts.bitnami.com/bitnami
-  version: 6.3.3
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 6.5.1
 - name: memcached
-  repository: https://charts.bitnami.com/bitnami
-  version: 6.3.3
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 6.5.1
 - name: memcached
-  repository: https://charts.bitnami.com/bitnami
-  version: 6.3.3
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 6.5.1
 - name: memcached
-  repository: https://charts.bitnami.com/bitnami
-  version: 6.3.3
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 6.5.1
 - name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 2.2.2
-digest: sha256:46094fcb53bf88490d960aeb39390e58604a858cc81a7d8c6eb34aeefe1692da
-generated: "2023-01-06T03:37:58.057967657Z"
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 2.4.0
+digest: sha256:0d1695bc0a547766e6860ae230c37ccdd7d17db64a7311043004fbb796ddba33
+generated: "2023-05-21T14:20:26.598205659Z"

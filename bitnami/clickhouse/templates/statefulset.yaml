@@ -25,15 +25,15 @@ spec:
   {{- end }}
   template:
     metadata:
-      {{- if or $.Values.podAnnotations (and $.Values.metrics.enabled $.Values.metrics.podAnnotations) }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") $ | sha256sum }}
         {{- if $.Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and $.Values.metrics.enabled $.Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: clickhouse
         {{- if $.Values.podLabels }}
@@ -82,8 +82,8 @@ spec:
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
           {{- end }}
-          # We don't require a privileged container in this case
           {{- if $.Values.containerSecurityContext.enabled }}
+          # We don't require a privileged container in this case
           securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
@@ -101,36 +101,35 @@ spec:
         - name: volume-permissions
           image: {{ include "clickhouse.volumePermissions.image" $ }}
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
-          command: |
-            mkdir -p /bitnami/clickhouse/data
-            chmod 700 /bitnami/clickhouse/data
-            {{- if $.Values.keeper.enabled }}
-            mkdir -p /bitnami/clickhouse/keeper
-            chmod 700 /bitnami/clickhouse/keeper
-            {{- end }}
-            chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
-            find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-            xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
-            {{- if $.Values.tls.enabled }}
-            cp /tmp/certs/* /opt/bitnami/clickhouse/certs/
-            {{- if eq ( toString ( $.Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-            chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/clickhouse/certs/
-            {{- else }}
-            chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /opt/bitnami/clickhouse/certs/
-            {{- end }}
-            chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
-            {{- end }}
-          {{- if $.Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              mkdir -p /bitnami/clickhouse/data
+              chmod 700 /bitnami/clickhouse/data
+              {{- if $.Values.keeper.enabled }}
+              mkdir -p /bitnami/clickhouse/keeper
+              chmod 700 /bitnami/clickhouse/keeper
+              {{- end }}
+              chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
+              find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
+              {{- if $.Values.tls.enabled }}
+              cp /tmp/certs/* /opt/bitnami/clickhouse/certs/
+              {{- if eq ( toString ( $.Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/clickhouse/certs/
+              {{- else }}
+              chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /opt/bitnami/clickhouse/certs/
+              {{- end }}
+              chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
+              {{- end }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" $.Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if $.Values.volumePermissions.resources }}
           resources: {{- toYaml $.Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/clickhouse
-            - name: config
-              mountPath: /bitnami/clickhouse/conf/default
             {{- if $.Values.tls.enabled }}
             - name: raw-certificates
               mountPath: /tmp/certs
@@ -174,6 +173,8 @@ spec:
             {{- if $.Values.tls.enabled }}
             - name: CLICKHOUSE_TCP_SECURE_PORT
               value: {{ $.Values.containerPorts.tcpSecure | quote }}
+            - name: CLICKHOUSE_HTTPS_PORT
+              value: {{ $.Values.containerPorts.https | quote }}
             {{- end }}
             {{- if $.Values.keeper.enabled }}
             - name: CLICKHOUSE_KEEPER_PORT
@@ -244,6 +245,8 @@ spec:
             - name: tcp
               containerPort: {{ $.Values.containerPorts.tcp }}
             {{- if $.Values.tls.enabled }}
+            - name: https
+              containerPort: {{ $.Values.containerPorts.https }}
             - name: tcp-secure
               containerPort: {{ $.Values.containerPorts.tcpSecure }}
             {{- end }}
@@ -383,9 +386,14 @@ spec:
           {{- if $.Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" $.Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
-        {{- if $.Values.commonLabels }}
-        labels: {{- include "common.tplvalues.render" (dict "value" $.Values.commonLabels "context" $) | nindent 10 }}
-        {{- end }}
+        labels: {{- include "common.labels.standard" $ | nindent 10 }}
+          app.kubernetes.io/component: clickhouse
+          {{- if $.Values.commonLabels }}
+          {{- include "common.tplvalues.render" (dict "value" $.Values.commonLabels "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if $.Values.persistence.labels }}
+          {{- include "common.tplvalues.render" (dict "value" $.Values.persistence.labels "context" $) | nindent 10 }}
+          {{- end }}
       spec:
         accessModes:
         {{- range $.Values.persistence.accessModes }}

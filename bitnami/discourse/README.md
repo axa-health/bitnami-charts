@@ -7,12 +7,11 @@ Discourse is an open source discussion platform with built-in moderation and gov
 [Overview of Discourse&reg;](http://www.discourse.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/discourse
+helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 ## Introduction
@@ -35,7 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release my-repo/discourse
+helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 The command deploys Discourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +46,7 @@ The command deploys Discourse on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -61,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,14 +76,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                   | `["infinity"]`  |
 
-
 ### Discourse Common parameters
 
 | Name                            | Description                                                                                                              | Value                 |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
 | `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
-| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.13-debian-11-r1` |
+| `image.tag`                     | Discourse image tag                                                                                                      | `3.0.3-debian-11-r11` |
 | `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
 | `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
@@ -129,12 +126,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Discourse pods                                          | `[]`                  |
 | `extraVolumes`                  | Optionally specify extra list of additional volumes for the Discourse pods                                               | `[]`                  |
 
-
 ### Discourse container parameters
 
 | Name                                              | Description                                                                                  | Value           |
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
+| `discourse.plugins`                               | List of plugins to be installed before the container initialization                          | `[]`            |
 | `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
 | `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
 | `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |
@@ -148,7 +145,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `discourse.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                          | `6`             |
 | `discourse.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                          | `1`             |
 | `discourse.readinessProbe.enabled`                | Enable readinessProbe on Discourse containers                                                | `true`          |
-| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `30`            |
+| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `180`           |
 | `discourse.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `10`            |
 | `discourse.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `5`             |
 | `discourse.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`             |
@@ -177,7 +174,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim`                       | The name of an existing PVC to use for persistence                                           | `""`            |
 | `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
 | `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
-
 
 ### Sidekiq container parameters
 
@@ -217,7 +213,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.lifecycleHooks`                        | for the Sidekiq container(s) to automate configuration before or after startup             | `{}`                                                |
 | `sidekiq.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Sidekiq pods              | `[]`                                                |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -248,7 +243,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -256,14 +250,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r61`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`     |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
-
 
 ### Other Parameters
 
@@ -273,7 +266,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-
 
 ### NetworkPolicy parameters
 
@@ -291,7 +283,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                            | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                    | `{}`    |
-
 
 ### Discourse database parameters
 
@@ -317,7 +308,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey`         | Name of an existing secret key containing the database credentials                                     | `password`            |
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the database admin user credentials                          | `postgres-password`   |
 
-
 ### Redis&reg; parameters
 
 | Name                                      | Description                                                                | Value            |
@@ -329,20 +319,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`     | `standalone`     |
 | `externalRedis.host`                      | Redis&reg; host                                                            | `localhost`      |
 | `externalRedis.port`                      | Redis&reg; port number                                                     | `6379`           |
-| `externalRedis.username`                  | Redis&reg; username                                                        | `""`             |
 | `externalRedis.password`                  | Redis&reg; password                                                        | `""`             |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
-
 
 The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.username=admin,auth.password=password \
-    my-repo/discourse
+    oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively.
@@ -352,7 +340,7 @@ The above command sets the Discourse administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/discourse
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -373,35 +361,35 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 
 1. Create a conventional release, that will be scaled later:
 
-```console
-$ helm install my-release my-repo/discourse
-...
-```
+    ```console
+    helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
+    ...
+    ```
 
 2. Wait for the release to complete and Discourse to be running successfully.
 
-```console
-$ kubectl get pods
-NAME                               READY   STATUS    RESTARTS   AGE
-my-release-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
-my-release-postgresql-0                 1/1     Running   0          5m10s
-my-release-redis-master-0               1/1     Running   0          5m11s
-```
+    ```console
+    $ kubectl get pods
+    NAME                               READY   STATUS    RESTARTS   AGE
+    my-release-discourse-744c48dd97-wx5h9   2/2     Running   0          5m11s
+    my-release-postgresql-0                 1/1     Running   0          5m10s
+    my-release-redis-master-0               1/1     Running   0          5m11s
+    ```
 
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 
-```console
-$ helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
-```
+    ```console
+    helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true oci://registry-1.docker.io/bitnamicharts/discourse
+    ```
 
-Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
+    Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.
 
-Then you can deploy Discourse chart using the proper parameters:
+    Then you can deploy Discourse chart using the proper parameters:
 
-```console
-persistence.storageClass=nfs
-postgresql.primary.persistence.storageClass=nfs
-```
+    ```console
+    persistence.storageClass=nfs
+    postgresql.primary.persistence.storageClass=nfs
+    ```
 
 ### Sidecars
 
@@ -503,13 +491,13 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

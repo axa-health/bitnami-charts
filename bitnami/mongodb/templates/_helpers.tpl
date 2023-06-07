@@ -22,9 +22,13 @@ Create a default mongo service name which can be overridden.
     {{- if and .Values.service .Values.service.nameOverride -}}
         {{- print .Values.service.nameOverride -}}
     {{- else -}}
-        {{- printf "%s-headless" (include "mongodb.fullname" .) -}}
-    {{- end }}
-{{- end }}
+        {{- if eq .Values.architecture "replicaset" -}}
+            {{- printf "%s-headless" (include "mongodb.fullname" .) -}}
+        {{- else -}}
+            {{- printf "%s" (include "mongodb.fullname" .) -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
 
 {{/*
 Create a default mongo arbiter service name which can be overridden.
@@ -469,4 +473,31 @@ Return true if certificates must be auto generated
 {{- if and $standalone $replicaset $arbiter $hidden -}}
     {{- true -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Generate argument list for mongodb-exporter
+reference: https://github.com/percona/mongodb_exporter/blob/main/REFERENCE.md
+*/}}
+{{- define "mongodb.exporterArgs" -}}
+{{- with .Values.metrics.collector -}}
+{{- ternary " --collect-all" "" .all -}}
+{{- ternary " --collector.diagnosticdata" "" .diagnosticdata -}}
+{{- ternary " --collector.replicasetstatus" "" .replicasetstatus -}}
+{{- ternary " --collector.dbstats" "" .dbstats -}}
+{{- ternary " --collector.topmetrics" "" .topmetrics -}}
+{{- ternary " --collector.indexstats" "" .indexstats -}}
+{{- ternary " --collector.collstats" "" .collstats -}}
+{{- if .collstatsColls -}}
+{{- " --mongodb.collstats-colls=" -}}
+{{- join "," .collstatsColls -}}
+{{- end -}}
+{{- if .indexstatsColls -}}
+{{- " --mongodb.indexstats-colls=" -}}
+{{- join "," .indexstatsColls -}}
+{{- end -}}
+{{- $limitArg := print " --collector.collstats-limit=" .collstatsLimit -}}
+{{- ne (print .collstatsLimit) "0" | ternary $limitArg "" -}}
+{{- end -}}
+{{- ternary " --compatible-mode" "" .Values.metrics.compatibleMode -}}
 {{- end -}}

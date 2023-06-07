@@ -64,12 +64,7 @@ spec:
       hostNetwork: {{ .Values.envoy.hostNetwork }}
       dnsPolicy: {{ .Values.envoy.dnsPolicy }}
       {{- if .Values.envoy.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.envoy.podSecurityContext.fsGroup }}
-        {{- if .Values.envoy.podSecurityContext.sysctls }}
-        sysctls:
-          {{- toYaml .Values.envoy.podSecurityContext.sysctls | nindent 8 }}
-        {{- end }}
+      securityContext: {{- omit .Values.envoy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.envoy.shutdownManager.enabled }}
@@ -78,6 +73,9 @@ spec:
           args:
             - envoy
             - shutdown-manager
+            {{- if .Values.envoy.shutdownManager.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           {{- if .Values.contour.extraEnvVars }}
@@ -105,17 +103,6 @@ spec:
                   - contour
                   - envoy
                   - shutdown
-          {{- end }}
-          {{- if .Values.contour.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8090
-            initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
           {{- end }}
           name: shutdown-manager
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
@@ -149,8 +136,7 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           {{- if .Values.envoy.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.envoy.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: CONTOUR_NAMESPACE
@@ -196,14 +182,20 @@ spec:
               {{- end }}
               name: https
               protocol: TCP
-            - containerPort: 8002
+            - containerPort: {{ .Values.envoy.containerPorts.metrics }}
+              {{- if .Values.envoy.useHostPort }}
+              hostPort: {{ .Values.envoy.hostPorts.metrics }}
+              {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.metrics }}
+              {{- end }}
               name: metrics
               protocol: TCP
           {{- if .Values.envoy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /ready
-              port: 8002
+              port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
@@ -214,7 +206,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /ready
-              port: 8002
+              port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.livenessProbe.timeoutSeconds }}
@@ -237,7 +229,7 @@ spec:
               {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
-                port: 8090
+                port: {{ .Values.envoy.shutdownManager.port }}
                 scheme: HTTP
               {{- else }}
               exec:
@@ -261,6 +253,9 @@ spec:
             - --envoy-cafile=/certs/ca.crt
             - --envoy-cert-file=/certs/tls.crt
             - --envoy-key-file=/certs/tls.key
+            {{- if .Values.contour.overloadManager.enabled }}
+            - --overload-max-heap={{ int .Values.contour.overloadManager.maxHeapBytes }}
+            {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           name: envoy-initconfig

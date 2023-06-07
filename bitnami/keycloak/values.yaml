@@ -35,9 +35,26 @@ namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## @param enableServiceLinks If set to false, disable Kubernetes service links in the pod spec
+## Ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service
+##
+enableServiceLinks: true
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param dnsPolicy DNS Policy for pod
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## E.g.
+## dnsPolicy: ClusterFirst
+dnsPolicy: ""
+## @param dnsConfig DNS Configuration pod
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## E.g.
+## dnsConfig:
+##   options:
+##   - name: ndots
+##     value: "4"
+dnsConfig: {}
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -74,7 +91,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 20.0.2-debian-11-r2
+  tag: 21.1.1-debian-11-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -245,10 +262,12 @@ extraEnvVarsSecret: ""
 replicaCount: 1
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
+## @param containerPorts.infinispan Keycloak infinispan container port
 ##
 containerPorts:
   http: 8080
   https: 8443
+  infinispan: 7800
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
@@ -450,7 +469,7 @@ sidecars: []
 service:
   ## @param service.type Kubernetes service type
   ##
-  type: LoadBalancer
+  type: ClusterIP
   ## @param service.http.enabled Enable http port on service
   ##
   http:
@@ -504,10 +523,19 @@ service:
   ## @param service.extraPorts Extra port to expose on Keycloak service
   ##
   extraPorts: []
+  # DEPRECATED service.extraHeadlessPorts will be removed in a future release, please use service.headless.extraPorts instead
   ## @param service.extraHeadlessPorts Extra ports to expose on Keycloak headless service
   ##
   extraHeadlessPorts: []
-
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+    ## @param service.headless.extraPorts Extra ports to expose on Keycloak headless service
+    ##
+    extraPorts: []
 ## Keycloak ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -529,9 +557,9 @@ ingress:
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
   hostname: keycloak.local
-  ## @param ingress.path Default path for the ingress record
+  ## @param ingress.path [string] Default path for the ingress record (evaluated as template)
   ##
-  path: /
+  path: "{{ .Values.httpRelativePath }}"
   ## @param ingress.servicePort Backend service port to use
   ## Default is http. Alternative is https.
   ##
@@ -655,6 +683,9 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
+  ## @param serviceAccount.extraLabels Additional labels for the ServiceAccount
+  ##
+  extraLabels: {}
 ## Specifies whether RBAC resources should be created
 ##
 rbac:
@@ -738,8 +769,8 @@ metrics:
     ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
     ##
     endpoints:
-      - path: /metrics
-      - path: /realms/master/metrics
+      - path: '{{ include "keycloak.httpPath" . }}metrics'
+      - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
@@ -821,7 +852,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.5.0-debian-11-r12
+    tag: 5.6.1-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -897,6 +928,11 @@ keycloakConfigCli:
   ##   - name: FOO
   ##     value: "bar"
   ##
+  ## @param keycloakConfigCli.nodeSelector Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ##
   ## @param keycloakConfigCli.podTolerations Tolerations for job pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -945,9 +981,8 @@ keycloakConfigCli:
   ##       "realm": "realm1",
   ##       "clients": []
   ##     }
-  ##   files/realm2.yaml:
-  ##   realm3.yaml: |
-  ##     realm: realm3
+  ##   realm2.yaml: |
+  ##     realm: realm2
   ##     clients: []
   ##
   configuration: {}
@@ -955,6 +990,14 @@ keycloakConfigCli:
   ## NOTE: This will override keycloakConfigCli.configuration
   ##
   existingConfigmap: ""
+  ## Automatic Cleanup for Finished Jobs
+  ## @param keycloakConfigCli.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs
+  ## @param keycloakConfigCli.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/
+  ##
+  cleanupAfterFinished:
+    enabled: false
+    seconds: 600
 
 ## @section Database parameters
 
@@ -971,7 +1014,7 @@ keycloakConfigCli:
 postgresql:
   enabled: true
   auth:
-    postgresPassword: ""  
+    postgresPassword: ""
     username: bn_keycloak
     password: ""
     database: bitnami_keycloak
@@ -985,6 +1028,10 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Keycloak
 ## @param externalDatabase.database Keycloak database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretHostKey Name of an existing secret key containing the database host name
+## @param externalDatabase.existingSecretPortKey Name of an existing secret key containing the database port
+## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
+## @param externalDatabase.existingSecretDatabaseKey Name of an existing secret key containing the database name
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##
 externalDatabase:
@@ -994,6 +1041,10 @@ externalDatabase:
   database: bitnami_keycloak
   password: ""
   existingSecret: ""
+  existingSecretHostKey: ""
+  existingSecretPortKey: ""
+  existingSecretUserKey: ""
+  existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
 
 ## @section Keycloak Cache parameters

@@ -6,13 +6,10 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
-
-                           
 ## TL;DR
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/spring-cloud-dataflow
+```console
+helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 ## Introduction
@@ -31,9 +28,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/spring-cloud-dataflow
+```console
+helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +40,7 @@ These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the 
 
 To uninstall/delete the `my-release` chart:
 
-```bash
+```console
 helm uninstall my-release
 ```
 
@@ -58,7 +54,6 @@ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                           | Value           |
@@ -71,14 +66,13 @@ helm uninstall my-release
 | `clusterDomain`     | Default Kubernetes cluster domain                                                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                     | `[]`            |
 
-
 ### Dataflow Server parameters
 
 | Name                                                | Description                                                                                                                                | Value                                                |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | `server.image.registry`                             | Spring Cloud Dataflow image registry                                                                                                       | `docker.io`                                          |
 | `server.image.repository`                           | Spring Cloud Dataflow image repository                                                                                                     | `bitnami/spring-cloud-dataflow`                      |
-| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.9.6-debian-11-r28`                                |
+| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.10.3-debian-11-r4`                                |
 | `server.image.digest`                               | Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                                                 |
 | `server.image.pullPolicy`                           | Spring Cloud Dataflow image pull policy                                                                                                    | `IfNotPresent`                                       |
 | `server.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                                                           | `[]`                                                 |
@@ -86,7 +80,7 @@ helm uninstall my-release
 | `server.hostAliases`                                | Deployment pod host aliases                                                                                                                | `[]`                                                 |
 | `server.composedTaskRunner.image.registry`          | Spring Cloud Dataflow Composed Task Runner image registry                                                                                  | `docker.io`                                          |
 | `server.composedTaskRunner.image.repository`        | Spring Cloud Dataflow Composed Task Runner image repository                                                                                | `bitnami/spring-cloud-dataflow-composed-task-runner` |
-| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.10.0-debian-11-r0`                                |
+| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.10.3-debian-11-r1`                                |
 | `server.composedTaskRunner.image.digest`            | Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `server.configuration.streamingEnabled`             | Enables or disables streaming data processing                                                                                              | `true`                                               |
 | `server.configuration.batchEnabled`                 | Enables or disables batch data (tasks and schedules) processing                                                                            | `true`                                               |
@@ -188,7 +182,6 @@ helm uninstall my-release
 | `server.proxy`                                      | Add proxy configuration for SCDF server                                                                                                    | `{}`                                                 |
 | `server.applicationProperties`                      | Specify common application properties added by SCDF server to streams and/or tasks                                                         | `{}`                                                 |
 
-
 ### Dataflow Skipper parameters
 
 | Name                                         | Description                                                                                                          | Value                          |
@@ -197,7 +190,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                                          | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                                  | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                                | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.8.6-debian-11-r29`          |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.9.3-debian-11-r2`           |
 | `skipper.image.digest`                       | Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                               | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                           |
@@ -281,7 +274,6 @@ helm uninstall my-release
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                                    | `localhost`                    |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                                  | `7577`                         |
 
-
 ### Deployer parameters
 
 | Name                                          | Description                                                                                                                                     | Value          |
@@ -302,7 +294,6 @@ helm uninstall my-release
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never  | `IfNotPresent` |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                             | Value  |
@@ -313,7 +304,6 @@ helm uninstall my-release
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`   |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true` |
 
-
 ### Metrics parameters
 
 | Name                                         | Description                                                                                                                | Value                              |
@@ -321,7 +311,7 @@ helm uninstall my-release
 | `metrics.enabled`                            | Enable Prometheus metrics                                                                                                  | `false`                            |
 | `metrics.image.registry`                     | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
 | `metrics.image.repository`                   | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
-| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r39`              |
+| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r87`              |
 | `metrics.image.digest`                       | Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag   | `""`                               |
 | `metrics.image.pullPolicy`                   | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                           | `[]`                               |
@@ -391,7 +381,6 @@ helm uninstall my-release
 | `metrics.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                          | `""`                               |
 | `metrics.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                       | `""`                               |
 
-
 ### Init Container parameters
 
 | Name                                 | Description                                                                                                                     | Value                 |
@@ -399,13 +388,12 @@ helm uninstall my-release
 | `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                |
 | `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `docker.io`           |
 | `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `bitnami/kubectl`     |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.5-debian-11-r0` |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.9-debian-11-r9` |
 | `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`        |
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                  |
 | `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                  |
 | `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                  |
-
 
 ### Database parameters
 
@@ -436,7 +424,6 @@ helm uninstall my-release
 | `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
 | `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
 
-
 ### RabbitMQ chart parameters
 
 | Name                                      | Description                                                                     | Value       |
@@ -451,7 +438,6 @@ helm uninstall my-release
 | `externalRabbitmq.vhost`                  | External RabbitMQ virtual host. It will be saved in a kubernetes secret         | `""`        |
 | `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password. It will be saved in a kubernetes secret | `""`        |
 
-
 ### Kafka chart parameters
 
 | Name                                  | Description                             | Value            |
@@ -459,24 +445,22 @@ helm uninstall my-release
 | `kafka.enabled`                       | Enable/disable Kafka chart installation | `false`          |
 | `kafka.replicaCount`                  | Number of Kafka brokers                 | `1`              |
 | `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                        | `1`              |
-| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas            | `1`              |
 | `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
 | `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
 | `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
-helm install my-release --set server.replicaCount=2 my-repo/spring-cloud-dataflow
+```console
+helm install my-release --set server.replicaCount=2 oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 The above command installs Spring Cloud Data Flow chart with 2 Dataflow server replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-helm install my-release -f values.yaml my-repo/spring-cloud-dataflow
+```console
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/spring-cloud-dataflow/values.yaml)
@@ -539,8 +523,8 @@ externalDatabase.port=3306
 externalDatabase.password=mypassword
 externalDatabase.dataflow.user=mydataflowuser
 externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.dataflow.user=myskipperuser
-externalDatabase.dataflow.database=myskipperdatabase
+externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.database=myskipperdatabase
 ```
 
 NOTE: When using the individual properties (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.
@@ -634,6 +618,7 @@ This chart will facilitate the creation of TLS secrets for use with the ingress 
 - An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+
   ```console
   -----BEGIN CERTIFICATE-----
   MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
@@ -641,7 +626,9 @@ In the first two cases, it's needed a certificate and a key. We would expect the
   jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
   -----END CERTIFICATE-----
   ```
+
 - keys should look like:
+
   ```console
   -----BEGIN RSA PRIVATE KEY-----
   MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
@@ -649,6 +636,7 @@ In the first two cases, it's needed a certificate and a key. We would expect the
   wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
   -----END RSA PRIVATE KEY-----
   ```
+
 - If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `server.ingress.secrets` entry.
 - In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
 - To use self-signed certificates created by Helm, set `server.ingress.tls` to `true` and `server.ingress.certManager` to `false`.
@@ -667,6 +655,18 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 18.0.0
+
+This major updates the Kafka subchart to its newest major, 22.0.0. This new version of Kafka uses Kraft by default. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2200).
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
+
+### To 16.0.0
+
+This major updates the Kafka subchart to its newest major, 21.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2100) you can find more information about the changes introduced in that version.
 
 ### To 15.0.0
 
@@ -712,22 +712,22 @@ To upgrade to *6.0.0* from *5.x* using Kafka as messaging solution, it should be
 
 1. Obtain the credentials on your current release:
 
-```bash
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
-```
+    ```console
+    export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+    export MARIADB_PASSWORD=$(kubectl get secret --namespace default scdf-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
+    ```
 
 2. Upgrade your release using the same Kafka version:
 
-```bash
-export CURRENT_KAFKA_VERSION=$(kubectl exec scdf-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-helm upgrade scdf my-repo/spring-cloud-dataflow \
-  --set rabbitmq.enabled=false \
-  --set kafka.enabled=true \
-  --set kafka.image.tag=$CURRENT_KAFKA_VERSION \
-  --set mariadb.auth.password=$MARIADB_PASSWORD \
-  --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD
-```
+    ```console
+    $ export CURRENT_KAFKA_VERSION=$(kubectl exec scdf-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+    helm upgrade scdf oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow \
+      --set rabbitmq.enabled=false \
+      --set kafka.enabled=true \
+      --set kafka.image.tag=$CURRENT_KAFKA_VERSION \
+      --set mariadb.auth.password=$MARIADB_PASSWORD \
+      --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD
+    ```
 
 ### To 5.0.0
 
@@ -753,35 +753,35 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### v0.x.x
 
-```bash
-helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+```console
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 ### v1.x.x
 
-```bash
-helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+```console
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 ### To 1.0.0
@@ -794,7 +794,7 @@ To upgrade to `1.0.0`, you will need to reuse the PVC used to hold the MariaDB d
 
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
-```bash
+```console
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default dataflow-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=dataflow -o jsonpath="{.items[0].metadata.name}")
@@ -804,8 +804,8 @@ export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-
 
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Data Flow replicas to 0:
 
-```bash
-helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
+```console
+helm upgrade dataflow oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow --version 0.7.4 \
   --set server.replicaCount=0 \
   --set skipper.replicaCount=0 \
   --set mariadb.enabled=false \
@@ -815,8 +815,8 @@ helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
 
 Finally, upgrade you release to 1.0.0 reusing the existing PVC, and enabling back MariaDB:
 
-```bash
-helm upgrade dataflow my-repo/spring-cloud-dataflow \
+```console
+helm upgrade dataflow oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow \
   --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC \
   --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
   --set mariadb.auth.password=$MARIADB_PASSWORD \
@@ -836,13 +836,13 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

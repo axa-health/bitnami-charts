@@ -1,4 +1,0 @@
-containerPorts:
-  http: 8080
-logging:
-  output: default

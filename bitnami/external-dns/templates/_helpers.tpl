@@ -62,23 +62,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Return the proper External DNS image name
 */}}
 {{- define "external-dns.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
-Also, we can't use a single if because lazy evaluation is not an option
-*/}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s:%s" .Values.global.imageRegistry $repositoryName $tag -}}
-    {{- else -}}
-        {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- end -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -118,7 +102,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "alibabacloud") .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret (not .Values.alibabacloud.secretName) }}
     {{- true -}}
-{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) }}
+{{- else if and (eq .Values.provider "aws") .Values.aws.credentials.secretKey .Values.aws.credentials.accessKey (not .Values.aws.credentials.secretName) (not (include "external-dns.aws-credentials-secret-ref-defined" . )) }}
     {{- true -}}
 {{- else if and (or (eq .Values.provider "azure") (eq .Values.provider "azure-private-dns")) (or (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.aadClientId .Values.azure.aadClientSecret (not .Values.azure.useManagedIdentityExtension)) (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId .Values.azure.useManagedIdentityExtension)) (not .Values.azure.secretName) -}}
     {{- true -}}
@@ -129,6 +113,8 @@ Return true if a secret object should be created
 {{- else if and (eq .Values.provider "designate") (or .Values.designate.applicationCredentialId .Values.designate.applicationCredentialSecret) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.apiToken (not .Values.digitalocean.secretName) -}}
+    {{- true -}}
+{{- else if and (eq .Values.provider "exoscale") .Values.exoscale.apiKey (not .Values.exoscale.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
     {{- true -}}
@@ -186,6 +172,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.cloudflare.secretName }}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.secretName }}
 {{- .Values.digitalocean.secretName }}
+{{- else if and (eq .Values.provider "exoscale") .Values.exoscale.secretName }}
+{{- .Values.exoscale.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
 {{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName }}
@@ -236,6 +224,13 @@ aws_secret_access_key = {{ .Values.aws.credentials.secretKey }}
 [profile default]
 region = {{ .Values.aws.region }}
 {{ end }}
+
+{{- define "external-dns.aws-credentials-secret-ref-defined" -}}
+{{- if and .Values.aws.credentials.accessKeyIDSecretRef.name .Values.aws.credentials.accessKeyIDSecretRef.key .Values.aws.credentials.secretAccessKeySecretRef.name .Values.aws.credentials.secretAccessKeySecretRef.key -}}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
 
 {{- define "external-dns.azure-credentials" -}}
 {

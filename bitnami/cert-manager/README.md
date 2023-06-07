@@ -7,12 +7,11 @@ cert-manager is a Kubernetes add-on to automate the management and issuance of T
 [Overview of cert-manager](https://github.com/jetstack/cert-manager)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cert-manager
+helm install my-release oci://registry-1.docker.io/bitnamicharts/cert-manager
 ```
 
 ## Introduction
@@ -34,8 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/cert-manager
+helm install my-release oci://registry-1.docker.io/bitnamicharts/cert-manager
 ```
 
 > **Tip**: List all releases using `helm list`
@@ -45,7 +43,7 @@ $ helm install my-release my-repo/cert-manager
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -77,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `installCRDs`              | Flag to install cert-manager CRDs                                                                                                                 | `false`       |
 | `replicaCount`             | Number of cert-manager replicas                                                                                                                   | `1`           |
 
-
 ### Controller deployment parameters
 
 | Name                                                     | Description                                                                                                | Value                  |
@@ -85,14 +81,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                              | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                                  | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                                | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r9`  |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                      | `1.12.1-debian-11-r0`  |
 | `controller.image.digest`                                | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                              | `[]`                   |
 | `controller.image.debug`                                 | Controller image debug mode                                                                                | `false`                |
 | `controller.acmesolver.image.registry`                   | Controller image registry                                                                                  | `docker.io`            |
 | `controller.acmesolver.image.repository`                 | Controller image repository                                                                                | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r9`  |
+| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                      | `1.11.2-debian-11-r8`  |
 | `controller.acmesolver.image.digest`                     | Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `controller.acmesolver.image.pullPolicy`                 | Controller image pull policy                                                                               | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`                | Controller image pull secrets                                                                              | `[]`                   |
@@ -140,7 +136,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                   |
 | `controller.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                 |
 
-
 ### Webhook deployment parameters
 
 | Name                                                  | Description                                                                                             | Value                          |
@@ -148,7 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                                | Number of Webhook replicas                                                                              | `1`                            |
 | `webhook.image.registry`                              | Webhook image registry                                                                                  | `docker.io`                    |
 | `webhook.image.repository`                            | Webhook image repository                                                                                | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r9`          |
+| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                      | `1.11.2-debian-11-r8`          |
 | `webhook.image.digest`                                | Webhook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `webhook.image.pullPolicy`                            | Webhook image pull policy                                                                               | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                           | Webhook image pull secrets                                                                              | `[]`                           |
@@ -211,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                  | `""`                           |
 | `webhook.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                           |
 | `webhook.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                          | `true`                         |
-
+| `webhook.hostNetwork`                                 | Specifies hostNetwork value                                                                             | `false`                        |
 
 ### CAInjector deployment parameters
 
@@ -220,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                              | `1`                   |
 | `cainjector.image.registry`                              | CAInjector image registry                                                                                  | `docker.io`           |
 | `cainjector.image.repository`                            | CAInjector image repository                                                                                | `bitnami/cainjector`  |
-| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                      | `1.10.1-debian-11-r9` |
+| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                      | `1.11.2-debian-11-r8` |
 | `cainjector.image.digest`                                | CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                               | `IfNotPresent`        |
 | `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                              | `[]`                  |
@@ -265,7 +260,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                  |
 | `cainjector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                             | `true`                |
 
-
 ### Metrics Parameters
 
 | Name                                       | Description                                                                       | Value      |
@@ -286,25 +280,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.additionalLabels`  | DEPRECATED. Use metrics.serviceMonitor.labels instead.                            | `{}`       |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels          | `false`    |
 
-
 ### Other Parameters
 
 | Name          | Description                                        | Value  |
 | ------------- | -------------------------------------------------- | ------ |
 | `rbac.create` | Specifies whether RBAC resources should be created | `true` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release my-repo/cert-manager \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/cert-manager \
   --set installCRDs=true
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/cert-manager
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/cert-manager
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -377,13 +369,13 @@ Exisiting CRDs have been syncronised with the official [cert-manager repository]
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mastodon"
         },
-        "runtime_parameters": "YWRtaW5FbWFpbDogInZpYi11c2VyQGV4YW1wbGUuY29tIgphZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0IgoKd2ViRG9tYWluOiBiaXRuYW1pLW1hc3RvZG9uLm15CgpzZXJ2aWNlQWNjb3VudDoKICBjcmVhdGU6IHRydWUKICBhdXRvbW91bnRTZXJ2aWNlQWNjb3VudFRva2VuOiB0cnVlCgp3ZWI6CiAgY29udGFpbmVyUG9ydHM6CiAgICBodHRwOiA4MTIzCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgICBjYXBhYmlsaXRpZXM6CiAgICAgIGRyb3A6IFsiQUxMIl0KICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgICBzZWNjb21wUHJvZmlsZToKICAgICAgdHlwZTogIlJ1bnRpbWVEZWZhdWx0IgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODUwMAoKc3RyZWFtaW5nOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODYwMAoKYXBhY2hlOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAKCnBvc3RncmVzcWw6CiAgZW5hYmxlZDogdHJ1ZQogIHByaW1hcnk6CiAgICBzZXJ2aWNlOgogICAgICBwb3J0czoKICAgICAgICBwb3N0Z3Jlc3FsOiA5MzkzCgptaW5pbzoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBhcGk6IDgwMTEKCnJlZGlzOgogIGVuYWJsZWQ6IHRydWUKICBtYXN0ZXI6CiAgICBzZXJ2aWNlOgogICAgICBwb3J0czoKICAgICAgICByZWRpczogNjgwMAoKZWxhc3RpY3NlYXJjaDoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICByZXN0QVBJOiA3Nzc3Cg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -41,12 +40,15 @@
         {
           "action_id": "goss",
           "params": {
-            "vars_file": "vars.yaml",
             "resources": {
-              "path": "/.vib/mastodon/goss"
+              "path": "/.vib"
             },
+            "tests_file": "mastodon/goss/goss.yaml",
+            "vars_file": "mastodon/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-mastodon-web"
+              "pod": {
+                "workload": "deploy-mastodon-web"
+              }
             }
           }
         },
@@ -59,7 +61,7 @@
             "endpoint": "lb-mastodon-apache-http",
             "app_protocol": "HTTP",
             "env": {
-              "user": "vib-user@example.com",
+              "user": "vib-user@changeme.com",
               "password": "bitnami!1234"
             }
           }
@@ -74,8 +76,10 @@
             "repository": {
               "kind": "S3",
               "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}"
+              }
             }
           }
         }

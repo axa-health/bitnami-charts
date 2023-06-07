@@ -2,10 +2,9 @@
 {{- $fullname := include "common.names.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
-{{- $interBrokerPort := .Values.service.ports.internal }}
-{{- $clientPort := .Values.service.ports.client }}
 {{- $interBrokerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.interBrokerProtocol) -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
+{{- $controllerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.controllerProtocol) -}}
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -186,13 +185,19 @@ spec:
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}
             - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
+              {{- $securityProtocolMap := list }}
               {{- if .Values.listenerSecurityProtocolMap }}
-              value: {{ .Values.listenerSecurityProtocolMap | quote }}
-              {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+              {{- $securityProtocolMap = append $securityProtocolMap .Values.listenerSecurityProtocolMap }}
               {{- else }}
-              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
+              {{- $securityProtocolMap = append $securityProtocolMap (printf "INTERNAL:%s,CLIENT:%s" $interBrokerProtocol $clientProtocol) }}
+              {{- if .Values.kraft.enabled }}
+              {{- $securityProtocolMap = append $securityProtocolMap (printf "CONTROLLER:%s" $controllerProtocol) }}
+              {{- end}}
+              {{- if .Values.externalAccess.enabled }}
+              {{- $securityProtocolMap = append $securityProtocolMap (printf "EXTERNAL:%s" $externalClientProtocol) }}
               {{- end }}
+              {{- end }}
+              value: {{ join "," $securityProtocolMap | quote }}
             {{- if or ($clientProtocol | regexFind "SASL") ($externalClientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") .Values.auth.sasl.jaas.zookeeperUser }}
             - name: KAFKA_CFG_SASL_ENABLED_MECHANISMS
               value: {{ upper .Values.auth.sasl.mechanisms | quote }}
@@ -200,13 +205,19 @@ spec:
               value: {{ upper .Values.auth.sasl.interBrokerMechanism | quote }}
             {{- end }}
             - name: KAFKA_CFG_LISTENERS
+              {{- $listeners := list }}
               {{- if .Values.listeners }}
-              value: {{ join "," .Values.listeners }}
-              {{- else if .Values.externalAccess.enabled }}
-              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092,EXTERNAL://:9094"
+              {{- $listeners = .Values.listeners }}
               {{- else }}
-              value: "INTERNAL://:{{ $interBrokerPort }},CLIENT://:9092"
+              {{- $listeners = append $listeners (printf "INTERNAL://:%d,CLIENT://:%d" (int .Values.containerPorts.internal) (int .Values.containerPorts.client)) }}
+              {{- if .Values.kraft.enabled }}
+              {{- $listeners = append $listeners (printf "CONTROLLER://:%d" (int .Values.containerPorts.controller)) }}
+              {{- end}}
+              {{- if .Values.externalAccess.enabled }}
+              {{- $listeners = append $listeners (printf "EXTERNAL://:%d" (int .Values.containerPorts.external)) }}
               {{- end }}
+              {{- end }}
+              value: {{ join "," $listeners | quote }}
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
             - name: SHARED_FILE
@@ -223,7 +234,7 @@ spec:
               {{- if .Values.advertisedListeners }}
               value: {{ join "," .Values.advertisedListeners }}
               {{- else }}
-              value: "INTERNAL://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $interBrokerPort }},CLIENT://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $clientPort }}"
+              value: "INTERNAL://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.internal }},CLIENT://$(MY_POD_NAME).{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }}"
               {{- end }}
             {{- end }}
             - name: ALLOW_PLAINTEXT_LISTENER
@@ -356,6 +367,23 @@ spec:
               value: {{ .Values.allowEveryoneIfNoAclFound | quote }}
             - name: KAFKA_CFG_SUPER_USERS
               value: {{ .Values.superUsers | quote }}
+            - name: KAFKA_ENABLE_KRAFT
+              value: {{ ternary "true" "false" .Values.kraft.enabled | quote }}
+            {{- if .Values.kraft.enabled }}
+            - name: KAFKA_KRAFT_CLUSTER_ID
+              value: {{ .Values.kraft.clusterId | quote }}
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: {{ .Values.kraft.processRoles | quote }}
+            - name: KAFKA_CFG_CONTROLLER_LISTENER_NAMES
+              value: {{ .Values.kraft.controllerListenerNames | quote }}
+              {{- if .Values.kraft.controllerQuorumVoters }}
+            - name: KAFKA_CFG_CONTROLLER_QUORUM_VOTERS
+              value: {{ .Values.kraft.controllerQuorumVoters}}
+              {{- end }}
+            {{- else }}
+            - name: KAFKA_ENABLE_KRAFT
+              value: "false"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -378,6 +406,10 @@ spec:
             {{- if .Values.externalAccess.enabled }}
             - name: kafka-external
               containerPort: {{ .Values.containerPorts.external }}
+            {{- end }}
+            {{- if and .Values.kraft.enabled (contains "controller" .Values.kraft.processRoles) }}
+            - name: kafka-ctlr
+              containerPort: {{ .Values.containerPorts.controller }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}

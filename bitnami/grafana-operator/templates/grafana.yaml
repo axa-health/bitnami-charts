@@ -36,6 +36,9 @@ spec:
         - {{ . | quote }}
       {{- end }}
     size: {{ .Values.grafana.persistence.size }}
+    {{- if .Values.grafana.persistence.existingVolume }}
+    volumeName: {{ .Values.grafana.persistence.existingVolume }}
+    {{- end }}
     {{- if .Values.grafana.persistence.storageClass }}
     class: {{ .Values.grafana.persistence.storageClass }}
     {{- end }}
@@ -68,9 +71,6 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- $imagePullSecrets | nindent 4 }}
-  {{- end }}
-  {{- if .Values.grafana.initContainers }}
-  initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.initContainers "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.grafana.sidecars }}
   containers:

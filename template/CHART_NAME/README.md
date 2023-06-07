@@ -7,8 +7,7 @@
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/%%CHART_NAME%%
+helm install my-release oci://registry-1.docker.io/bitnamicharts/%%CHART_NAME%%
 ```
 
 ## Introduction
@@ -27,7 +26,7 @@ $ helm install my-release my-repo/%%CHART_NAME%%
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/%%CHART_NAME%%
+helm install my-release oci://registry-1.docker.io/bitnamicharts/%%CHART_NAME%%
 ```
 
 The command deploys %%CHART_NAME%% on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +45,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
 The above parameters map to the env variables defined in [bitnami/%%CHART_NAME%%](https://github.com/bitnami/containers/tree/main/bitnami/%%CHART_NAME%%). For more information please refer to the [bitnami/%%CHART_NAME%%](https://github.com/bitnami/containers/tree/main/bitnami/%%CHART_NAME%%) image documentation.
 
@@ -57,7 +56,7 @@ helm install my-release \
   --set %%CHART_NAME%%Username=admin \
   --set %%CHART_NAME%%Password=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    my-repo/%%CHART_NAME%%
+    oci://registry-1.docker.io/bitnamicharts/%%CHART_NAME%%
 ```
 
 The above command sets the %%CHART_NAME%% administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -67,7 +66,7 @@ The above command sets the %%CHART_NAME%% administrator account username and pas
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/%%CHART_NAME%%
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/%%CHART_NAME%%
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -142,13 +141,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

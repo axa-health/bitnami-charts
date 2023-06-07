@@ -152,7 +152,7 @@ Validate values of rabbitmq - LDAP support
 rabbitmq: LDAP
     Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers" or "ldap.uri" are mandatory
     to configure the connection and "ldap.userDnPattern" or "ldap.basedn" are necessary to lookup the users. Please provide them:
-    $ helm install {{ .Release.Name }} my-repo/rabbitmq \
+    $ helm install {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/rabbitmq \
       --set ldap.enabled=true \
       --set ldap.servers[0]=my-ldap-server" \
       --set ldap.port="389" \
@@ -174,7 +174,7 @@ rabbitmq: memoryHighWatermark
     You enabled configuring memory high watermark using a relative limit. However,
     no memory limits were defined at POD level. Define your POD limits as shown below:
 
-    $ helm install {{ .Release.Name }} my-repo/rabbitmq \
+    $ helm install {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/rabbitmq \
       --set memoryHighWatermark.enabled=true \
       --set memoryHighWatermark.type="relative" \
       --set memoryHighWatermark.value="0.4" \
@@ -182,7 +182,7 @@ rabbitmq: memoryHighWatermark
 
     Altenatively, user an absolute value for the memory memory high watermark :
 
-    $ helm install {{ .Release.Name }} my-repo/rabbitmq \
+    $ helm install {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/rabbitmq \
       --set memoryHighWatermark.enabled=true \
       --set memoryHighWatermark.type="absolute" \
       --set memoryHighWatermark.value="512MB"
@@ -224,4 +224,40 @@ Get the initialization scripts volume name.
 */}}
 {{- define "rabbitmq.initScripts" -}}
 {{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+    {{- $len := (default 16 .Length) | int -}}
+    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+    {{- if $obj }}
+        {{- index $obj .Key | b64dec -}}
+    {{- else -}}
+        {{- randAlphaNum $len -}}
+    {{- end -}}
+{{- end }}
+
+{{/*
+Get the extraConfigurationExistingSecret secret.
+*/}}
+{{- define "rabbitmq.extraConfiguration" -}}
+{{- if not (empty .Values.extraConfigurationExistingSecret) -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" .Values.extraConfigurationExistingSecret "Length" 10 "Key" "extraConfiguration")  -}}
+{{- else -}}
+    {{- tpl .Values.extraConfiguration . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the TLS.sslOptions.Password secret.
+*/}}
+{{- define "rabbitmq.tlsSslOptionsPassword" -}}
+{{- if not (empty .Values.auth.tls.sslOptionsPassword.password) -}}
+    {{- .Values.auth.tls.sslOptionsPassword.password -}}
+{{- else -}}
+    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" .Values.auth.tls.sslOptionsPassword.existingSecret "Length" 10 "Key" .Values.auth.tls.sslOptionsPassword.key)  -}}
+{{- end -}}
 {{- end -}}

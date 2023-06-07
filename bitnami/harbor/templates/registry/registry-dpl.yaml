@@ -128,20 +128,16 @@ spec:
             - name: INTERNAL_TLS_TRUST_CA_PATH
               value: /etc/harbor/ssl/registry/ca.crt
             {{- end }}
-            {{- if has "chartmuseum" .Values.proxy.components }}
-            - name: HTTP_PROXY
-              value: {{ .Values.proxy.httpProxy | quote  }}
-            - name: HTTPS_PROXY
-              value: {{ .Values.proxy.httpsProxy | quote }}
-            - name: NO_PROXY
-              value: {{ include "harbor.noProxy" . | quote }}
-            {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - secretRef:
+                {{- if .Values.registry.existingSecret }}
+                name: {{ .Values.registry.existingSecret }}
+                {{- else }}
                 name: {{ include "harbor.registry" . }}
+                {{- end }}
             {{- if .Values.registry.server.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVarsCM "context" $) }}
@@ -256,7 +252,11 @@ spec:
                 name: {{ printf "%s-ctl-envvars" (include "harbor.registry" .) }}
             {{- end }}
             - secretRef:
+                {{- if .Values.registry.existingSecret }}
+                name: {{  .Values.registry.existingSecret }}
+                {{- else }}
                 name: {{ include "harbor.registry" . }}
+                {{- end }}
             {{- if .Values.registry.controller.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.registry.controller.extraEnvVarsCM "context" $) }}
@@ -270,14 +270,26 @@ spec:
               value: {{ ternary "true" "false" .Values.registry.controller.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
+                {{- if .Values.core.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.core.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}
                   key: secret
+                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
+                {{- if .Values.jobservice.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.jobservice.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+                {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -365,7 +377,11 @@ spec:
       volumes:
         - name: registry-htpasswd
           secret:
+            {{- if .Values.registry.existingSecret }}
+            secretName: {{ .Values.registry.existingSecret }}
+            {{- else }}
             secretName: {{ template "harbor.registry" . }}
+            {{- end }}
             items:
               - key: REGISTRY_HTPASSWD
                 path: passwd
