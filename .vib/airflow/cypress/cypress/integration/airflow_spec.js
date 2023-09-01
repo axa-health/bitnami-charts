@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
@@ -6,7 +11,6 @@ it('allows triggering execution of a sample DAG', () => {
   cy.fixture('DAGs').then((dags) => {
     cy.visit(`dags/${dags.triggered.id}/grid`);
     cy.get('[aria-label="Trigger DAG"]').click();
-    cy.contains('button', 'Trigger DAG').click(); // A dropdown appears and clicking again is needed
 
     // Verify the DAG appears in the list of active jobs
     cy.visit('home?status=active');

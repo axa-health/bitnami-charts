@@ -20,12 +20,12 @@ This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Confluent Schema Registry in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -57,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `kubeVersion`             | Override Kubernetes version                     | `""`  |
 
 ### Common parameters
@@ -81,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r0`      |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.1-debian-11-r25`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -159,8 +158,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for MinIO&reg; pods                                                  | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)                                     | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for schema-registry pods                                             | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                | `[]`            |
 | `initContainers`                     | Add additional init containers to the Schema Registry pods.                                                              | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Schema Registry pods.                                                           | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
@@ -220,14 +219,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                               | Description                                                                   | Value                            |
-| ---------------------------------- | ----------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation                                       | `true`                           |
-| `kafka.replicaCount`               | Number of Kafka brokers                                                       | `1`                              |
-| `externalKafka.brokers`            | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.auth.protocol`      | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls | `plaintext`                      |
-| `externalKafka.auth.jaas.user`     | User for SASL authentication                                                  | `user`                           |
-| `externalKafka.auth.jaas.password` | Password for SASL authentication                                              | `""`                             |
+| Name                                | Description                                                                                                                  | Value                                |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                               |
+| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                                  |
+| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                          |
+| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                               |
+| `kafka.extraConfig`                 | Additional configuration to be appended at the end of the generated Kafka configuration file.                                | `offsets.topic.replication.factor=1` |
+| `kafka.sasl.client.users`           | Comma-separated list of usernames for Kafka client listener when SASL is enabled                                             | `["user"]`                           |
+| `kafka.sasl.client.passwords`       | Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users            | `""`                                 |
+| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]`     |
+| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                          |
+| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                               |
+| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                                 |
+| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -373,6 +378,16 @@ externalKafka.auth.jaas.user=myuser
 externalKafka.auth.jaas.password=mypassword
 ```
 
+Alternatively, you can use an existing secret with a key "client-passwords":
+
+```console
+kafka.enabled=false
+externalKafka.brokers=SASL_PLAINTEXT://kafka-0.kafka-headless.default.svc.cluster.local:9092
+externalKafka.auth.protocol=sasl
+externalKafka.auth.jaas.user=myuser
+externalKafka.auth.jaas.existingSecret=my-secret
+```
+
 ### Ingress
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your Schema Registry.
@@ -388,6 +403,21 @@ For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Upgrading
+
+### To 14.0.0
+
+This major updates the Kafka subchart to its newest major, 25.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2500).
+
+### To 13.0.0
+
+This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
+
+Additionally, `externalKafka` parameters have been renamed to match the new kafka format:
+
+- `externalKafka.auth.protocol` has been renamed as `externalKafka.listener.protocol`.
+- `externalKafka.auth.jaas.user` has been renamed as `externalKafka.sasl.user`.
+- `externalKafka.auth.jaas.password` has been renamed as `externalKafka.sasl.password`.
+- `externalKafka.auth.jaas.existingSecret` has been renamed as `externalKafka.sasl.existingSecret`.
 
 ### To 10.0.0
 

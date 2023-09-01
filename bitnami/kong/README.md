@@ -22,6 +22,8 @@ Extra functionalities beyond the Kong core are extended through plugins. Kong is
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Kong in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -79,7 +81,7 @@ helm delete my-release
 | ------------------- | ---------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | kong image registry                                                                                  | `docker.io`          |
 | `image.repository`  | kong image repository                                                                                | `bitnami/kong`       |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.3.0-debian-11-r1` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.4.0-debian-11-r4` |
 | `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                 |
@@ -213,7 +215,7 @@ helm delete my-release
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.9.3-debian-11-r10`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.11.0-debian-11-r9`             |
 | `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
@@ -288,7 +290,7 @@ helm delete my-release
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`          |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`           |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`  |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.8.0-debian-11-r2` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.9.0-debian-11-r8` |
 | `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `postgresql.external.host`                      | Database host                                                                                              | `""`                  |
 | `postgresql.external.port`                      | Database port number                                                                                       | `5432`                |
@@ -488,7 +490,7 @@ extraDeploy:
     metadata:
       name: {{ include "common.names.fullname" . }}-plugin-correlation
       namespace: {{ .Release.Namespace }}
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
     config:
       header_name: my-request-id
     plugin: correlation-id

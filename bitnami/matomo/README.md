@@ -22,6 +22,8 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
+Looking to use Matomo in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`            |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`       |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.14.2-debian-11-r16` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.15.1-debian-11-r17` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                   |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                   |
@@ -110,11 +112,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccountName`                    | Attach serviceAccountName to the pod and sidecars                                                                     | `""`                   |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                   |
 | `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                   |
+| `smtpAuth`                              | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                        | `""`                   |
 | `smtpHost`                              | SMTP host                                                                                                             | `""`                   |
 | `smtpPort`                              | SMTP port                                                                                                             | `""`                   |
 | `smtpUser`                              | SMTP user                                                                                                             | `""`                   |
 | `smtpPassword`                          | SMTP password                                                                                                         | `""`                   |
 | `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                   |
+| `noreplyName`                           | Noreply name                                                                                                          | `""`                   |
+| `noreplyAddress`                        | Noreply address                                                                                                       | `""`                   |
 | `smtpExistingSecret`                    | The name of an existing secret with SMTP credentials                                                                  | `""`                   |
 | `containerPorts`                        | Container ports                                                                                                       | `{}`                   |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                 |
@@ -224,17 +229,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                                               | Value                   |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r121`     |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+| Name                                   | Description                                                                                                                                               | Value              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r43` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`               |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`               |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`               |
 
 ### Metrics parameters
 
@@ -243,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.4-debian-11-r0`     |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.1-debian-11-r21`     |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -267,8 +272,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsCM`                        | ConfigMap containing extra env vars                                                                               | `""`                                     |
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r121`                      |
+| `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/os-shell`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r43`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -386,6 +391,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://registry-
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
 
 ### To 1.0.0
 

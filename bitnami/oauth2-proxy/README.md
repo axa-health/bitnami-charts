@@ -22,6 +22,8 @@ This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-pr
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use OAuth2 Proxy in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -114,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r70`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r278` |
 | `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
@@ -129,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret                                                      | `""`               |
 | `configuration.google.enabled`                         | Enable Google service account                                                                            | `false`            |
 | `configuration.google.adminEmail`                      | Google admin email                                                                                       | `""`               |
-| `configuration.google.googleGroup`                     | Restrict logins to members of this google group                                                          | `""`               |
+| `configuration.google.groups`                          | Restrict logins to members of these google groups                                                        | `[]`               |
 | `configuration.google.serviceAccountJson`              | Google Service account JSON                                                                              | `""`               |
 | `configuration.google.existingSecret`                  | Existing secret containing Google Service Account                                                        | `""`               |
 | `configuration.content`                                | Default configuration                                                                                    | `""`               |
@@ -313,6 +315,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/oauth2-proxy/administration/upgrade/).
 

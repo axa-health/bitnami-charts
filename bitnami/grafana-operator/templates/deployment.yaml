@@ -1,34 +1,34 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.operator.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.operator.replicaCount }}
+  {{- $podLabels := merge .Values.operator.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   {{- if .Values.operator.updateStrategy }}
   strategy: {{ toYaml .Values.operator.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.operator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.operator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
       {{- if .Values.operator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafana.pluginsInitContainerImage) "global" .Values.global) | nindent 6 }}
+      {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image) "global" .Values.global) | nindent 6 }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName | quote }}
       {{- end }}
@@ -49,10 +49,10 @@ spec:
       {{- else }}
       affinity:
         {{- if not (empty .Values.operator.podAffinityPreset) }}
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         {{- end }}
         {{- if not (empty .Values.operator.podAntiAffinityPreset) }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "component" "grafana-operator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         {{- end }}
         {{- if not (empty .Values.operator.nodeAffinityPreset.type) }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.operator.nodeAffinityPreset.type "key" .Values.operator.nodeAffinityPreset.key "values" .Values.operator.nodeAffinityPreset.values) | nindent 10 }}
@@ -88,17 +88,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.operator.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
-            - --grafana-image-tag={{ .Values.grafana.image.tag | trim }}
-            - --grafana-plugins-init-container-image={{ include "grafana-operator.grafana.pluginsInitContainerImage" . }}
-            - --grafana-plugins-init-container-tag={{ default .Values.grafana.image.tag .Values.grafana.pluginsInitContainerImage.tag | trim }}
             {{- if .Values.operator.leaderElect }}
             - --leader-elect=True
-            {{- end }}
-            {{- if (and .Values.operator.scanAllNamespaces (not .Values.operator.scanNamespaces)) }}
-            - --scan-all=True
-            {{- else if (and .Values.operator.scanNamespaces (not .Values.operator.scanAllNamespaces )) }}
-            - --namespaces={{ include "grafana-operator.joinListWithComma" .Values.operator.scanNamespaces }}
             {{- end }}
             {{- if .Values.operator.zapDevel }}
             - --zap-devel={{ .Values.operator.zapDevel }}
@@ -129,12 +120,10 @@ spec:
             - name: TEMPLATE_PATH
               value: /usr/local/bin/templates
             - name: WATCH_NAMESPACE
-              {{- if .Values.operator.watchNamespace }}
-              value: {{ .Values.operator.watchNamespace }}
-              {{- else }}
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+              {{- if and .Values.namespaceScope (empty .Values.watchNamespaces) }}
+              value: namespace: {{ include "common.names.namespace" . | quote }}
+              {{ else }}
+              value: {{ .Values.watchNamespaces }}
               {{- end }}
             - name: POD_NAME
               valueFrom:

@@ -22,6 +22,8 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use JasperReports in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | JasperReports image registry                                                                                  | `docker.io`             |
 | `image.repository`            | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r6`    |
+| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r51`   |
 | `image.digest`                | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`            | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                              | `[]`                    |
@@ -321,6 +323,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
+
 ### To 15.0.0
 
 This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
@@ -473,14 +479,6 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 kubectl patch deployment jasperreports-jasperreports --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 kubectl delete statefulset jasperreports-mariadb --cascade=false
 ```
-
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
 
 ## License
 

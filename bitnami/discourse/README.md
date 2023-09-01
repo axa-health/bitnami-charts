@@ -22,6 +22,8 @@ It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/mai
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Discoursereg; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -82,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
 | `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
-| `image.tag`                     | Discourse image tag                                                                                                      | `3.0.3-debian-11-r11` |
+| `image.tag`                     | Discourse image tag                                                                                                      | `3.0.6-debian-11-r15` |
 | `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
 | `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
@@ -245,18 +247,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value                   |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`     |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
+| Name                                                   | Description                                                                                                                       | Value              |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r40` |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`               |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`               |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                |
 
 ### Other Parameters
 
@@ -473,6 +475,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
+
 ### To 9.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
@@ -480,14 +488,6 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 ### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/discourse/administration/upgrade/).
-
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
 
 ## License
 

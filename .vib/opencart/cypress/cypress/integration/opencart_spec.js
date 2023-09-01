@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
@@ -43,7 +48,7 @@ it('allows an admin to add a product to the catalog', () => {
     cy.get('#input-meta-title-1').type(`${product.newProduct.metatagTitle}.${random}`);
     cy.contains('Data').click();
     cy.get('#input-model').type(`${product.newProduct.model}.${random}`);
-    cy.get('#input-keyword-0-1').type(`${product.newProduct.model}.${random}`, { force: true });
+    cy.get('#input-keyword-0-1').type(`${product.newProduct.model}${random}`, { force: true });
     cy.get('[title="Save"]').click();
     cy.contains('Success');
     cy.visit('/');

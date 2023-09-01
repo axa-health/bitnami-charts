@@ -22,6 +22,8 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Redmine in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -90,7 +92,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | ----------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`        | Redmine image registry                                                                                  | `docker.io`           |
 | `image.repository`      | Redmine image repository                                                                                | `bitnami/redmine`     |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r23` |
+| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r71` |
 | `image.digest`          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`      | Redmine image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`     | Redmine image pull secrets                                                                              | `[]`                  |
@@ -335,8 +337,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                     | `""`                                     |
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store                                      | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                                                                  | `docker.io`                              |
-| `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`                      |
+| `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/os-shell`                       |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r43`                       |
 | `certificates.image.digest`                          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |
@@ -554,6 +556,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 23.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
+
 ### To 22.0.0
 
 This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
@@ -565,14 +571,6 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 ### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/redmine/administration/upgrade/).
-
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
 
 ## License
 

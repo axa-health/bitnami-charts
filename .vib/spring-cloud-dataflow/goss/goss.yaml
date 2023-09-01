@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.port }}:
     status: 200
@@ -9,7 +12,6 @@ file:
     owner: root
     contains:
     - {{ .Vars.server.configuration.accountName }}
-    - /runAsUser.*{{ .Vars.deployer.podSecurityContext.runAsUser }}/
     - /url.*jdbc:mariadb.*{{ .Vars.mariadb.auth.database }}/
     - /username.*{{ .Vars.mariadb.auth.username }}/
   /etc/secrets/database:

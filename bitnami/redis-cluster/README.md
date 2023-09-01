@@ -32,6 +32,8 @@ The main features of each chart are the following:
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
 
+Looking to use Redisreg; Cluster in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -92,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                                   | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                                        | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
 | `image.repository`                                      | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
-| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.11-debian-11-r12`  |
+| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.2.0-debian-11-r0`    |
 | `image.digest`                                          | Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `image.pullPolicy`                                      | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -153,10 +155,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                      | Size of data volume                                                                                                                                 | `8Gi`                   |
 | `persistence.matchLabels`                               | Persistent Volume selectors                                                                                                                         | `{}`                    |
 | `persistence.matchExpressions`                          | matchExpressions Persistent Volume selectors                                                                                                        | `{}`                    |
+| `persistentVolumeClaimRetentionPolicy.enabled`          | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                                                                          | `false`                 |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`       | Volume retention behavior when the replica count of the StatefulSet is reduced                                                                      | `Retain`                |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted`      | Volume retention behavior that applies when the StatefulSet is deleted                                                                              | `Retain`                |
 | `volumePermissions.enabled`                             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r118`     |
+| `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/os-shell`      |
+| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r48`      |
 | `volumePermissions.image.digest`                        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
 | `volumePermissions.image.pullPolicy`                    | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -267,6 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail        | `6`            |
 | `cluster.replicas`                                        | Number of replicas for every master in the cluster                                            | `1`            |
 | `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                    | `false`        |
+| `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                               | `false`        |
 | `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                | `LoadBalancer` |
 | `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                | `6379`         |
 | `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes | `[]`           |
@@ -284,7 +290,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.50.0-debian-11-r13`   |
+| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.53.0-debian-11-r0`    |
 | `metrics.image.digest`                                      | Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
@@ -318,22 +324,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Sysctl Image parameters
 
-| Name                                              | Description                                                                                                          | Value                   |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `sysctlImage.enabled`                             | Enable an init container to modify Kernel settings                                                                   | `false`                 |
-| `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`                    |
-| `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`             |
-| `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r118`     |
-| `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`          |
-| `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `sysctlImage.mountHostSys`                        | Mount the host `/sys` folder to `/host-sys`                                                                          | `false`                 |
-| `sysctlImage.containerSecurityContext.enabled`    | Enable Containers' Security Context                                                                                  | `true`                  |
-| `sysctlImage.containerSecurityContext.runAsUser`  | User ID for the containers.                                                                                          | `0`                     |
-| `sysctlImage.containerSecurityContext.privileged` | Run privileged as privileged                                                                                         | `true`                  |
-| `sysctlImage.resources.limits`                    | The resources limits for the container                                                                               | `{}`                    |
-| `sysctlImage.resources.requests`                  | The requested resources for the container                                                                            | `{}`                    |
+| Name                                              | Description                                                                                                          | Value              |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `sysctlImage.enabled`                             | Enable an init container to modify Kernel settings                                                                   | `false`            |
+| `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`               |
+| `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`        |
+| `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/os-shell` |
+| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r48` |
+| `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`     |
+| `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`               |
+| `sysctlImage.mountHostSys`                        | Mount the host `/sys` folder to `/host-sys`                                                                          | `false`            |
+| `sysctlImage.containerSecurityContext.enabled`    | Enable Containers' Security Context                                                                                  | `true`             |
+| `sysctlImage.containerSecurityContext.runAsUser`  | User ID for the containers.                                                                                          | `0`                |
+| `sysctlImage.containerSecurityContext.privileged` | Run privileged as privileged                                                                                         | `true`             |
+| `sysctlImage.resources.limits`                    | The resources limits for the container                                                                               | `{}`               |
+| `sysctlImage.resources.requests`                  | The requested resources for the container                                                                            | `{}`               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -645,6 +651,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.0` to `7.2`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.2 release notes](https://raw.githubusercontent.com/redis/redis/7.2/00-RELEASENOTES) before upgrading.
+
+NOTE: Due to an error in our release process, versions higher or equal than 8.8.1 already use 7.2 by default.
 
 ### To 7.0.0
 

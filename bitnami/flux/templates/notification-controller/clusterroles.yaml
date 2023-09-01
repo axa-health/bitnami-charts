@@ -1,15 +1,16 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.notificationController.enabled .Values.notificationController.rbac.create }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-manager" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -177,13 +178,9 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-alert-editor" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -211,13 +208,9 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-alert-viewer" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -241,13 +234,9 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-provider-editor" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -275,13 +264,9 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-provider-viewer" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -305,13 +290,9 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-receiver-editor" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -339,13 +320,9 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-receiver-viewer" (include "flux.notification-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}

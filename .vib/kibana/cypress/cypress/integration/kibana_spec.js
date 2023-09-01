@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 
 import { skipTheWelcomeScreen, random } from '../support/utils';
@@ -24,7 +29,7 @@ it('allows uploading data', () => {
   cy.get('[data-test-subj="dataVisualizerFileImportSuccessCallout"]');
 });
 
-it('allows creating a dashboard and visualisation', () => {
+it('allows creating a dashboard and visualization', () => {
   cy.visit('app/visualize/');
   cy.get('[data-test-subj="newItemButton"]').click();
   cy.get('[data-test-subj="visType-vega"]').forceClick();
@@ -44,7 +49,7 @@ it('allows creating a dashboard and visualisation', () => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
       `${dashboard.newDashboard.title}.${random}`
     );
-    cy.get('[data-test-subj="dashboardDescription"]').type(
+    cy.get('[data-test-subj="viewDescription"]').type(
       `${dashboard.newDashboard.description}.${random}`
     );
     cy.get('[data-test-subj="confirmSaveSavedObjectButton"]').forceClick();
