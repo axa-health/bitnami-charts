@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,7 +9,9 @@ kind: Deployment
 metadata:
   name: {{ template "supabase.storage.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.storage.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: supabase
     app.kubernetes.io/component: storage
   {{- if .Values.commonAnnotations }}
@@ -20,7 +22,7 @@ spec:
   {{- if .Values.storage.updateStrategy }}
   strategy: {{- toYaml .Values.storage.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.storage.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storage.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: storage
@@ -36,10 +38,12 @@ spec:
         {{- end }}
         checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: supabase
         app.kubernetes.io/component: storage
     spec:
       serviceAccountName: {{ template "supabase.serviceAccountName" . }}
       {{- include "supabase.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.storage.automountServiceAccountToken }}
       {{- if .Values.storage.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storage.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -67,7 +71,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.storage.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.storage.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.storage.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storage.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.storage.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.storage.terminationGracePeriodSeconds }}
@@ -85,11 +89,18 @@ spec:
               mkdir -p {{ .Values.storage.persistence.mountPath }}
               find {{ .Values.storage.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.storage.containerSecurityContext.runAsUser }}:{{ .Values.storage.podSecurityContext.fsGroup }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.storage.persistence.mountPath }}
               subPath: {{ .Values.storage.persistence.subPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- include "supabase.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
@@ -101,7 +112,7 @@ spec:
           image: {{ template "supabase.storage.image" . }}
           imagePullPolicy: {{ .Values.storage.image.pullPolicy }}
           {{- if .Values.storage.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.storage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storage.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -122,7 +133,7 @@ spec:
               #!/bin/bash
 
               cd /opt/bitnami/supabase-storage
-              pm2-runtime start ecosystem.config.js
+              node dist/server.js
           {{- end }}
           env:
             - name: DB_USER
@@ -175,6 +186,8 @@ spec:
             {{- end }}
           {{- if .Values.storage.resources }}
           resources: {{- toYaml .Values.storage.resources | nindent 12 }}
+          {{- else if ne .Values.storage.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.storage.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -209,6 +222,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storage.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.pm2
+              subPath: app-pm2-dir
             - name: data
               mountPath: {{ .Values.storage.persistence.mountPath }}
               {{- if .Values.storage.persistence.subPath }}
@@ -221,6 +240,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.storage.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
         {{- if .Values.storage.persistence.enabled }}
           persistentVolumeClaim:

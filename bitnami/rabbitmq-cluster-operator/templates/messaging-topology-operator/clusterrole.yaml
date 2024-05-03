@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,9 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
   name: {{ template "rmqco.msgTopologyOperator.fullname.namespace" . }}
@@ -15,6 +17,20 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.msgTopologyOperator.rbac.clusterRole.customRules }}
+  {{- range .Values.msgTopologyOperator.rbac.clusterRole.customRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- else }}
+  {{- if .Values.msgTopologyOperator.rbac.clusterRole.extraRules }}
+  {{- range .Values.msgTopologyOperator.rbac.clusterRole.extraRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- end }}
   - apiGroups:
       - ""
     resources:
@@ -296,4 +312,23 @@ rules:
       - get
       - patch
       - update
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies/status
+    verbs:
+    - get
+  {{- end }}
 {{- end }}

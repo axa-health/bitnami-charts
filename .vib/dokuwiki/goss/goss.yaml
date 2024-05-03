@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 file:
@@ -11,5 +11,5 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
+    contents:
       - /title.*{{ .Vars.dokuwikiWikiName }}/

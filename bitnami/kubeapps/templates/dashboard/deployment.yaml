@@ -1,15 +1,17 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.dashboard.enabled -}}
+{{- if .Values.dashboard.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.dashboard.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.dashboard.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: dashboard
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -19,7 +21,7 @@ spec:
   {{- if .Values.dashboard.updateStrategy }}
   strategy: {{- toYaml .Values.dashboard.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.dashboard.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboard.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dashboard
@@ -34,6 +36,7 @@ spec:
         app.kubernetes.io/component: dashboard
     spec:
       {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboard.automountServiceAccountToken }}
       {{- if .Values.dashboard.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -61,7 +64,7 @@ spec:
       priorityClassName: {{ .Values.dashboard.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.dashboard.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dashboard.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.initContainers "context" $) | nindent 8 }}
@@ -71,7 +74,7 @@ spec:
           image: {{ include "kubeapps.dashboard.image" . }}
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
           {{- if .Values.dashboard.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dashboard.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -131,10 +134,21 @@ spec:
           {{- end }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: vhost
               mountPath: /opt/bitnami/nginx/conf/server_blocks
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: app-logs-dir
             - name: config
               mountPath: /app/config.json
               subPath: config.json
@@ -151,6 +165,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: vhost
           configMap:
             name: {{ template "kubeapps.dashboard-config.fullname" . }}

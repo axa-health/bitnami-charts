@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: collector
   {{- if or .Values.collector.service.annotations .Values.collector.service.metrics.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.collector.service.annotations .Values.collector.service.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.collector.service.annotations .Values.collector.service.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -68,10 +68,26 @@ spec:
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - name: otlp-grpc
+      port: {{ .Values.collector.service.ports.otlp.grpc }}
+      targetPort: {{ .Values.collector.containerPorts.otlp.grpc }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.otlp.grpc)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.otlp.grpc }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: otlp-http
+      port: {{ .Values.collector.service.ports.otlp.http }}
+      targetPort: {{ .Values.collector.containerPorts.otlp.http }}
+      {{- if and (or (eq .Values.collector.service.type "NodePort") (eq .Values.collector.service.type "LoadBalancer")) (not (empty .Values.collector.service.nodePorts.otlp.http)) }}
+      nodePort: {{ .Values.collector.service.nodePorts.otlp.http }}
+      {{- else if eq .Values.collector.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.collector.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.collector.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.collector.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.collector.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: collector

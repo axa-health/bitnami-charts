@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -10,13 +10,15 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if or .Values.commonAnnotations .Values.service.headless.annotations }}
-  {{- $annotations := merge .Values.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.ports "context" $) | nindent 4 }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+    {{- range $port := .Values.service.ports }}
+    - {{- omit (include "common.tplvalues.render" ( dict "value" $port "context" $ ) | fromYaml) "nodePort" | toYaml | nindent 6 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

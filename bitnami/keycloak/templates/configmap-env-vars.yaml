@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -63,6 +63,6 @@ data:
   {{- end }}
   {{- if .Values.logging }}
   KEYCLOAK_LOG_OUTPUT: {{ .Values.logging.output | quote }}
-  KC_LOG_LEVEL: {{ .Values.logging.level | quote }}
+  KEYCLOAK_LOG_LEVEL: {{ .Values.logging.level | quote }}
   {{- end }}
 

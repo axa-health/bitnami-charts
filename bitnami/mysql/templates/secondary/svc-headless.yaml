@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -12,7 +12,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: secondary
   {{- if or .Values.secondary.service.headless.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.secondary.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -21,9 +21,14 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: mysql
-      port: {{ .Values.secondary.service.ports.mysql }}
+      port: {{ .Values.secondary.containerPorts.mysql }}
       targetPort: mysql
-  {{- $podLabels := merge .Values.secondary.podLabels .Values.commonLabels }}
+    {{- if .Values.secondary.service.exposeMySQLX }}
+    - name: mysqlx
+      port: {{ .Values.secondary.containerPorts.mysqlx }}
+      targetPort: mysqlx
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: secondary
 {{- end }}

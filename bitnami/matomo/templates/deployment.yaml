@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   {{- if .Values.updateStrategy }}
@@ -35,7 +35,7 @@ spec:
     spec:
       {{- include "matomo.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccountName }}
       serviceAccountName: {{ .Values.serviceAccountName | quote }}
@@ -61,6 +61,7 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       # yamllint disable rule:indentation
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -70,73 +71,7 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-        - name: volume-permissions
-          image: {{ include "matomo.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p "/bitnami/matomo"
-              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/matomo"
-          securityContext:
-            runAsUser: 0
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: matomo-data
-              mountPath: /bitnami/matomo
-        {{- end }}
-        {{- if .Values.certificates.customCAs }}
-        - name: certificates
-          image: {{ template "certificates.image" . }}
-          imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
-          imagePullSecrets:
-          {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
-            - name: {{ . }}
-          {{- end }}
-          command:
-          {{- if .Values.certificates.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
-          {{- else if .Values.certificates.customCertificate.certificateSecret }}
-          - sh
-          - -c
-          - install_packages ca-certificates openssl
-          {{- else }}
-          - sh
-          - -c
-          - install_packages ca-certificates openssl
-            && openssl req -new -x509 -days 3650 -nodes -sha256
-              -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
-              -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
-              -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
-          {{- end }}
-          {{- if .Values.certificates.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
-          {{- end }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 12 }}
-          envFrom:
-            {{- if .Values.certificates.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
-            {{- end }}
-            {{- if .Values.certificates.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
-            {{- end }}
-          volumeMounts:
-            - name: etc-ssl-certs
-              mountPath: /etc/ssl/certs
-              readOnly: false
-            - name: etc-ssl-private
-              mountPath: /etc/ssl/private
-              readOnly: false
-            - name: custom-ca-certificates
-              mountPath: /usr/local/share/ca-certificates
-              readOnly: true
-        {{- end }}
+        {{ include "matomo.initContainers" . | nindent 8 }}
       containers:
         - name: {{ include "common.names.fullname" . }}
           image: {{ template "matomo.image" . }}
@@ -148,7 +83,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -187,7 +122,7 @@ spec:
               value: {{ .Values.matomoWebsiteName | quote }}
             - name: MATOMO_WEBSITE_HOST
               value: {{ .Values.matomoWebsiteHost | quote }}
-            {{- if .Values.smtpAuth -}}
+            {{- if .Values.smtpAuth }}
             - name: MATOMO_SMTP_AUTH
               value: {{ .Values.smtpAuth | quote }}
             {{- end }}
@@ -242,6 +177,9 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
@@ -283,6 +221,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: matomo-data
@@ -330,7 +270,11 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
+          {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}

@@ -1,18 +1,18 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.query.ingress.enabled -}}
+{{- if and .Values.query.enabled .Values.query.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if or .Values.query.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.query.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -21,7 +21,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.query.ingress.hostname }}
-    - host: {{ .Values.query.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.query.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.query.ingress.path }}
@@ -51,7 +51,7 @@ spec:
       secretName: {{ .Values.query.ingress.secretName | default (printf "%s-tls" .Values.query.ingress.hostname) }}
     {{- end }}
     {{- if .Values.query.ingress.extraTls }}
-    {{- toYaml .Values.query.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -11,7 +11,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -31,7 +31,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.dashboard.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-dashboard" (include "common.names.fullname" $)) "servicePort" "http-dashboard" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "parse.dashboard.fullname" .) "servicePort" "http-dashboard" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.dashboard.extraHosts }}
     - host: {{ .name | quote }}
@@ -41,7 +41,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-dashboard" (include "common.names.fullname" $)) "servicePort" "http-dashboard" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "parse.dashboard.fullname" .) "servicePort" "http-dashboard" "context" $) | nindent 14 }}
     {{- end }}
   {{- end }}
   {{- if .Values.ingress.server.hostname }}

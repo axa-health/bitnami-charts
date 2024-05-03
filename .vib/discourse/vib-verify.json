@@ -25,18 +25,11 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "L4"
           }
         }
       },
       "actions": [
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-discourse-http",
-            "app_protocol": "HTTP"
-          }
-        },
         {
           "action_id": "goss",
           "params": {

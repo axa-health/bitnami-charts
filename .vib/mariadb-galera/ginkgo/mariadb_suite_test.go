@@ -30,7 +30,7 @@ func init() {
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
 	flag.StringVar(&username, "username", "", "database user")
 	flag.StringVar(&password, "password", "", "database password for username")
-	flag.IntVar(&timeoutSeconds, "timeout", 180, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 240, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
@@ -40,6 +40,17 @@ func TestMariaDB(t *testing.T) {
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, stmt string) error {
+	securityContext := &v1.SecurityContext{
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
+		Capabilities: &v1.Capabilities{
+			Drop: []v1.Capability{"ALL"},
+		},
+		SeccompProfile: &v1.SeccompProfile{
+			Type: "RuntimeDefault",
+		},
+	}
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
@@ -74,6 +85,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 									Value: port,
 								},
 							},
+							SecurityContext: securityContext,
 						},
 					},
 				},

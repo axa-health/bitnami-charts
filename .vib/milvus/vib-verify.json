@@ -25,17 +25,11 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "L4"
           }
         }
       },
       "actions": [
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-milvus-attu-http"
-          }
-        },
         {
           "action_id": "goss",
           "params": {

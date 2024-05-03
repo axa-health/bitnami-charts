@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $clientPodLabels := merge .Values.client.podLabels .Values.commonLabels }}
+  {{- $clientPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $clientPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.client.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}    
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -31,12 +35,17 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        {{- if (eq .Values.source.type "git") }}
+        # Setting standard git ports for cloning
+        - port: 22
+        - port: 80
+        - port: 443
+        {{- end }}
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.worker.containerPorts.ssh }}
-        - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
       to:
-        {{- $workerPodLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+        {{- $workerPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $workerPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: deepspeed
@@ -44,6 +53,7 @@ spec:
     {{- if .Values.client.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" (dict "value" .Values.client.networkPolicy.extraEgress "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     # By default, the client is not setting any port
     {{- if .Values.client.networkPolicy.extraIngress }}

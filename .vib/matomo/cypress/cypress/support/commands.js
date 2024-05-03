@@ -1,12 +1,12 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
 const COMMAND_DELAY = 2000;
-const BASE_URL = 'http://bitnami-matomo.my';
+export const BASE_URL = 'http://bitnami-matomo.my';
 
-for (const command of ['click']) {
+for (const command of ['click', 'type']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
     const origVal = originalFn(...args);
 
@@ -31,3 +31,15 @@ Cypress.Commands.add(
     cy.contains('input', 'Sign in').click();
   }
 );
+
+Cypress.on('uncaught:exception', (err) => {
+  // we expect an error with message 'cannot call methods on liveWidget'
+  // and don't want to fail the test so we return false
+  if (
+    err.message.includes('cannot call methods on liveWidget')
+  ) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+});

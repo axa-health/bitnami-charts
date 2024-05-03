@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -17,7 +17,7 @@ We append a random number to the string to avoid password validation errors
 Get the user defined password or use a random string
 */}}
 {{- define "magento.password" -}}
-{{- $password := index .Values (printf "%sPassword" .Chart.Name) -}}
+{{- $password := .Values.magentoPassword -}}
 {{- default (include "magento.randomPassword" .) $password -}}
 {{- end -}}
 
@@ -35,6 +35,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "magento.elasticsearch.fullname" -}}
 {{- printf "%s-%s" .Release.Name "elasticsearch" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return Elasticsearch port
+*/}}
+{{- define "magento.elasticsearch.port" -}}
+{{- if .Values.elasticsearch.enabled -}}
+    {{- print .Values.elasticsearch.service.ports.restAPI -}}
+{{- else -}}
+    {{- print .Values.externalElasticsearch.port -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -58,9 +69,23 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- if .Values.ingress.enabled }}
 {{- $host := .Values.ingress.hostname | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
-{{- else -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- else if .Values.magentoHost -}}
+{{- $host := .Values.magentoHost | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
+{{- else -}}
+{{- $host := .Values.magentoHost | default "" -}}
+{{- default (include "magento.serviceIP" .) $host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "magento.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

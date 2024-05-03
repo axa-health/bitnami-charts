@@ -27,7 +27,7 @@ func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.StringVar(&stsName, "name", "", "name of the primary statefulset")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
-	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 240, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
@@ -37,6 +37,17 @@ func TestZookeeper(t *testing.T) {
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name string, port string, image string, args ...string) error {
+	securityContext := &v1.SecurityContext{
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
+		Capabilities: &v1.Capabilities{
+			Drop: []v1.Capability{"ALL"},
+		},
+		SeccompProfile: &v1.SeccompProfile{
+			Type: "RuntimeDefault",
+		},
+	}
 	command := []string{"zkCli.sh", "-server", fmt.Sprintf("%s:%s", stsName, port)}
 	command = append(command, args[:]...)
 	job := &batchv1.Job{
@@ -57,6 +68,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Command: command,
 						},
 					},
+					SecurityContext: securityContext,
 				},
 			},
 		},

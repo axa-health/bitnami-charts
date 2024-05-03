@@ -1,8 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if .Values.server.rbac.create }}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -21,3 +22,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "prometheus.server.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
+{{- end }}

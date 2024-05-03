@@ -1,18 +1,18 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.storegateway.ingress.enabled -}}
+{{- if and .Values.storegateway.enabled .Values.storegateway.ingress.enabled -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}-storegateway
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.storegateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
   {{- if or .Values.storegateway.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.storegateway.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -21,7 +21,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.storegateway.ingress.hostname }}
-    - host: {{ .Values.storegateway.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.storegateway.ingress.hostname "context" $ ) }}
       http:
         paths:
           - path: {{ .Values.storegateway.ingress.path }}
@@ -51,7 +51,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.storegateway.ingress.hostname }}
     {{- end }}
     {{- if .Values.storegateway.ingress.extraTls }}
-    {{- toYaml .Values.storegateway.ingress.extraTls | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.ingress.extraTls "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

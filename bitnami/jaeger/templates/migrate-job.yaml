@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -11,23 +11,24 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: migration
   {{- if or .Values.migration.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.migration.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   ttlSecondsAfterFinished: 30
   template:
     metadata:
-      {{- $podLabels := merge .Values.migration.podLabels .Values.commonLabels }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: migration
       {{- if .Values.migration.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.migration.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.migration.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         - name: jaeger-cassandra-schema-grabber
@@ -36,6 +37,9 @@ spec:
           volumeMounts:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
+          {{- if .Values.migration.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
       containers:
         - name: jaeger-cassandra-migrator
           image: {{ include "jaeger.cqlshImage" . }}
@@ -66,6 +70,9 @@ spec:
                 sed -i 's/cqlsh -e "show version"/cqlsh -e "show version" -u $CASSANDRA_USERNAME -p $CASSANDRA_PASSWORD /' /cassandra-schema/create.sh
                 /cassandra-schema/docker.sh
               fi
+          {{- if .Values.migration.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: CQLSH
               value: /opt/bitnami/cassandra/bin/cqlsh
@@ -101,11 +108,13 @@ spec:
           volumeMounts:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
-          {{- if .Values.migration.extraVolumeMounts }}
+            {{- if .Values.migration.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
+          {{- else if ne .Values.migration.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
         - name: cassandra-schema

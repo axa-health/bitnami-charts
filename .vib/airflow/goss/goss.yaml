@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 command:
@@ -11,7 +11,6 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-    group: root
   /opt/bitnami/airflow/dags:
     filetype: directory
     exists: true

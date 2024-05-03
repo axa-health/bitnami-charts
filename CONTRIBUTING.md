@@ -22,7 +22,7 @@ When submitting a PR make sure that it:
 
 ```yaml
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 ```
@@ -56,7 +56,7 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 
 ### Documentation Requirements
 
-- A chart's `README.md` must include configuration options. The tables of parameters are generated based on the metadata information from the `values.yaml` file, by using [this tool](https://github.com/bitnami-labs/readme-generator-for-helm).
+- A chart's `README.md` must include configuration options. The tables of parameters are generated based on the metadata information from the `values.yaml` file, by using [this tool](https://github.com/bitnami/readme-generator-for-helm).
 - A chart's `NOTES.txt` must include relevant post-installation information.
 - The title of the PR starts with chart name (e.g. `[bitnami/chart]`)
 
@@ -87,7 +87,7 @@ There are five major technical requirements to add a new Helm chart to our catal
 
 ```yaml
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 ```
@@ -95,7 +95,7 @@ SPDX-License-Identifier: APACHE-2.0
 - The exception to the license header rule above are `Chart.yaml` and `values.yaml` files, that use the following format instead:
 
 ```yaml
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 ```
 

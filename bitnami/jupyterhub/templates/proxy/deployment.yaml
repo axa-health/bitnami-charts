@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,9 @@ kind: Deployment
 metadata:
   name: {{ include "jupyterhub.proxy.name" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.proxy.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: proxy
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -17,7 +19,7 @@ spec:
   {{- if .Values.proxy.updateStrategy }}
   strategy: {{- toYaml .Values.proxy.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.proxy.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: proxy
@@ -63,7 +65,7 @@ spec:
       schedulerName: {{ .Values.proxy.schedulerName }}
       {{- end }}
       {{- if .Values.proxy.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.proxy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.proxy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.proxy.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.proxy.terminationGracePeriodSeconds }}
@@ -79,7 +81,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.proxy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.proxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.proxy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -96,8 +98,8 @@ spec:
             - "--ip=::"
             - "--api-ip=::"
             - --api-port={{ .Values.proxy.containerPort.api }}
-            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}
-            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}/hub/error
+            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.ports.http }}
+            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.ports.http }}/hub/error
             - --port={{ .Values.proxy.containerPort.http }}
             {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
             - "--metrics-ip=::"
@@ -139,6 +141,8 @@ spec:
             {{- end }}
           {{- if .Values.proxy.resources }}
           resources: {{- toYaml .Values.proxy.resources | nindent 12 }}
+          {{- else if ne .Values.proxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.proxy.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.proxy.customStartupProbe }}
@@ -167,12 +171,18 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.proxy.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.proxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.proxy.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.proxy.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.proxy.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

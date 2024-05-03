@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 file:
@@ -7,7 +7,7 @@ file:
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
+    contents:
       - /logLevel.*{{ .Vars.config.logLevel }}/
 command:
   {{- if .Vars.containerSecurityContext.enabled }}

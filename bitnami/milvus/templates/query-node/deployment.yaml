@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -22,7 +22,7 @@ spec:
   {{- if .Values.queryNode.updateStrategy }}
   strategy: {{- toYaml .Values.queryNode.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.queryNode.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: milvus
@@ -40,8 +40,12 @@ spec:
         app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: query-node
     spec:
+      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- end }}
       serviceAccountName: {{ template "milvus.query-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.queryNode.automountServiceAccountToken }}
       {{- if .Values.queryNode.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -72,7 +76,7 @@ spec:
       schedulerName: {{ .Values.queryNode.schedulerName }}
       {{- end }}
       {{- if .Values.queryNode.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryNode.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryNode.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.queryNode.enableDefaultInitContainers }}
@@ -89,7 +93,7 @@ spec:
           image: {{ template "milvus.image" . }}
           imagePullPolicy: {{ .Values.milvus.image.pullPolicy }}
           {{- if .Values.queryNode.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryNode.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryNode.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -127,6 +131,8 @@ spec:
               name: http-metrics
           {{- if .Values.queryNode.resources }}
           resources: {{- toYaml .Values.queryNode.resources | nindent 12 }}
+          {{- else if ne .Values.queryNode.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.queryNode.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.queryNode.customLivenessProbe }}
@@ -157,15 +163,24 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: rendered-config
+            - name: empty-dir
               mountPath: /opt/bitnami/milvus/configs
-            - name: tmp
+              subPath: app-rendered-conf-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: tmp-milvus
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/milvus/tmp
+              subPath: app-tmp-dir
               # We are using a s3 backend, so this data dir is temporary
-            - name: tmp-data-milvus
+            - name: empty-dir
               mountPath: /bitnami/milvus/data
+              subPath: app-data-dir
+            {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+            - name: etcd-client-certs
+              mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
+              readOnly: true
+            {{- end }}
           {{- if .Values.queryNode.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -173,11 +188,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-data-milvus
-          emptyDir: {}
-        - name: tmp-milvus
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         - name: config-common
           configMap:
@@ -195,8 +206,12 @@ spec:
           configMap:
             name: {{ template "milvus.query-node.extraConfigmapName" . }}
         {{- end }}
-        - name: rendered-config
-          emptyDir: {}
+        {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+        - name: etcd-client-certs
+          secret:
+            secretName: {{ .Values.externalEtcd.tls.existingSecret }}
+            defaultMode: 256
+        {{- end }}
         {{- if .Values.queryNode.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

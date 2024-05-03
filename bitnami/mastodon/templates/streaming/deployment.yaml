@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -20,7 +20,7 @@ spec:
   {{- if .Values.streaming.updateStrategy }}
   strategy: {{- toYaml .Values.streaming.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.streaming.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: streaming
@@ -34,6 +34,7 @@ spec:
     spec:
       serviceAccountName: {{ template "mastodon.serviceAccountName" . }}
       {{- include "mastodon.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.streaming.automountServiceAccountToken }}
       {{- if .Values.streaming.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -61,7 +62,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.streaming.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.streaming.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.streaming.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.streaming.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.streaming.terminationGracePeriodSeconds }}
@@ -79,7 +80,7 @@ spec:
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.streaming.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.streaming.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.streaming.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -170,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.streaming.resources }}
           resources: {{- toYaml .Values.streaming.resources | nindent 12 }}
+          {{- else if ne .Values.streaming.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.streaming.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -204,6 +207,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if not .Values.enableS3 }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -215,6 +221,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.streaming.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+          - name: empty-dir
+            emptyDir: {}
         {{- if not .Values.enableS3 }}
           - name: data
             {{- if .Values.persistence.enabled }}
@@ -225,6 +233,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.streaming.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 10 }}
         {{- end }}
 {{- end }}

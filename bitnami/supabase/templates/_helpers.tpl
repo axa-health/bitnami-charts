@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -386,6 +386,17 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "supabase.jwt.serviceAccountName" -}}
+{{- if .Values.jwt.autoGenerate.serviceAccount.create -}}
+    {{ default (printf "%s-jwt-init" (include "common.names.fullname" .)) .Values.jwt.autoGenerate.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.jwt.autoGenerate.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return postgresql fullname
 */}}
 {{- define "supabase.database.fullname" -}}
@@ -478,7 +489,7 @@ Return the PostgreSQL User
   image: {{ template "supabase.psql.image" . }}
   imagePullPolicy: {{ .Values.psqlImage.pullPolicy }}
   {{- if .Values.auth.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.auth.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.auth.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -523,6 +534,10 @@ Return the PostgreSQL User
       value: {{ include "supabase.database.user" . | quote }}
     - name: DATABASE_NAME
       value: {{ include "supabase.database.name" . | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -536,10 +551,10 @@ Retrieve key of the postgresql secret
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- print "postgres-password" -}}
+            {{- print "db-password" -}}
         {{- end -}}
     {{- else -}}
-        {{- print "postgres-password" -}}
+        {{- print "db-password" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
