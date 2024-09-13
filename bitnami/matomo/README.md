@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/matomo
 ```
 
-Looking to use Matomo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Matomo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -131,7 +131,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -179,6 +180,9 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `extraVolumes`                                      | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                | `[]`                     |
 | `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.                                                                                             | `[]`                     |
 | `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                                                                                                               | `[]`                     |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                   |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                     |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                     |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                     |
 | `serviceAccountName`                                | Attach serviceAccountName to the pod and sidecars                                                                                                                                                                 | `""`                     |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                     |
@@ -235,7 +239,6 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                | `5`                      |
 | `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                | `1`                      |
 | `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                              | `true`                   |
-| `livenessProbe.path`                                | Request path for livenessProbe                                                                                                                                                                                    | `/matomo.php`            |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `600`                    |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`                     |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `5`                      |
@@ -378,8 +381,12 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.taskScheduler.serviceAccountName`                                | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
+| `cronjobs.taskScheduler.automountServiceAccountToken`                      | Mount Service Account token in pod of the CronJob                                                                 | `true`           |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.taskScheduler.nodeSelector`                                      | Node labels for CronJob pod assignment. Evaluated as a template.                                                  | `{}`             |
+| `cronjobs.taskScheduler.tolerations`                                       | Tolerations for CronJob pod assignment                                                                            | `[]`             |
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images)                                              | `[]`             |
 | `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)                                                 | `[]`             |
 | `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                              | `true`           |
@@ -405,8 +412,12 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.extraEnvVars`                                      | Extra environment variables for the taskScheduler CronJob                                                         | `[]`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.archive.serviceAccountName`                                      | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
+| `cronjobs.archive.automountServiceAccountToken`                            | Mount Service Account token in pod of the CronJob                                                                 | `true`           |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.archive.tolerations`                                             | Tolerations for CronJob pod assignment                                                                            | `[]`             |
+| `cronjobs.archive.nodeSelector`                                            | Node labels for CronJob pod assignment. Evaluated as a template.                                                  | `{}`             |
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images)                                              | `[]`             |
 | `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)                                                 | `[]`             |
 | `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                                                              | `true`           |
@@ -459,6 +470,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/matom
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 8.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 7.0.0
 

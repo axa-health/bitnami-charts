@@ -105,12 +105,7 @@ Return  the proper Commit Storage Class
 {{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
 */}}
 {{- define "cassandra.commitstorage.class" -}}
-{{- $storageClass := .persistence.commitStorageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.commitStorageClass -}}
-    {{- end -}}
-{{- end -}}
+{{- $storageClass := default .persistence.commitStorageClass | default (.global).defaultStorageClass | default "" -}}
 
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
@@ -136,8 +131,6 @@ Return true if encryption via TLS for internode communication connections should
 {{- define "cassandra.internode.tlsEncryption" -}}
 {{- if (ne .Values.tls.internodeEncryption "none") -}}
     {{- printf "%s" .Values.tls.internodeEncryption -}}
-{{- else if (ne .Values.cluster.internodeEncryption "none") -}}
-    {{- printf "%s" .Values.cluster.internodeEncryption -}}
 {{- else -}}
     {{- printf "none" -}}
 {{- end -}}

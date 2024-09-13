@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,6 +18,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -128,7 +130,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -193,7 +195,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.9.0-debian-12-r2
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -465,8 +467,8 @@ web:
   ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow web replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Web Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -538,7 +540,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.9.0-debian-12-r2
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -606,6 +608,20 @@ scheduler:
     periodSeconds: 10
     timeoutSeconds: 15
     failureThreshold: 6
+    successThreshold: 1
+  ## @param scheduler.startupProbe.enabled Enable startupProbe on Airflow scheduler containers
+  ## @param scheduler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param scheduler.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param scheduler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param scheduler.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param scheduler.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
     successThreshold: 1
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -786,8 +802,8 @@ scheduler:
   ## @param scheduler.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow scheduler replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Scheduler Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -859,7 +875,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.9.0-debian-12-r2
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1131,8 +1147,8 @@ worker:
   ## @param worker.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow worker replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1220,7 +1236,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.44.0-debian-12-r3
+    tag: 2.46.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1600,7 +1616,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r30
+    tag: 0.20220314.0-debian-12-r47
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

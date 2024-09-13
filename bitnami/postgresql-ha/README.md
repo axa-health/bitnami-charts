@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha
 ```
 
-Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use PostgreSQL HA in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -29,12 +29,12 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Differences between the PostgreSQL-HA and PostgreSQL Helm charts
 
-There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simply and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
+There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simple and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
 
-- Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a master-slave topology. The master node has writing permissions while replication is on the slaves nodes which have reading-only permissions.
-- The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, and one master and one slave for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one master and one slave).
+- Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a primary/replica topology. The primary node has writing permissions while replication is on the replica nodes which have read-only permissions.
+- The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, one primary, and one replica for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one primary and one replica).
 - The PostgreSQL HA Helm chart uses pgpool to handle the connection to the nodes. pgpool is resposible to spread the queries among nodes.
-- The PostgreSQL HA Helm chart includes a repmgr module that ensures high-availability thanks to automatic membership control. If the master is down, any of the slave nodes will be promoted as master to avoid data loss.
+- The PostgreSQL HA Helm chart includes a repmgr module that ensures high-availability thanks to automatic membership control. If the primary is down, any of the replica nodes will be promoted as primary to avoid data loss.
 
 The following diagram shows you the options you have for using Bitnami's PostgreSQL solutions in your deployments:
 
@@ -63,7 +63,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -313,7 +313,8 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.postgresql.username`                          | PostgreSQL username (overrides `postgresql.username`)                                                                                                                                                                                                                                                                                                               | `""`   |
 | `global.postgresql.password`                          | PostgreSQL password (overrides `postgresql.password`)                                                                                                                                                                                                                                                                                                               | `""`   |
 | `global.postgresql.database`                          | PostgreSQL database (overrides `postgresql.database`)                                                                                                                                                                                                                                                                                                               | `""`   |
@@ -433,9 +434,9 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `postgresql.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                            | `[]`                                |
 | `postgresql.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                  | `{}`                                |
 | `postgresql.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                                |
-| `postgresql.pdb.create`                                        | Specifies whether to create a Pod disruption budget for PostgreSQL with Repmgr                                                                                                                                                          | `false`                             |
-| `postgresql.pdb.minAvailable`                                  | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                        | `1`                                 |
-| `postgresql.pdb.maxUnavailable`                                | Maximum number / percentage of pods that may be made unavailable                                                                                                                                                                        | `""`                                |
+| `postgresql.pdb.create`                                        | Specifies whether to create a Pod disruption budget for PostgreSQL with Repmgr                                                                                                                                                          | `true`                              |
+| `postgresql.pdb.minAvailable`                                  | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                        | `""`                                |
+| `postgresql.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `postgresql.pdb.minAvailable` and `postgresql.pdb.maxUnavailable` are empty.                                                                    | `""`                                |
 | `postgresql.username`                                          | PostgreSQL username                                                                                                                                                                                                                     | `postgres`                          |
 | `postgresql.password`                                          | PostgreSQL password                                                                                                                                                                                                                     | `""`                                |
 | `postgresql.database`                                          | PostgreSQL database                                                                                                                                                                                                                     | `""`                                |
@@ -565,9 +566,9 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `witness.customLivenessProbe`                                  | Override default liveness probe                                                                                                                                                                                                         | `{}`                                |
 | `witness.customReadinessProbe`                                 | Override default readiness probe                                                                                                                                                                                                        | `{}`                                |
 | `witness.customStartupProbe`                                   | Override default startup probe                                                                                                                                                                                                          | `{}`                                |
-| `witness.pdb.create`                                           | Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr                                                                                                                                                  | `false`                             |
-| `witness.pdb.minAvailable`                                     | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                        | `1`                                 |
-| `witness.pdb.maxUnavailable`                                   | Maximum number / percentage of pods that may be made unavailable                                                                                                                                                                        | `""`                                |
+| `witness.pdb.create`                                           | Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr                                                                                                                                                  | `true`                              |
+| `witness.pdb.minAvailable`                                     | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                        | `""`                                |
+| `witness.pdb.maxUnavailable`                                   | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `witness.pdb.minAvailable` and `witness.pdb.maxUnavailable` are empty.                                                                          | `""`                                |
 | `witness.upgradeRepmgrExtension`                               | Upgrade repmgr extension in the database                                                                                                                                                                                                | `false`                             |
 | `witness.pgHbaTrustAll`                                        | Configures PostgreSQL HBA to trust every user                                                                                                                                                                                           | `false`                             |
 | `witness.repmgrLogLevel`                                       | Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)                                                                                                                                                            | `NOTICE`                            |
@@ -691,9 +692,9 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `pgpool.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                    | `[]`                     |
 | `pgpool.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                          | `{}`                     |
 | `pgpool.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                      | `{}`                     |
-| `pgpool.pdb.create`                                        | Specifies whether a Pod disruption budget should be created for Pgpool pods                                                                                                                                                     | `false`                  |
-| `pgpool.pdb.minAvailable`                                  | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                | `1`                      |
-| `pgpool.pdb.maxUnavailable`                                | Maximum number / percentage of pods that may be made unavailable                                                                                                                                                                | `""`                     |
+| `pgpool.pdb.create`                                        | Specifies whether a Pod disruption budget should be created for Pgpool pods                                                                                                                                                     | `true`                   |
+| `pgpool.pdb.minAvailable`                                  | Minimum number / percentage of pods that should remain scheduled                                                                                                                                                                | `""`                     |
+| `pgpool.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pgpool.pdb.minAvailable` and `pgpool.pdb.maxUnavailable` are empty.                                                                    | `""`                     |
 | `pgpool.updateStrategy`                                    | Strategy used to replace old Pods by new ones                                                                                                                                                                                   | `{}`                     |
 | `pgpool.containerPorts.postgresql`                         | Pgpool port                                                                                                                                                                                                                     | `5432`                   |
 | `pgpool.minReadySeconds`                                   | How many seconds a pod needs to be ready before killing the next, during update                                                                                                                                                 | `""`                     |
@@ -907,6 +908,7 @@ A default `StorageClass` is needed in the Kubernetes cluster to dynamically prov
 | `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                | `{}`                                                                                                                                                                                 |
 | `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                           | `{}`                                                                                                                                                                                 |
 | `backup.cronjob.nodeSelector`                                      | Node labels for PostgreSQL backup CronJob pod assignment                                                                              | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.tolerations`                                       | Tolerations for PostgreSQL backup CronJob pod assignment                                                                              | `[]`                                                                                                                                                                                 |
 | `backup.cronjob.storage.existingClaim`                             | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                                                                                                                                                                                 |
 | `backup.cronjob.storage.resourcePolicy`                            | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                                                                                                                                                                                 |
 | `backup.cronjob.storage.storageClass`                              | PVC Storage Class for the backup data volume                                                                                          | `""`                                                                                                                                                                                 |
@@ -956,6 +958,25 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha \
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders *[POSTGRES_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+If a message like the following appears in the logs:
+
+```log
+...
+postgresql-repmgr 13:57:07.50 INFO  ==> ** Starting repmgrd **
+[2024-06-12 13:57:07] [NOTICE] repmgrd (repmgrd 5.4.1) starting up
+[2024-06-12 13:57:07] [ERROR] an older version of the "repmgr" extension is installed
+[2024-06-12 13:57:07] [DETAIL] extension version 5.3 is installed but newer version 5.4 is available
+...
+```
+
+You will need to perform the following step first, and then continue with the upgrade:
+
+```console
+$ helm upgrade mypg oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
+  --set postgresql.replicaCount=1 \
+  --set postgresql.upgradeRepmgrExtension=true
+```
 
 ### To 14.0.0
 
@@ -1058,7 +1079,7 @@ As an alternative to this feature, users can still use the equivalent parameters
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -1204,7 +1225,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Documentation for PostgreSQL HA Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 - [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
-- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+- [Kubernetes Developer guides](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-index.html)
 
 ## License
 

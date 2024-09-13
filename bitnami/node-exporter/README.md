@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
-Looking to use Node Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Node Exporter in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -47,7 +47,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -73,7 +73,8 @@ Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetw
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -115,6 +116,9 @@ Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetw
 | `containerPorts.metrics`                            | Node Exporter container port                                                                                                                                                                                      | `9100`                          |
 | `sidecars`                                          | Add additional sidecar containers to the Node exporter pod(s)                                                                                                                                                     | `[]`                            |
 | `initContainers`                                    | Add additional init containers to the Node exporter pod(s)                                                                                                                                                        | `[]`                            |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                          |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                            |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                            |
 | `extraArgs`                                         | Additional command line arguments to pass to node-exporter                                                                                                                                                        | `{}`                            |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                                                                              | `[]`                            |
 | `args`                                              | Override default container args (useful when using custom images)                                                                                                                                                 | `[]`                            |
@@ -212,6 +216,7 @@ Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetw
 | `serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                          | `false`                         |
 | `serviceMonitor.attachMetadata`                     | Attaches node metadata to discovered targets                                                                                                                                                                      | `{}`                            |
 | `serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted.                                                                                                                                              | `""`                            |
+| `podSecurityPolicy.annotations`                     | Annotations for Pod Security Policy. Evaluated as a template.                                                                                                                                                     | `{}`                            |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 

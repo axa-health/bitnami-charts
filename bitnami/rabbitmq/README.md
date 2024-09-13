@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq
 ```
 
-Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use RabbitMQ in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,7 +50,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -263,41 +263,29 @@ extraConfiguration: |
   log.console.formatter = json
 ```
 
-### Recover the cluster from complete shutdown
+### How to Avoid Deadlocked Deployments After a Cluster-Wide Restart
 
-> IMPORTANT: Some of these procedures can lead to data loss. Always make a backup beforehand.
+RabbitMQ nodes assume their peers come back online within five minutes (by default). When the `OrderedReady` pod management policy is used with a readiness probe that implicitly requires a fully booted node, the deployment can deadlock:
 
-The RabbitMQ cluster is able to support multiple node failures but, in a situation in which all the nodes are brought down at the same time, the cluster might not be able to self-recover.
+- Kubernetes will expect the first node to pass a readiness probe
+- The readiness probe may require a fully booted node
+- The node will fully boot after it detects that its peers have come online
+- Kubernetes will not start any more pods until the first one boots
 
-This happens if the pod management policy of the statefulset is not `Parallel` and the last pod to be running wasn't the first pod of the statefulset. If that happens, update the pod management policy to recover a healthy state:
+The following combination of deployment settings avoids the problem:
 
-```console
-$ kubectl delete statefulset STATEFULSET_NAME --cascade=false
-helm upgrade RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq \
-    --set podManagementPolicy=Parallel \
-    --set replicaCount=NUMBER_OF_REPLICAS \
-    --set auth.password=PASSWORD \
-    --set auth.erlangCookie=ERLANG_COOKIE
-```
+- Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
+- Use `rabbitmq-diagnostics ping` for readiness probe
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+To learn more, please consult RabbitMQ documentation guides:
 
-For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
+- [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
+- [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
+- [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for Operator-less (DIY) deployments to Kubernetes
 
-If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
+#### Do Not Force Boot Nodes on a Regular Basis
 
-```console
-helm upgrade RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq \
-    --set podManagementPolicy=Parallel \
-    --set clustering.forceBoot=true \
-    --set replicaCount=NUMBER_OF_REPLICAS \
-    --set auth.password=PASSWORD \
-    --set auth.erlangCookie=ERLANG_COOKIE
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
+Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
 
 ### Known issues
 
@@ -330,6 +318,27 @@ As an alternative, this chart supports using an `initContainer` to change the ow
 
 You can enable this `initContainer` by setting `volumePermissions.enabled` to `true`.
 
+## Prometheus Metrics
+
+RabbitMQ has [built-in support](https://www.rabbitmq.com/docs/prometheus#default-endpoint) for Prometheus metrics
+exposed at `GET /metrics`. However, these metrics are all cluster-wide, and do not show any per-queue or per-node
+metrics.
+
+To get per-object metrics, there is a
+[second metrics endpoint](https://www.rabbitmq.com/docs/prometheus#detailed-endpoint) at `GET /metrics/detailed` that
+accepts query parameters to choose which metric families you would like to see. For instance, you can pass
+`family=node_coarse_metrics&family=queue_coarse_metrics` to see per-node and per-queue metrics, but with no need to see
+Erlang, connection, or channel metrics.
+
+Additionally, there is a [third metrics endpoint](https://www.rabbitmq.com/docs/prometheus#per-object-endpoint):
+`GET /metrics/per-object`. which returns *all* per-object metrics. However, this can be computationally expensive on a
+large cluster with many objects, and so RabbitMQ docs suggest using `GET /metrics/detailed` mentioned above to filter
+your scraping and only fetch the per-object metrics that are needed for a given monitoring application.
+
+Because they expose different sets of data, a valid use case is to scrape metrics from both `GET /metrics` and
+`GET /metrics/detailed`, ingesting both cluster-level and per-object metrics. The `metrics.serviceMonitor.default` and
+`metrics.serviceMonitor.detailed` values support configuring a ServiceMonitor that targets one or both of these metrics.
+
 ## Parameters
 
 ### Global parameters
@@ -338,7 +347,8 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### RabbitMQ Image parameters
@@ -398,13 +408,14 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `auth.tls.existingSecretFullChain`           | Whether or not the existing secret contains the full chain in the certificate (`tls.crt`). Will be used in place of `ca.cert` if `true`.                                | `false`                                           |
 | `auth.tls.overrideCaCertificate`             | Existing secret with certificate content be mounted instead of the `ca.crt` coming from caCertificate or existingSecret/existingSecretFullChain.                        | `""`                                              |
 | `logs`                                       | Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable                                                                       | `-`                                               |
-| `ulimitNofiles`                              | RabbitMQ Max File Descriptors                                                                                                                                           | `65536`                                           |
+| `ulimitNofiles`                              | RabbitMQ Max File Descriptors                                                                                                                                           | `65535`                                           |
 | `maxAvailableSchedulers`                     | RabbitMQ maximum available scheduler threads                                                                                                                            | `""`                                              |
 | `onlineSchedulers`                           | RabbitMQ online scheduler threads                                                                                                                                       | `""`                                              |
 | `memoryHighWatermark.enabled`                | Enable configuring Memory high watermark on RabbitMQ                                                                                                                    | `false`                                           |
 | `memoryHighWatermark.type`                   | Memory high watermark type. Either `absolute` or `relative`                                                                                                             | `relative`                                        |
 | `memoryHighWatermark.value`                  | Memory high watermark value                                                                                                                                             | `0.4`                                             |
 | `plugins`                                    | List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)                                                | `rabbitmq_management rabbitmq_peer_discovery_k8s` |
+| `queue_master_locator`                       | Changes the queue_master_locator setting in the rabbitmq config file                                                                                                    | `min-masters`                                     |
 | `communityPlugins`                           | List of Community plugins (URLs) to be downloaded during container initialization                                                                                       | `""`                                              |
 | `extraPlugins`                               | Extra plugins to enable (single string containing a space-separated list)                                                                                               | `rabbitmq_auth_backend_ldap`                      |
 | `clustering.enabled`                         | Enable RabbitMQ clustering                                                                                                                                              | `true`                                            |
@@ -531,9 +542,9 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `customStartupProbe`                                | Define a custom startup probe                                                                                                                                                                                     | `{}`             |
 | `initContainers`                                    | Add init containers to the RabbitMQ pod                                                                                                                                                                           | `[]`             |
 | `sidecars`                                          | Add sidecar containers to the RabbitMQ pod                                                                                                                                                                        | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                    | `""`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### RBAC parameters
 
@@ -592,6 +603,7 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `service.nodePorts.epmd`                | Node port for EPMD Discovery                                                                                                     | `""`                     |
 | `service.nodePorts.metrics`             | Node port for RabbitMQ Prometheues metrics                                                                                       | `""`                     |
 | `service.extraPorts`                    | Extra ports to expose in the service                                                                                             | `[]`                     |
+| `service.extraPortsHeadless`            | Extra ports to expose in the headless service                                                                                    | `[]`                     |
 | `service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is `LoadBalancer`                                                                      | `[]`                     |
 | `service.allocateLoadBalancerNodePorts` | Whether to allocate node ports when service type is LoadBalancer                                                                 | `true`                   |
 | `service.externalIPs`                   | Set the ExternalIPs                                                                                                              | `[]`                     |
@@ -623,37 +635,59 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                        | `true`                   |
 | `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.                              | `{}`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                        | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                    | `{}`                     |
 
 ### Metrics Parameters
 
-| Name                                       | Description                                                                            | Value                 |
-| ------------------------------------------ | -------------------------------------------------------------------------------------- | --------------------- |
-| `metrics.enabled`                          | Enable exposing RabbitMQ metrics to be gathered by Prometheus                          | `false`               |
-| `metrics.plugins`                          | Plugins to enable Prometheus metrics in RabbitMQ                                       | `rabbitmq_prometheus` |
-| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                     | `{}`                  |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`               |
-| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created             | `""`                  |
-| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                                | `30s`                 |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                    | `""`                  |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.      | `""`                  |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping.                                    | `[]`                  |
-| `metrics.serviceMonitor.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                            | `[]`                  |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels               | `false`               |
-| `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                          | `{}`                  |
-| `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                              | `{}`                  |
-| `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
-| `metrics.serviceMonitor.params`            | Define the HTTP URL parameters used by ServiceMonitor                                  | `{}`                  |
-| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                         | `{}`                  |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                    | `{}`                  |
-| `metrics.serviceMonitor.annotations`       | Extra annotations for the ServiceMonitor                                               | `{}`                  |
-| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                     | `false`               |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`                  |
-| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                             | `""`                  |
-| `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                               | `[]`                  |
+| Name                                                 | Description                                                                                        | Value                 |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------- |
+| `metrics.enabled`                                    | Enable exposing RabbitMQ metrics to be gathered by Prometheus                                      | `false`               |
+| `metrics.plugins`                                    | Plugins to enable Prometheus metrics in RabbitMQ                                                   | `rabbitmq_prometheus` |
+| `metrics.podAnnotations`                             | Annotations for enabling prometheus to access the metrics endpoint                                 | `{}`                  |
+| `metrics.serviceMonitor.namespace`                   | Specify the namespace in which the serviceMonitor resource will be created                         | `""`                  |
+| `metrics.serviceMonitor.jobLabel`                    | The name of the label on the target service to use as the job name in prometheus.                  | `""`                  |
+| `metrics.serviceMonitor.targetLabels`                | Used to keep given service's labels in target                                                      | `{}`                  |
+| `metrics.serviceMonitor.podTargetLabels`             | Used to keep given pod's labels in target                                                          | `{}`                  |
+| `metrics.serviceMonitor.selector`                    | ServiceMonitor selector labels                                                                     | `{}`                  |
+| `metrics.serviceMonitor.labels`                      | Extra labels for the ServiceMonitor                                                                | `{}`                  |
+| `metrics.serviceMonitor.annotations`                 | Extra annotations for the ServiceMonitor                                                           | `{}`                  |
+| `metrics.serviceMonitor.default.enabled`             | Enable default metrics endpoint (`GET /metrics`) to be scraped by the ServiceMonitor               | `false`               |
+| `metrics.serviceMonitor.default.interval`            | Specify the interval at which metrics should be scraped                                            | `30s`                 |
+| `metrics.serviceMonitor.default.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                | `""`                  |
+| `metrics.serviceMonitor.default.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                | `[]`                  |
+| `metrics.serviceMonitor.default.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                        | `[]`                  |
+| `metrics.serviceMonitor.default.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels                           | `false`               |
+| `metrics.serviceMonitor.perObject.enabled`           | Enable per-object metrics endpoint (`GET /metrics/per-object`) to be scraped by the ServiceMonitor | `false`               |
+| `metrics.serviceMonitor.perObject.interval`          | Specify the interval at which metrics should be scraped                                            | `30s`                 |
+| `metrics.serviceMonitor.perObject.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                | `""`                  |
+| `metrics.serviceMonitor.perObject.relabelings`       | RelabelConfigs to apply to samples before scraping.                                                | `[]`                  |
+| `metrics.serviceMonitor.perObject.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                                        | `[]`                  |
+| `metrics.serviceMonitor.perObject.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                           | `false`               |
+| `metrics.serviceMonitor.detailed.enabled`            | Enable detailed metrics endpoint (`GET /metrics/detailed`) to be scraped by the ServiceMonitor     | `false`               |
+| `metrics.serviceMonitor.detailed.family`             | List of metric families to get                                                                     | `[]`                  |
+| `metrics.serviceMonitor.detailed.vhost`              | Filter metrics to only show for the specified vhosts                                               | `[]`                  |
+| `metrics.serviceMonitor.detailed.interval`           | Specify the interval at which metrics should be scraped                                            | `30s`                 |
+| `metrics.serviceMonitor.detailed.scrapeTimeout`      | Specify the timeout after which the scrape is ended                                                | `""`                  |
+| `metrics.serviceMonitor.detailed.relabelings`        | RelabelConfigs to apply to samples before scraping.                                                | `[]`                  |
+| `metrics.serviceMonitor.detailed.metricRelabelings`  | MetricsRelabelConfigs to apply to samples before ingestion.                                        | `[]`                  |
+| `metrics.serviceMonitor.detailed.honorLabels`        | honorLabels chooses the metric's labels on collisions with target labels                           | `false`               |
+| `metrics.serviceMonitor.enabled`                     | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `false`               |
+| `metrics.serviceMonitor.interval`                    | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `30s`                 |
+| `metrics.serviceMonitor.scrapeTimeout`               | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `""`                  |
+| `metrics.serviceMonitor.relabelings`                 | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `[]`                  |
+| `metrics.serviceMonitor.metricRelabelings`           | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `[]`                  |
+| `metrics.serviceMonitor.honorLabels`                 | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `false`               |
+| `metrics.serviceMonitor.path`                        | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `""`                  |
+| `metrics.serviceMonitor.params`                      | Deprecated. Please use `metrics.serviceMonitor.{default/perObject/detailed}` instead.              | `{}`                  |
+| `metrics.prometheusRule.enabled`                     | Set this to true to create prometheusRules for Prometheus operator                                 | `false`               |
+| `metrics.prometheusRule.additionalLabels`            | Additional labels that can be used so prometheusRules will be discovered by Prometheus             | `{}`                  |
+| `metrics.prometheusRule.namespace`                   | namespace where prometheusRules resource should be created                                         | `""`                  |
+| `metrics.prometheusRule.rules`                       | List of rules, used as template by Helm.                                                           | `[]`                  |
 
 ### Init Container Parameters
 
@@ -860,7 +894,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Documentation for RabbitMQ Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq)
 - [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
-- [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+- [Kubernetes Developer guides](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-index.html)
 
 ## License
 

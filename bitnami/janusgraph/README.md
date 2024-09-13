@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/janusgraph
 ```
 
-Looking to use JanusGraph in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use JanusGraph in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -59,7 +59,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -152,8 +153,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                                    | Annotations for JanusGraph pods                                                                                                                                                                                      | `{}`                               |
 | `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                  | `""`                               |
 | `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                             | `soft`                             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                      | `false`                            |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                       | `1`                                |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                      | `true`                             |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                       | `""`                               |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                       | `""`                               |
 | `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                            | `""`                               |
 | `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                                                                                                                | `""`                               |
@@ -313,12 +314,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cassandra storage sub-chart
 
-| Name                          | Description                                             | Value                |
-| ----------------------------- | ------------------------------------------------------- | -------------------- |
-| `cassandra.keyspace`          | Name for cassandra's janusgraph keyspace                | `bitnami_janusgraph` |
-| `cassandra.dbUser.user`       | Cassandra admin user                                    | `bn_janusgraph`      |
-| `cassandra.dbUser.password`   | Password for `dbUser.user`. Randomly generated if empty | `""`                 |
-| `cassandra.service.ports.cql` | Cassandra cql port                                      | `9043`               |
+| Name                          | Description                                                                                               | Value                       |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `cassandra.image.registry`    | Cassandra image registry                                                                                  | `REGISTRY_NAME`             |
+| `cassandra.image.repository`  | Cassandra image repository                                                                                | `REPOSITORY_NAME/cassandra` |
+| `cassandra.image.digest`      | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
+| `cassandra.keyspace`          | Name for cassandra's janusgraph keyspace                                                                  | `bitnami_janusgraph`        |
+| `cassandra.dbUser.user`       | Cassandra admin user                                                                                      | `bn_janusgraph`             |
+| `cassandra.dbUser.password`   | Password for `dbUser.user`. Randomly generated if empty                                                   | `""`                        |
+| `cassandra.service.ports.cql` | Cassandra cql port                                                                                        | `9043`                      |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
@@ -343,7 +347,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/janus
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 

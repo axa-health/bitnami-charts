@@ -202,8 +202,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /srv/status
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}

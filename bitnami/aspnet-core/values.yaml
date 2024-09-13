@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,6 +19,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -71,7 +73,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 8.0.4-debian-12-r0
+  tag: 8.0.8-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -369,8 +371,8 @@ customReadinessProbe: {}
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## ASP.NET Core Autoscaling parameters.
 ## @param autoscaling.enabled Enable autoscaling for ASP.NET Core
@@ -408,7 +410,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.44.0-debian-12-r2
+      tag: 2.46.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -453,7 +455,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 8.0.204-debian-12-r0
+      tag: 8.0.400-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

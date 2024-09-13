@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
 ```
 
-Looking to use Fluent Bit in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Fluent Bit in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -119,7 +119,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -306,7 +307,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                                                                 | `[]`                     |
 | `ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                                                          | `[]`                     |
 | `ingress.extraRules`                                | Additional rules to be covered with this ingress record                                                                                                                | `[]`                     |
-| `pdb.create`                                        | Deploy a PodDisruptionBudget object for Fluent Bit deployment                                                                                                          | `false`                  |
+| `pdb.create`                                        | Deploy a PodDisruptionBudget object for Fluent Bit deployment                                                                                                          | `true`                   |
 | `pdb.minAvailable`                                  | Minimum available Fluent Bit replicas (expressed in percentage)                                                                                                        | `""`                     |
 | `pdb.maxUnavailable`                                | Maximum unavailable Fluent Bit replicas (expressed in percentage)                                                                                                      | `50%`                    |
 | `metrics.enabled`                                   | Enable the export of Prometheus metrics                                                                                                                                | `false`                  |

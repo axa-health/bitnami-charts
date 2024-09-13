@@ -309,8 +309,17 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.receive.persistence.enabled (not .Values.receive.persistence.existingClaim) }}
+  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+  {{- if .Values.receive.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.receive.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.annotations "context" $) | nindent 10 }}

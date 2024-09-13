@@ -33,13 +33,23 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.cronjobs.archive.serviceAccountName }}
+          serviceAccountName: {{ .Values.cronjobs.archive.serviceAccountName | quote }}
+          {{- end }}
+          automountServiceAccountToken: {{ .Values.cronjobs.archive.automountServiceAccountToken }}
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.cronjobs.archive.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.affinity "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.cronjobs.archive.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cronjobs.archive.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.tolerations "context" $) | nindent 12 }}
+          {{- end }}
           initContainers:
-            {{ include "matomo.initContainers" . | nindent 12 }}
+            {{- include "matomo.initContainers" . | nindent 12 }}
           {{- if .Values.cronjobs.archive.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.cronjobs.archive.podSecurityContext "enabled" | toYaml | nindent 16 }}
           {{- end }}
@@ -199,13 +209,23 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
         spec:
+          {{- if .Values.cronjobs.taskScheduler.serviceAccountName }}
+          serviceAccountName: {{ .Values.cronjobs.taskScheduler.serviceAccountName | quote }}
+          {{- end }}
+          automountServiceAccountToken: {{ .Values.cronjobs.taskScheduler.automountServiceAccountToken }}
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.cronjobs.taskScheduler.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.affinity "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.cronjobs.taskScheduler.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cronjobs.taskScheduler.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.tolerations "context" $) | nindent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
           initContainers:
-            {{ include "matomo.initContainers" . | nindent 12 }}
+            {{- include "matomo.initContainers" . | nindent 12 }}
           {{- if .Values.cronjobs.taskScheduler.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.cronjobs.taskScheduler.podSecurityContext "enabled" | toYaml | nindent 16 }}
           {{- end }}

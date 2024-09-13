@@ -12,7 +12,7 @@ WordPress is the world's most popular blogging and content management platform. 
 helm install my-release oci://registry-1.docker.io/bitnamicharts/wordpress
 ```
 
-Looking to use WordPress in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use WordPress in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -246,7 +246,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -302,6 +303,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `smtpUser`                             | SMTP username                                                                         | `""`               |
 | `smtpPassword`                         | SMTP user password                                                                    | `""`               |
 | `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpFromEmail`                        | SMTP from email (default is `smtpUser`)                                               | `""`               |
+| `smtpFromName`                         | SMTP from name  (default is `wordpressFirstName` and `wordpressLastName`)             | `""`               |
 | `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
 | `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
 | `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
@@ -467,20 +470,20 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                    | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                | `false` |
-| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled         | `1`     |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable         | `""`    |
-| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                        | `false` |
-| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                   | `1`     |
-| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                   | `11`    |
-| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
-| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
+| Name                                          | Description                                                                                                                                    | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                                                            | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                         | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                         | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                           | `{}`    |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                        | `true`  |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                 | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                                                                                                | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                                                                                           | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                                                                                           | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                                              | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                                           | `50`    |
 
 ### Metrics Parameters
 
@@ -632,6 +635,10 @@ In addition, several new features have been implemented:
 To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
 
 ## Upgrading
+
+### To 23.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 22.0.0
 

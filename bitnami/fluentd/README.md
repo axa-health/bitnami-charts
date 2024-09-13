@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd
 ```
 
-Looking to use Fluentd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Fluentd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -137,10 +137,10 @@ As an example, using the above configmap, you should specify the required parame
 
 ```console
 aggregator.configMap=elasticsearch-output
-aggregator.extraEnv[0].name=ELASTICSEARCH_HOST
-aggregator.extraEnv[0].value=your-ip-here
-aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
-aggregator.extraEnv[1].value=your-port-here
+aggregator.extraEnvVars[0].name=ELASTICSEARCH_HOST
+aggregator.extraEnvVars[0].value=your-ip-here
+aggregator.extraEnvVars[1].name=ELASTICSEARCH_PORT
+aggregator.extraEnvVars[1].value=your-port-here
 ```
 
 ### Using custom init scripts
@@ -154,7 +154,7 @@ initScriptsSecret=special-scripts-sensitive
 
 ### Forwarder Security Context & Policy
 
-By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
+By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-work-with-non-root-containers-index.html).
 
 The default behaviour is to run as `root` because:
 
@@ -204,7 +204,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -290,8 +291,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `forwarder.startupProbe.failureThreshold`                      | Failure threshold for startupProbe                                                                                                                                                                                                      | `6`                                                        |
 | `forwarder.startupProbe.successThreshold`                      | Success threshold for startupProbe                                                                                                                                                                                                      | `1`                                                        |
 | `forwarder.livenessProbe.enabled`                              | Enable livenessProbe                                                                                                                                                                                                                    | `true`                                                     |
-| `forwarder.livenessProbe.httpGet.path`                         | Request path for livenessProbe                                                                                                                                                                                                          | `/fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D` |
-| `forwarder.livenessProbe.httpGet.port`                         | Port for livenessProbe                                                                                                                                                                                                                  | `http`                                                     |
+| `forwarder.livenessProbe.tcpSocket.port`                       | Port for livenessProbe                                                                                                                                                                                                                  | `http`                                                     |
 | `forwarder.livenessProbe.initialDelaySeconds`                  | Initial delay seconds for livenessProbe                                                                                                                                                                                                 | `60`                                                       |
 | `forwarder.livenessProbe.periodSeconds`                        | Period seconds for livenessProbe                                                                                                                                                                                                        | `10`                                                       |
 | `forwarder.livenessProbe.timeoutSeconds`                       | Timeout seconds for livenessProbe                                                                                                                                                                                                       | `5`                                                        |
@@ -415,8 +415,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `aggregator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                                      | `6`                                                        |
 | `aggregator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                                      | `1`                                                        |
 | `aggregator.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                                                    | `true`                                                     |
-| `aggregator.livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                                                                                                                                                                          | `/fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D` |
-| `aggregator.livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                                                                                                                                                                  | `http`                                                     |
+| `aggregator.livenessProbe.tcpSocket.port`                      | Port for livenessProbe                                                                                                                                                                                                                  | `http`                                                     |
 | `aggregator.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                                 | `60`                                                       |
 | `aggregator.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                        | `10`                                                       |
 | `aggregator.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                                       | `5`                                                        |
@@ -478,6 +477,9 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `aggregator.initScripts`                                       | Dictionary of init scripts. Evaluated as a template.                                                                                                                                                                                    | `{}`                                                       |
 | `aggregator.initScriptsCM`                                     | ConfigMap with the init scripts. Evaluated as a template.                                                                                                                                                                               | `""`                                                       |
 | `aggregator.initScriptsSecret`                                 | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                                                                                     | `""`                                                       |
+| `aggregator.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`                                                     |
+| `aggregator.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`                                                       |
+| `aggregator.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                       | `""`                                                       |
 | `metrics.enabled`                                              | Enable the export of Prometheus metrics                                                                                                                                                                                                 | `false`                                                    |
 | `metrics.service.type`                                         | Prometheus metrics service type                                                                                                                                                                                                         | `ClusterIP`                                                |
 | `metrics.service.port`                                         | Prometheus metrics service port                                                                                                                                                                                                         | `24231`                                                    |
@@ -583,7 +585,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

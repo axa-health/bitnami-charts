@@ -18,6 +18,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replica.replicaCount }}
+  revisionHistoryLimit: {{ .Values.replica.revisionHistoryLimit }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -36,6 +37,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: node
+        {{- if .Values.sentinel.masterService.enabled }}
+        app.kubernetes.io/role: slave
+        {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -462,7 +466,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.sentinel.service.createMaster}}
+            {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster}}
             - name: kubectl-shared
               mountPath: /etc/shared
             {{- end }}
@@ -591,7 +595,7 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if .Values.sentinel.service.createMaster }}
+        {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
         - name: kubectl-shared
           image: {{ template "redis.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
@@ -634,6 +638,10 @@ spec:
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.extraEnvVars }}
+          env:
+          {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -686,7 +694,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.sentinel.service.createMaster}}
+        {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster}}
         - name: kubectl-shared
           emptyDir: {}
         - name: kubectl-scripts

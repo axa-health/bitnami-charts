@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: APACHE-2.0
  */
 
-const COMMAND_DELAY = 2000;
-export const BASE_URL = 'http://bitnami-matomo.my';
+const COMMAND_DELAY = 3000;
 
 for (const command of ['click', 'type']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -17,10 +16,6 @@ for (const command of ['click', 'type']) {
     });
   });
 }
-
-Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  return originalFn(`${BASE_URL}${url}`, options);
-});
 
 Cypress.Commands.add(
   'login',

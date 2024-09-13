@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine
 ```
 
-Looking to use Redmine in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redmine in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -117,7 +117,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -198,7 +198,7 @@ extraVolumeMounts:
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
-livenessProbe:
+startupProbe:
   enabled: true
   path: /redmine/
 ---
@@ -238,7 +238,8 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -310,7 +311,6 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | `containerSecurityContext.capabilities.add`         | List of capabilities to be added                                                                                                                                                                                  | `["CHOWN","SYS_CHROOT","FOWNER","SETGID","SETUID","DAC_OVERRIDE"]` |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`                                                   |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Redmine containers                                                                                                                                                                        | `true`                                                             |
-| `livenessProbe.path`                                | Path for to check for livenessProbe                                                                                                                                                                               | `/`                                                                |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `300`                                                              |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`                                                               |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `5`                                                                |
@@ -417,16 +417,16 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 
 ### Other Parameters
 
-| Name                       | Description                                                    | Value   |
-| -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
-| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `""`    |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Redmine                  | `false` |
-| `autoscaling.minReplicas`  | Minimum number of Redmine replicas                             | `1`     |
-| `autoscaling.maxReplicas`  | Maximum number of Redmine replicas                             | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
+| Name                       | Description                                                                                                                                                  | Value   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `pdb.create`               | Enable a Pod Disruption Budget creation                                                                                                                      | `true`  |
+| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`    |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Redmine                                                                                                                | `false` |
+| `autoscaling.minReplicas`  | Minimum number of Redmine replicas                                                                                                                           | `1`     |
+| `autoscaling.maxReplicas`  | Maximum number of Redmine replicas                                                                                                                           | `11`    |
+| `autoscaling.targetCPU`    | Target CPU utilization percentage                                                                                                                            | `50`    |
+| `autoscaling.targetMemory` | Target Memory utilization percentage                                                                                                                         | `50`    |
 
 ### Database Parameters
 
@@ -572,6 +572,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redmi
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 29.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 28.0.0
 
@@ -731,7 +735,7 @@ helm upgrade redmine bitnami/redmine \
 
 #### Useful links
 
-- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Bitnami Tutorial](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html)
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 

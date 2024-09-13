@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/parse
 ```
 
-Looking to use Parse Server in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Parse Server in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -131,7 +131,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common Parameters
@@ -193,6 +194,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `server.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                                                                                                                             | `[]`                    |
 | `server.sidecars`                                          | Add additional sidecar containers to the Parse pod(s)                                                                                                                                                                           | `[]`                    |
 | `server.initContainers`                                    | Add additional init containers to the Parse pod(s)                                                                                                                                                                              | `[]`                    |
+| `server.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                  |
+| `server.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `""`                    |
+| `server.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.                                                                    | `""`                    |
 | `server.enableCloudCode`                                   | Enable Parse Cloud Code                                                                                                                                                                                                         | `false`                 |
 | `server.cloudCodeScripts`                                  | Cloud Code scripts                                                                                                                                                                                                              | `{}`                    |
 | `server.existingCloudCodeScriptsCM`                        | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                                                                                                                                         | `""`                    |
@@ -334,6 +338,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `dashboard.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                                                                                                                                   | `[]`                              |
 | `dashboard.sidecars`                                          | Add additional sidecar containers to the Parse pod(s)                                                                                                                                                                                 | `[]`                              |
 | `dashboard.initContainers`                                    | Add additional init containers to the Parse pod(s)                                                                                                                                                                                    | `[]`                              |
+| `dashboard.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`                            |
+| `dashboard.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`                              |
+| `dashboard.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboard.pdb.minAvailable` and `dashboard.pdb.maxUnavailable` are empty.                                                                    | `""`                              |
 | `dashboard.forceOverwriteConfFile`                            | Overwrite config.json configuration file on each run (set to false if mounting a custom configuration file)                                                                                                                           | `true`                            |
 | `dashboard.service.type`                                      | Kubernetes Service type                                                                                                                                                                                                               | `LoadBalancer`                    |
 | `dashboard.service.ports.http`                                | Service HTTP port (Dashboard)                                                                                                                                                                                                         | `80`                              |
@@ -541,7 +548,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

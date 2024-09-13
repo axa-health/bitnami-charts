@@ -65,6 +65,7 @@ spec:
       {{- if .Values.metricsGenerator.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.metricsGenerator.enableServiceLinks }}
       initContainers:
         {{- if .Values.metricsGenerator.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.initContainers "context" $) | nindent 8 }}
@@ -111,7 +112,7 @@ spec:
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.metricsGenerator.resources }}
-          resources: {{- toYaml .Values.metricsGenerator.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.metricsGenerator.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metricsGenerator.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -120,8 +121,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metricsGenerator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.metricsGenerator.customReadinessProbe }}

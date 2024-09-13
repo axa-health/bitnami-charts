@@ -8,7 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -17,7 +17,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -68,7 +68,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.2-debian-12-r16
+    tag: 2.11.4-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -103,7 +103,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.2-debian-12-r13
+      tag: 2.11.4-debian-12-r2
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -128,9 +128,6 @@ server:
     ##     authorization-type: dockeroauth2
     ##
     containerRegistries: {}
-    ## @param server.configuration.grafanaInfo Endpoint to the grafana instance (Deprecated: use the metricsDashboard instead)
-    ##
-    grafanaInfo: ""
     ## @param server.configuration.metricsDashboard Endpoint to the metricsDashboard instance
     ##
     metricsDashboard: ""
@@ -497,10 +494,6 @@ server:
     ## @param server.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## DEPRECATED: Use server.ingress.annotations instead of server.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param server.ingress.hostname Default host for the ingress resource
     ##
     hostname: dataflow.local
@@ -621,11 +614,11 @@ server:
   pdb:
     ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Dataflow Server Autoscaling parameters.
@@ -713,7 +706,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.11.2-debian-12-r12
+    tag: 2.11.4-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1102,11 +1095,11 @@ skipper:
   pdb:
     ## @param skipper.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param skipper.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `skipper.pdb.minAvailable` and `skipper.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Skipper Autoscaling parameters.
@@ -1233,6 +1226,9 @@ deployer:
   ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
   imagePullPolicy: IfNotPresent
+  ## @param deployer.taskServiceAccountName Custom service account for scheduled tasks
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_service_account
+  taskServiceAccountName: ""
 ## @section RBAC parameters
 
 ## K8s Service Account.
@@ -1276,7 +1272,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-12-r13
+    tag: 1.5.3-debian-12-r26
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1707,11 +1703,11 @@ metrics:
   pdb:
     ## @param metrics.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param metrics.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metrics.pdb.minAvailable` and `metrics.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Prometheus Rsocket Proxy Autoscaling parameters.
@@ -1746,7 +1742,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.30.0-debian-12-r0
+    tag: 1.31.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1828,7 +1824,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.7-debian-12-r12
+    tag: 10.11.9-debian-12-r0
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
@@ -1917,15 +1913,6 @@ externalDatabase:
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
   hibernateDialect: ""
-  ## @param externalDatabase.password External database password (DEPRECATED: use dataflow.password and skipper.password instead)
-  ##
-  password: ""
-  ## @param externalDatabase.existingPasswordSecret Existing secret with database password (DEPRECATED: use dataflow.existingSecret and skipper.existingSecret instead)
-  ##
-  existingPasswordSecret: ""
-  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password (DEPRECATED: use dataflow.existingSecretPasswordKey and skipper.existingSecretPasswordKey instead)
-  ##
-  existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:
@@ -2035,9 +2022,6 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)
-  ##
-  existingPasswordSecret: ""
   ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
   ##
   existingSecret: ""

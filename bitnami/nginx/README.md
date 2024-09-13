@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
-Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -195,6 +195,8 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                       | `{}`             |
 | `hostNetwork`                                       | Specify if host network should be enabled for NGINX pod                                                                                                                                                           | `false`          |
 | `hostIPC`                                           | Specify if host IPC should be enabled for NGINX pod                                                                                                                                                               | `false`          |
+| `dnsPolicy`                                         | Specifies the DNS policy for the NGINX pod                                                                                                                                                                        | `""`             |
+| `dnsConfig`                                         | Allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                                 | `{}`             |
 | `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                                                                                          | `{}`             |
 | `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                                                                                                                          | `[]`             |
 | `priorityClassName`                                 | NGINX pods' priorityClassName                                                                                                                                                                                     | `""`             |
@@ -244,6 +246,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                               | `6`              |
 | `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                               | `1`              |
 | `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                                                                                             | `true`           |
+| `readinessProbe.path`                               | Request path for livenessProbe                                                                                                                                                                                    | `/`              |
 | `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                          | `5`              |
 | `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                 | `5`              |
 | `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                | `3`              |
@@ -266,9 +269,9 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `sidecars`                                          | Sidecar parameters                                                                                                                                                                                                | `[]`             |
 | `sidecarSingleProcessNamespace`                     | Enable sharing the process namespace with sidecars                                                                                                                                                                | `false`          |
 | `initContainers`                                    | Extra init containers                                                                                                                                                                                             | `[]`             |
-| `pdb.create`                                        | Created a PodDisruptionBudget                                                                                                                                                                                     | `false`          |
-| `pdb.minAvailable`                                  | Min number of pods that must still be available after the eviction.                                                                                                                                               | `1`              |
-| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction.                                                                                                                                                    | `0`              |
+| `pdb.create`                                        | Created a PodDisruptionBudget                                                                                                                                                                                     | `true`           |
+| `pdb.minAvailable`                                  | Min number of pods that must still be available after the eviction.                                                                                                                                               | `""`             |
+| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction.                                                                                                                                                    | `""`             |
 
 ### Custom NGINX application parameters
 
@@ -465,7 +468,7 @@ On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implement
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

@@ -14,7 +14,7 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
 ```
 
-Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -50,7 +50,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -216,7 +216,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -253,6 +254,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `auth.rootPasswordSecretKey` | Key where the MINIO_ROOT_USER password is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.forcePassword`         | Force users to specify required passwords                                                                                             | `false`                        |
 | `auth.useCredentialsFiles`   | Mount credentials as a files instead of using an environment variable                                                                 | `false`                        |
+| `auth.useSecret`             | Uses a secret to mount the credential files.                                                                                          | `true`                         |
 | `auth.forceNewKeys`          | Force root credentials (user and password) to be reconfigured every time they change in the secrets                                   | `false`                        |
 | `defaultBuckets`             | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)                            | `""`                           |
 | `disableWebUI`               | Disable MinIO&reg; Web UI                                                                                                             | `false`                        |
@@ -473,17 +475,18 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Other parameters
 
-| Name                 | Description                                                                       | Value   |
-| -------------------- | --------------------------------------------------------------------------------- | ------- |
-| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
+| Name                 | Description                                                                       | Value  |
+| -------------------- | --------------------------------------------------------------------------------- | ------ |
+| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `true` |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `""`   |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`   |
 
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                   | Value                                                    |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `metrics.prometheusAuthType`               | Authentication mode for Prometheus (`jwt` or `public`)                                                                        | `public`                                                 |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                       | `false`                                                  |
 | `metrics.serviceMonitor.enabled`           | If the operator is installed in your cluster, set to true to create a Service Monitor Entry                                   | `false`                                                  |
 | `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                      | `""`                                                     |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                           | `{}`                                                     |
@@ -601,7 +604,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

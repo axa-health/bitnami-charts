@@ -169,12 +169,26 @@ spec:
               containerPort: {{ .Values.server.containerPorts.metrics }}
               protocol: TCP
           env:
+            {{- if gt (int .Values.server.replicaCount) 1 }}
+            - name: ARGOCD_API_SERVER_REPLICAS
+              value: {{ .Values.server.replicaCount | quote }}
+            {{- end }}
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
@@ -211,7 +225,7 @@ spec:
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz?full=true
               port: {{ .Values.server.containerPorts.http }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}

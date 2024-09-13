@@ -14,7 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mastodon
 ```
 
-Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Mastodon in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -227,7 +227,8 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
@@ -368,6 +369,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `web.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon web container(s)                                                                                                                                | `[]`             |
 | `web.sidecars`                                          | Add additional sidecar containers to the Mastodon web pod(s)                                                                                                                                                              | `[]`             |
 | `web.initContainers`                                    | Add additional init containers to the Mastodon web pod(s)                                                                                                                                                                 | `[]`             |
+| `web.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                           | `true`           |
+| `web.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                            | `""`             |
+| `web.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `web.pdb.minAvailable` and `web.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Mastodon Web Traffic Exposure Parameters
 
@@ -462,6 +466,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)                                                                                                                                    | `[]`             |
 | `sidekiq.sidecars`                                          | Add additional sidecar containers to the Mastodon sidekiq pod(s)                                                                                                                                                                  | `[]`             |
 | `sidekiq.initContainers`                                    | Add additional init containers to the Mastodon sidekiq pod(s)                                                                                                                                                                     | `[]`             |
+| `sidekiq.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`           |
+| `sidekiq.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`             |
+| `sidekiq.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `sidekiq.pdb.minAvailable` and `sidekiq.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `sidekiq.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                                                                                                                        | `true`           |
 | `sidekiq.networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                                                                                                                         | `true`           |
 | `sidekiq.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                   | `true`           |
@@ -541,6 +548,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `streaming.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon streaming container(s)                                                                                                                                      | `[]`             |
 | `streaming.sidecars`                                          | Add additional sidecar containers to the Mastodon streaming pod(s)                                                                                                                                                                    | `[]`             |
 | `streaming.initContainers`                                    | Add additional init containers to the Mastodon streaming pod(s)                                                                                                                                                                       | `[]`             |
+| `streaming.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `streaming.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
+| `streaming.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `streaming.pdb.minAvailable` and `streaming.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Mastodon Streaming Traffic Exposure Parameters
 
@@ -743,20 +753,20 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 
 ### MinIO&reg; chart parameters
 
-| Name                               | Description                                                                                                                       | Value                                                  |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `minio`                            | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |                                                        |
-| `minio.enabled`                    | Enable/disable MinIO&reg; chart installation                                                                                      | `true`                                                 |
-| `minio.auth.rootUser`              | MinIO&reg; root username                                                                                                          | `admin`                                                |
-| `minio.auth.rootPassword`          | Password for MinIO&reg; root user                                                                                                 | `""`                                                   |
-| `minio.auth.existingSecret`        | Name of an existing secret containing the MinIO&reg; credentials                                                                  | `""`                                                   |
-| `minio.defaultBuckets`             | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `s3storage`                                            |
-| `minio.provisioning.enabled`       | Enable/disable MinIO&reg; provisioning job                                                                                        | `true`                                                 |
-| `minio.provisioning.extraCommands` | Extra commands to run on MinIO&reg; provisioning job                                                                              | `["mc anonymous set download provisioning/s3storage"]` |
-| `minio.tls.enabled`                | Enable/disable MinIO&reg; TLS support                                                                                             | `false`                                                |
-| `minio.service.type`               | MinIO&reg; service type                                                                                                           | `ClusterIP`                                            |
-| `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                   |
-| `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `80`                                                   |
+| Name                               | Description                                                                                                                      | Value                                                  |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `minio`                            | For full list of MinIO&reg; values configurations please refer [here](https://github.com/bitnami/charts/tree/main/bitnami/minio) |                                                        |
+| `minio.enabled`                    | Enable/disable MinIO&reg; chart installation                                                                                     | `true`                                                 |
+| `minio.auth.rootUser`              | MinIO&reg; root username                                                                                                         | `admin`                                                |
+| `minio.auth.rootPassword`          | Password for MinIO&reg; root user                                                                                                | `""`                                                   |
+| `minio.auth.existingSecret`        | Name of an existing secret containing the MinIO&reg; credentials                                                                 | `""`                                                   |
+| `minio.defaultBuckets`             | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                        | `s3storage`                                            |
+| `minio.provisioning.enabled`       | Enable/disable MinIO&reg; provisioning job                                                                                       | `true`                                                 |
+| `minio.provisioning.extraCommands` | Extra commands to run on MinIO&reg; provisioning job                                                                             | `["mc anonymous set download provisioning/s3storage"]` |
+| `minio.tls.enabled`                | Enable/disable MinIO&reg; TLS support                                                                                            | `false`                                                |
+| `minio.service.type`               | MinIO&reg; service type                                                                                                          | `ClusterIP`                                            |
+| `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                               | `""`                                                   |
+| `minio.service.ports.api`          | MinIO&reg; service port                                                                                                          | `80`                                                   |
 
 ### Elasticsearch chart configuration
 
@@ -783,7 +793,6 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `apache.service.loadBalancerIP` | Apache service LoadBalancer IP                                  | `""`                       |
 | `apache.service.ports.http`     | Apache service port                                             | `80`                       |
 | `apache.vhostsConfigMap`        | Name of the ConfigMap containing the Apache vhost configuration | `""`                       |
-| `apache.livenessProbe.path`     | Apache liveness probe path                                      | `/api/v1/streaming/health` |
 | `apache.readinessProbe.path`    | Apache readiness probe path                                     | `/api/v1/streaming/health` |
 | `apache.startupProbe.path`      | Apache startup probe path                                       | `/api/v1/streaming/health` |
 | `apache.ingress.enabled`        | Enable ingress                                                  | `false`                    |
@@ -818,6 +827,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/masto
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-2000) you can find more information about the changes introduced in that version.
 
 ### To 6.0.0
 
