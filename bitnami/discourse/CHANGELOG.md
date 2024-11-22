@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.0.2 (2024-10-14)
+## 15.0.5 (2024-11-14)
 
-* [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container ([#29874](https://github.com/bitnami/charts/pull/29874))
+* [bitnami/discourse] Release 15.0.5 ([#30451](https://github.com/bitnami/charts/pull/30451))
+
+## <small>15.0.4 (2024-10-22)</small>
+
+* [bitnami/discourse] include discourse.extraEnvVars in the "install-plugins" init-container (#30026) ([3c92104](https://github.com/bitnami/charts/commit/3c9210499341e217733db49192a7927b9e048105)), closes [#30026](https://github.com/bitnami/charts/issues/30026)
+
+## <small>15.0.3 (2024-10-21)</small>
+
+* [bitnami/discourse] Avoid looping on subdirectories on plugins instalation (#30022) ([4bb0481](https://github.com/bitnami/charts/commit/4bb0481e66a9a52557d938d24561cc392ddc3482)), closes [#30022](https://github.com/bitnami/charts/issues/30022)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>15.0.2 (2024-10-14)</small>
+
+* [bitnami/discourse]: (bugfix) fix mount path on install-plugins init-container (#29874) ([8a8e47b](https://github.com/bitnami/charts/commit/8a8e47bf9be1dcaeb082a2afb06768488eaa4ecd)), closes [#29874](https://github.com/bitnami/charts/issues/29874)
 
 ## <small>15.0.1 (2024-10-08)</small>
 

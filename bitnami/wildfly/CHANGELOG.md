@@ -1,8 +1,26 @@
 # Changelog
 
-## 21.0.6 (2024-10-10)
+## 22.0.3 (2024-11-20)
 
-* [bitnami/wildfly] fix annotations merging for management ingress ([#29819](https://github.com/bitnami/charts/pull/29819))
+* [bitnami/wildfly] Release 22.0.3 ([#30551](https://github.com/bitnami/charts/pull/30551))
+
+## <small>22.0.2 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/wildfly] Unify seLinuxOptions default value (#30319) ([d3e81f9](https://github.com/bitnami/charts/commit/d3e81f9e50f70fffbe93c6213d239366341a07fd)), closes [#30319](https://github.com/bitnami/charts/issues/30319)
+
+## <small>22.0.1 (2024-10-26)</small>
+
+* [bitnami/wildfly] Release 22.0.1 (#30093) ([80d2f2f](https://github.com/bitnami/charts/commit/80d2f2f0d47ed1f0a0eeaef393f3b2ac56866ace)), closes [#30093](https://github.com/bitnami/charts/issues/30093)
+
+## 22.0.0 (2024-10-24)
+
+* [bitnami/wildfly] Release 22.0.0 (#30071) ([e8c8adb](https://github.com/bitnami/charts/commit/e8c8adb0f5a3dc42e60fab1562cac3142bfc1a52)), closes [#30071](https://github.com/bitnami/charts/issues/30071)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>21.0.6 (2024-10-10)</small>
+
+* [bitnami/wildfly] fix annotations merging for management ingress (#29819) ([f8291f6](https://github.com/bitnami/charts/commit/f8291f6076a81d6950aa23a9b1490b8b442d2a81)), closes [#29819](https://github.com/bitnami/charts/issues/29819)
 
 ## <small>21.0.5 (2024-09-17)</small>
 

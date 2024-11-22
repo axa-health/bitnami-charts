@@ -49,7 +49,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -502,7 +502,7 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `sysctl.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctl.resources is set (sysctl.resources is recommended for production). | `none`                     |
 | `sysctl.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                               | `{}`                       |
 | `sysctl.containerSecurityContext.enabled`        | Enable container security context                                                                                                                                                                                               | `true`                     |
-| `sysctl.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                | `nil`                      |
+| `sysctl.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                | `{}`                       |
 | `sysctl.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                 | `0`                        |
 | `sysctl.containerSecurityContext.privileged`     | Set init container's Security Context privileged                                                                                                                                                                                | `true`                     |
 

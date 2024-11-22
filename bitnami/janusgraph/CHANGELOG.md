@@ -1,8 +1,30 @@
 # Changelog
 
-## 0.3.21 (2024-09-13)
+## 0.3.26 (2024-11-09)
 
-* [bitnami/janusgraph] Release 0.3.21 ([#29395](https://github.com/bitnami/charts/pull/29395))
+* [bitnami/janusgraph] Release 0.3.26 ([#30371](https://github.com/bitnami/charts/pull/30371))
+
+## <small>0.3.25 (2024-11-08)</small>
+
+* [bitnami/janusgraph] Release 0.3.25 (#30362) ([f68a5da](https://github.com/bitnami/charts/commit/f68a5da959de807b537f653f42bd1132c59d6bf7)), closes [#30362](https://github.com/bitnami/charts/issues/30362)
+
+## <small>0.3.24 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/janusgraph] Unify seLinuxOptions default value (#30342) ([756e580](https://github.com/bitnami/charts/commit/756e580b2ae6e14fe59774583e3e8e87d1984684)), closes [#30342](https://github.com/bitnami/charts/issues/30342)
+
+## <small>0.3.23 (2024-10-18)</small>
+
+* [bitnami/janusgraph] Remove wrong entries from image verification (#29914) ([be16cbf](https://github.com/bitnami/charts/commit/be16cbf0564756887e50ad9a54ceb408a672460f)), closes [#29914](https://github.com/bitnami/charts/issues/29914)
+
+## <small>0.3.22 (2024-10-16)</small>
+
+* [bitnami/janusgraph] Release 0.3.22 (#29951) ([275a6d4](https://github.com/bitnami/charts/commit/275a6d435eeba33f4e4240d7c2c3f6f8829124ba)), closes [#29951](https://github.com/bitnami/charts/issues/29951)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>0.3.21 (2024-09-13)</small>
+
+* [bitnami/janusgraph] Release 0.3.21 (#29395) ([37fcbce](https://github.com/bitnami/charts/commit/37fcbce879573fad85c8661011c20015bd90f311)), closes [#29395](https://github.com/bitnami/charts/issues/29395)
 
 ## <small>0.3.20 (2024-09-13)</small>
 

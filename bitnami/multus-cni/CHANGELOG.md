@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.1.17 (2024-10-08)
+## 2.1.19 (2024-11-07)
 
-* [bitnami/multus-cni] Release 2.1.17 ([#29810](https://github.com/bitnami/charts/pull/29810))
+* [bitnami/multus-cni] Release 2.1.19 ([#30284](https://github.com/bitnami/charts/pull/30284))
+
+## <small>2.1.18 (2024-10-16)</small>
+
+* [bitnami/multus-cni] Release 2.1.18 (#29953) ([858b84e](https://github.com/bitnami/charts/commit/858b84ec9bc20f2775e01dbfe05d2eb190579f21)), closes [#29953](https://github.com/bitnami/charts/issues/29953)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>2.1.17 (2024-10-08)</small>
+
+* [bitnami/multus-cni] Release 2.1.17 (#29810) ([bc840b6](https://github.com/bitnami/charts/commit/bc840b623c9317a0c2c95602f0755301a7b8849c)), closes [#29810](https://github.com/bitnami/charts/issues/29810)
 
 ## <small>2.1.16 (2024-10-02)</small>
 

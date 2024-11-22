@@ -1,8 +1,26 @@
 # Changelog
 
+## 34.0.0 (2024-11-12)
+
+* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 ([#30426](https://github.com/bitnami/charts/pull/30426))
+
+## 33.0.0 (2024-11-12)
+
+* [bitnami/spring-cloud-dataflow] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30359) ([1369cbf](https://github.com/bitnami/charts/commit/1369cbfd07e26350d2b4fa91eeeb7c908fd49cca)), closes [#30359](https://github.com/bitnami/charts/issues/30359)
+
+## <small>32.0.2 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/spring-cloud-dataflow] Release 32.0.2 (#30122) ([6349db0](https://github.com/bitnami/charts/commit/6349db02cff375314e0278cc3618b33ffb4eafd1)), closes [#30122](https://github.com/bitnami/charts/issues/30122)
+
+## <small>32.0.1 (2024-10-22)</small>
+
+* [bitnami/spring-cloud-dataflow] fix: :bug: Add missing /.m2 emptyDir (#30034) ([483b762](https://github.com/bitnami/charts/commit/483b762831fff2de246581452b91501e6309f052)), closes [#30034](https://github.com/bitnami/charts/issues/30034)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
 ## 32.0.0 (2024-09-23)
 
-* [bitnami/spring-cloud-dataflow] feat!: :arrow_up: :boom: Bump RabbitMQ to 4.x.x ([#29572](https://github.com/bitnami/charts/pull/29572))
+* [bitnami/spring-cloud-dataflow] feat!: :arrow_up: :boom: Bump RabbitMQ to 4.x.x (#29572) ([7adaf80](https://github.com/bitnami/charts/commit/7adaf809d4275fa8c1dfedc2c8a23f7fab33c242)), closes [#29572](https://github.com/bitnami/charts/issues/29572)
 
 ## <small>31.0.4 (2024-09-19)</small>
 

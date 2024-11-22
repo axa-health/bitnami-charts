@@ -1,8 +1,26 @@
 # Changelog
 
-## 4.6.19 (2024-10-13)
+## 4.6.23 (2024-11-20)
 
-* [grafana-loki] Fix loki config results_cache type embedded-cache ([#29878](https://github.com/bitnami/charts/pull/29878))
+* [bitnami/grafana-loki] Release 4.6.23 ([#30543](https://github.com/bitnami/charts/pull/30543))
+
+## <small>4.6.22 (2024-11-07)</small>
+
+* [bitnami/grafana-loki] Release 4.6.22 (#30267) ([1445d2d](https://github.com/bitnami/charts/commit/1445d2dfb356b74ff8344e33f4c1525db9dcb0bb)), closes [#30267](https://github.com/bitnami/charts/issues/30267)
+
+## <small>4.6.21 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-loki] Fix conditional on ruler PDB creation (#30112) ([c10c73b](https://github.com/bitnami/charts/commit/c10c73b3185e95507c2ef41fa4d45fcdd899b91c)), closes [#30112](https://github.com/bitnami/charts/issues/30112)
+
+## <small>4.6.20 (2024-10-17)</small>
+
+* [bitnami/grafana-loki] Release 4.6.20 (#29978) ([b823cbd](https://github.com/bitnami/charts/commit/b823cbd9fa85f1ef1353b022b17a63b1fca86182)), closes [#29978](https://github.com/bitnami/charts/issues/29978)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.6.19 (2024-10-15)</small>
+
+* [grafana-loki] Fix loki config results_cache type embedded-cache (#29878) ([00cecc4](https://github.com/bitnami/charts/commit/00cecc46568fc4d65a0e88d4e8a0033107f2573e)), closes [#29878](https://github.com/bitnami/charts/issues/29878)
 
 ## <small>4.6.18 (2024-10-02)</small>
 

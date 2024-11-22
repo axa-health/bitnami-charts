@@ -1,8 +1,30 @@
 # Changelog
 
-## 11.3.16 (2024-10-01)
+## 11.3.21 (2024-11-09)
 
-* [bitnami/consul] Release 11.3.16 ([#29687](https://github.com/bitnami/charts/pull/29687))
+* [bitnami/consul] Release 11.3.21 ([#30374](https://github.com/bitnami/charts/pull/30374))
+
+## <small>11.3.20 (2024-11-07)</small>
+
+* [bitnami/consul] Release 11.3.20 (#30259) ([6c44b4c](https://github.com/bitnami/charts/commit/6c44b4c00afd32f6178260d90e1f2096c854b22f)), closes [#30259](https://github.com/bitnami/charts/issues/30259)
+
+## <small>11.3.19 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/consul] Release 11.3.19 (#30141) ([f02726a](https://github.com/bitnami/charts/commit/f02726aadc0452fec60f9487f48f363f3e74af04)), closes [#30141](https://github.com/bitnami/charts/issues/30141)
+
+## <small>11.3.18 (2024-10-22)</small>
+
+* [bitnami/consul] Change Configmap Template (#30016) ([11f2a7d](https://github.com/bitnami/charts/commit/11f2a7d09ea9c38286c1c3fc3fa4ab70473a8678)), closes [#30016](https://github.com/bitnami/charts/issues/30016)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.3.17 (2024-10-16)</small>
+
+* [bitnami/consul] Release 11.3.17 (#29918) ([1478868](https://github.com/bitnami/charts/commit/1478868d7784fc7a82fefc0302aa2ebed2dfa624)), closes [#29918](https://github.com/bitnami/charts/issues/29918)
+
+## <small>11.3.16 (2024-10-02)</small>
+
+* [bitnami/consul] Release 11.3.16 (#29687) ([3c2a220](https://github.com/bitnami/charts/commit/3c2a2201f0605e46931f7d3799aa56d588dc8c41)), closes [#29687](https://github.com/bitnami/charts/issues/29687)
 
 ## <small>11.3.15 (2024-09-17)</small>
 

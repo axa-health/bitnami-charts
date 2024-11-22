@@ -64,7 +64,7 @@ $ kubeseal --fetch-cert \
 
 Refer to Sealed Secrets documentation for more information about [kubeseal usage](https://github.com/bitnami-labs/sealed-secrets#usage).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -251,7 +251,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `containerSecurityContext.capabilities.drop`        | Which privileges to drop in the Sealed Secret container                                                                                                                                                           | `["ALL"]`                        |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Whether the Sealed Secret container has a read-only root filesystem                                                                                                                                               | `true`                           |
 | `containerSecurityContext.runAsNonRoot`             | Indicates that the Sealed Secret container must run as a non-root user                                                                                                                                            | `true`                           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`                            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`                             |
 | `containerSecurityContext.runAsUser`                | Set Sealed Secret containers' Security Context runAsUser                                                                                                                                                          | `1001`                           |
 | `containerSecurityContext.runAsGroup`               | Set Sealed Secret containers' Security Context runAsGroup                                                                                                                                                         | `1001`                           |
 | `containerSecurityContext.seccompProfile.type`      | Set Sealed Secret container's Security Context seccompProfile type                                                                                                                                                | `RuntimeDefault`                 |

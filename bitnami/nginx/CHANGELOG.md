@@ -1,8 +1,17 @@
 # Changelog
 
-## 18.2.3 (2024-10-11)
+## 18.2.5 (2024-11-08)
 
-* [bitnami/nginx] Remove duplicated (and wrong) image in verification ([#29871](https://github.com/bitnami/charts/pull/29871))
+* [bitnami/nginx] Unify seLinuxOptions default value ([#30337](https://github.com/bitnami/charts/pull/30337))
+
+## <small>18.2.4 (2024-10-21)</small>
+
+* [bitnami/nginx] Release 18.2.4 (#30017) ([c14b4ab](https://github.com/bitnami/charts/commit/c14b4ab38bf552b35713943432e4f96284ab8bdb)), closes [#30017](https://github.com/bitnami/charts/issues/30017)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>18.2.3 (2024-10-14)</small>
+
+* [bitnami/nginx] Remove duplicated (and wrong) image in verification (#29871) ([124709a](https://github.com/bitnami/charts/commit/124709a15fba391dabcc4bba849588466ecc70c4)), closes [#29871](https://github.com/bitnami/charts/issues/29871)
 
 ## <small>18.2.2 (2024-10-02)</small>
 

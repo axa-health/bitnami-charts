@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -376,6 +376,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `revisionHistoryLimitCount`                         | Number of controller revisions to keep                                                                                                                                                                            | `10`             |
 | `containerPorts.http`                               | Keycloak HTTP container port                                                                                                                                                                                      | `8080`           |
 | `containerPorts.https`                              | Keycloak HTTPS container port                                                                                                                                                                                     | `8443`           |
+| `containerPorts.metrics`                            | Keycloak metrics container port                                                                                                                                                                                   | `9000`           |
 | `extraContainerPorts`                               | Optionally specify extra list of additional port-mappings for Keycloak container                                                                                                                                  | `[]`             |
 | `statefulsetAnnotations`                            | Optionally add extra annotations on the statefulset resource                                                                                                                                                      | `{}`             |
 | `podSecurityContext.enabled`                        | Enabled Keycloak pods' Security Context                                                                                                                                                                           | `true`           |
@@ -539,29 +540,33 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                               | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                       | `false` |
-| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                 | `8080`  |
-| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`    |
-| `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                               | `[]`    |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false` |
-| `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                 | `http`  |
-| `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`    |
-| `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`    |
-| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                               | `30s`   |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                       | `""`    |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                       | `{}`    |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                        | `[]`    |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`    |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false` |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                         | `""`    |
-| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false` |
-| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                  | `""`    |
-| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
-| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `[]`    |
+| Name                                       | Description                                                                                                                                        | Value     |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                                                                                | `false`   |
+| `metrics.service.ports.http`               | Metrics service HTTP port                                                                                                                          | `8080`    |
+| `metrics.service.ports.https`              | Metrics service HTTPS port                                                                                                                         | `8443`    |
+| `metrics.service.ports.metrics`            | Metrics service Metrics port                                                                                                                       | `9000`    |
+| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                                                                                | `{}`      |
+| `metrics.service.extraPorts`               | Add additional ports to the keycloak metrics service (i.e. admin port 9000)                                                                        | `[]`      |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                                       | `false`   |
+| `metrics.serviceMonitor.port`              | Metrics service HTTP port                                                                                                                          | `metrics` |
+| `metrics.serviceMonitor.scheme`            | Metrics service scheme                                                                                                                             | `http`    |
+| `metrics.serviceMonitor.tlsConfig`         | Metrics service TLS configuration                                                                                                                  | `{}`      |
+| `metrics.serviceMonitor.endpoints`         | The endpoint configuration of the ServiceMonitor. Path is mandatory. Port, scheme, tlsConfig, interval, timeout and labellings can be overwritten. | `[]`      |
+| `metrics.serviceMonitor.path`              | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                                         | `""`      |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                                                                                           | `""`      |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                                                        | `30s`     |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                                                                | `""`      |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                              | `{}`      |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                                | `{}`      |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                                 | `[]`      |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                          | `[]`      |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                                           | `false`   |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                                  | `""`      |
+| `metrics.prometheusRule.enabled`           | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                                                       | `false`   |
+| `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                                                                                           | `""`      |
+| `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                              | `{}`      |
+| `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                                                | `[]`      |
 
 ### keycloak-config-cli parameters
 
@@ -681,6 +686,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 24.1.0
+
+With this update the metrics service listening port is switched to 9000, the same as the keycloak management endpoint is using.
+This can be changed by setting `metrics.service.ports.http` to a different value, e.g. 8080 like before this change.
+
 ### To 23.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
@@ -792,7 +802,7 @@ kubectl delete pod keycloak-postgresql-0
 
 #### Useful links
 
-- [Bitnami Tutorial](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html)
+- [Bitnami Tutorial](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html)
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 

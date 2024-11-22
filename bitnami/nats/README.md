@@ -49,7 +49,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -192,6 +192,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                         | `""`             |
 | `priorityClassName`                                 | Name of pod priority class                                                                                                                                                                                        | `""`             |
 | `updateStrategy.type`                               | StrategyType. Can be set to RollingUpdate or OnDelete                                                                                                                                                             | `RollingUpdate`  |
+| `podManagementPolicy`                               | StatefulSet pod management policy                                                                                                                                                                                 | `OrderedReady`   |
 | `containerPorts.client`                             | NATS client container port                                                                                                                                                                                        | `4222`           |
 | `containerPorts.cluster`                            | NATS cluster container port                                                                                                                                                                                       | `6222`           |
 | `containerPorts.monitoring`                         | NATS monitoring container port                                                                                                                                                                                    | `8222`           |
@@ -201,7 +202,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                       | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set NATS pod's Security Context fsGroup                                                                                                                                                                           | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`           |
 | `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                     | `true`           |
@@ -258,45 +259,46 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Traffic Exposure parameters
 
-| Name                                    | Description                                                                                                                      | Value                    |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                          | NATS service type                                                                                                                | `ClusterIP`              |
-| `service.ports.client`                  | NATS client service port                                                                                                         | `4222`                   |
-| `service.ports.cluster`                 | NATS cluster service port                                                                                                        | `6222`                   |
-| `service.ports.monitoring`              | NATS monitoring service port                                                                                                     | `8222`                   |
-| `service.nodePorts.client`              | Node port for clients                                                                                                            | `""`                     |
-| `service.nodePorts.cluster`             | Node port for clustering                                                                                                         | `""`                     |
-| `service.nodePorts.monitoring`          | Node port for monitoring                                                                                                         | `""`                     |
-| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.clusterIP`                     | NATS service Cluster IP                                                                                                          | `""`                     |
-| `service.loadBalancerIP`                | NATS service Load Balancer IP                                                                                                    | `""`                     |
-| `service.loadBalancerSourceRanges`      | NATS service Load Balancer sources                                                                                               | `[]`                     |
-| `service.externalTrafficPolicy`         | NATS service external traffic policy                                                                                             | `Cluster`                |
-| `service.annotations`                   | Additional custom annotations for NATS service                                                                                   | `{}`                     |
-| `service.extraPorts`                    | Extra ports to expose in the NATS service (normally used with the `sidecar` value)                                               | `[]`                     |
-| `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
-| `ingress.enabled`                       | Set to true to enable ingress record generation                                                                                  | `false`                  |
-| `ingress.pathType`                      | Ingress Path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`                    | Override API Version (automatically detected if not set)                                                                         | `""`                     |
-| `ingress.hostname`                      | When the ingress is enabled, a host pointing to this will be created                                                             | `nats.local`             |
-| `ingress.path`                          | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers.                            | `/`                      |
-| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`                    | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
-| `networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
-| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| Name                                        | Description                                                                                                                      | Value                    |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                              | NATS service type                                                                                                                | `ClusterIP`              |
+| `service.ports.client`                      | NATS client service port                                                                                                         | `4222`                   |
+| `service.ports.cluster`                     | NATS cluster service port                                                                                                        | `6222`                   |
+| `service.ports.monitoring`                  | NATS monitoring service port                                                                                                     | `8222`                   |
+| `service.nodePorts.client`                  | Node port for clients                                                                                                            | `""`                     |
+| `service.nodePorts.cluster`                 | Node port for clustering                                                                                                         | `""`                     |
+| `service.nodePorts.monitoring`              | Node port for monitoring                                                                                                         | `""`                     |
+| `service.sessionAffinity`                   | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`             | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.clusterIP`                         | NATS service Cluster IP                                                                                                          | `""`                     |
+| `service.loadBalancerIP`                    | NATS service Load Balancer IP                                                                                                    | `""`                     |
+| `service.loadBalancerSourceRanges`          | NATS service Load Balancer sources                                                                                               | `[]`                     |
+| `service.externalTrafficPolicy`             | NATS service external traffic policy                                                                                             | `Cluster`                |
+| `service.annotations`                       | Additional custom annotations for NATS service                                                                                   | `{}`                     |
+| `service.extraPorts`                        | Extra ports to expose in the NATS service (normally used with the `sidecar` value)                                               | `[]`                     |
+| `service.headless.annotations`              | Annotations for the headless service.                                                                                            | `{}`                     |
+| `service.headless.publishNotReadyAddresses` | Publishes the addresses of not ready Pods                                                                                        | `false`                  |
+| `ingress.enabled`                           | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                          | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                        | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                          | When the ingress is enabled, a host pointing to this will be created                                                             | `nats.local`             |
+| `ingress.path`                              | The Path to NATS. You may need to set this to '/*' in order to use this with ALB ingress controllers.                            | `/`                      |
+| `ingress.ingressClassName`                  | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.annotations`                       | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                               | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`                        | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`                        | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`                        | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                          | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                           | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`                        | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `networkPolicy.enabled`                     | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
+| `networkPolicy.allowExternal`               | The Policy model to apply                                                                                                        | `true`                   |
+| `networkPolicy.allowExternalEgress`         | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`                | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`                 | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`        | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels`     | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 
 ### Metrics parameters
 
