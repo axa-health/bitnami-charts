@@ -1,8 +1,101 @@
 # Changelog
 
-## 11.0.1 (2024-11-15)
+## 12.0.1 (2025-06-02)
 
-* [bitnami/argo-workflows] Release 11.0.1 ([#30474](https://github.com/bitnami/charts/pull/30474))
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#34032](https://github.com/bitnami/charts/pull/34032))
+
+## 12.0.0 (2025-05-12)
+
+* [bitnami/argo-workflows] Update MySQL subchart (#33612) ([1b26a9e](https://github.com/bitnami/charts/commit/1b26a9e0a9aae2c812fec428fa294c035c266d07)), closes [#33612](https://github.com/bitnami/charts/issues/33612)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.1.16 (2025-05-08)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#33555) ([8fbddc6](https://github.com/bitnami/charts/commit/8fbddc628df7162b278a5ce0cd185d52dd08825e)), closes [#33555](https://github.com/bitnami/charts/issues/33555)
+
+## <small>11.1.15 (2025-05-07)</small>
+
+* [bitnami/argo-workflows] Release 11.1.15 (#33540) ([45a7a53](https://github.com/bitnami/charts/commit/45a7a53a72757e0bc19b6aa7fb32dcf84c7385cb)), closes [#33540](https://github.com/bitnami/charts/issues/33540)
+
+## <small>11.1.14 (2025-05-06)</small>
+
+* [bitnami/argo-workflows] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([ff43ddf](https://github.com/bitnami/charts/commit/ff43ddf1d8adca95518eeecc0562ff5663548810)), closes [#33338](https://github.com/bitnami/charts/issues/33338)
+
+## <small>11.1.13 (2025-04-29)</small>
+
+* [bitnami/argo-workflows] Release 11.1.13 (#33251) ([3486155](https://github.com/bitnami/charts/commit/348615503d4c72ad09bc8a1e0ba20db2df83823d)), closes [#33251](https://github.com/bitnami/charts/issues/33251)
+
+## <small>11.1.12 (2025-04-28)</small>
+
+* [bitnami/argo-workflows] Release 11.1.12 (#33230) ([c4f0308](https://github.com/bitnami/charts/commit/c4f03080b936f33da9874043c863ce3817d8df7d)), closes [#33230](https://github.com/bitnami/charts/issues/33230)
+
+## <small>11.1.11 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/argo-workflows] Release 11.1.11 (#32718) ([c7a0b15](https://github.com/bitnami/charts/commit/c7a0b153bb32c5f5985cf70801b869be71a94d8d)), closes [#32718](https://github.com/bitnami/charts/issues/32718)
+
+## <small>11.1.10 (2025-03-11)</small>
+
+* [bitnami/argo-workflows] Release 11.1.10 (#32399) ([daca813](https://github.com/bitnami/charts/commit/daca813b2a0beaa4654d4202faff934572f16f3f)), closes [#32399](https://github.com/bitnami/charts/issues/32399)
+
+## <small>11.1.9 (2025-03-04)</small>
+
+* [bitnami/argo-workflows] Release 11.1.9 (#32277) ([fd874cc](https://github.com/bitnami/charts/commit/fd874ccdf91e737d41978d40a2a42dc245ca3980)), closes [#32277](https://github.com/bitnami/charts/issues/32277)
+
+## <small>11.1.8 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/argo-workflows] Release 11.1.8 (#32087) ([db716bb](https://github.com/bitnami/charts/commit/db716bbde52b9b6a47732be5107edc04215505a1)), closes [#32087](https://github.com/bitnami/charts/issues/32087)
+
+## <small>11.1.7 (2025-02-10)</small>
+
+* [bitnami/argo-workflows] Release 11.1.7 (#31853) ([01abe92](https://github.com/bitnami/charts/commit/01abe92e2e1ca50450f2096b5492652b05c10227)), closes [#31853](https://github.com/bitnami/charts/issues/31853)
+
+## <small>11.1.6 (2025-02-07)</small>
+
+* [bitnami/argo-workflows] Release 11.1.6 (#31839) ([49dd6d4](https://github.com/bitnami/charts/commit/49dd6d4ec3586701659a6112083ff8618d8c67fe)), closes [#31839](https://github.com/bitnami/charts/issues/31839)
+
+## <small>11.1.5 (2025-02-07)</small>
+
+* [bitnami/argo-workflows] Release 11.1.5 (#31824) ([bd9a9a2](https://github.com/bitnami/charts/commit/bd9a9a26567b0c76c40ba9d1d5c09bf25c0611a0)), closes [#31824](https://github.com/bitnami/charts/issues/31824)
+
+## <small>11.1.4 (2025-02-04)</small>
+
+* [bitnami/argo-workflows] Release 11.1.4 (#31743) ([03714fc](https://github.com/bitnami/charts/commit/03714fc841dcf5199a8c841d9b3b5876fa80c821)), closes [#31743](https://github.com/bitnami/charts/issues/31743)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.1.3 (2025-01-24)</small>
+
+* [bitnami/argo-workflows] Release 11.1.3 (#31542) ([08db052](https://github.com/bitnami/charts/commit/08db052141e48c2f28d920d2ec923da8c7953f7e)), closes [#31542](https://github.com/bitnami/charts/issues/31542)
+
+## <small>11.1.2 (2025-01-16)</small>
+
+* [bitnami/argo-workflows] Release 11.1.2 (#31408) ([fc7398e](https://github.com/bitnami/charts/commit/fc7398e8b2d6b1e29fe2e2730b2af217dc307af3)), closes [#31408](https://github.com/bitnami/charts/issues/31408)
+
+## <small>11.1.1 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/argo-workflows] Release 11.1.1 (#31309) ([bd97fdc](https://github.com/bitnami/charts/commit/bd97fdc65c501405bc15950b778ae954a3959bf7)), closes [#31309](https://github.com/bitnami/charts/issues/31309)
+
+## 11.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/argo-workflows] Detect non-standard images (#30864) ([f47e86a](https://github.com/bitnami/charts/commit/f47e86a9b51dee8812bf752f2946fc6e5c24e3e0)), closes [#30864](https://github.com/bitnami/charts/issues/30864)
+
+## <small>11.0.3 (2024-12-03)</small>
+
+* [bitnami/argo-workflows] Release 11.0.3 (#30740) ([a3c6c77](https://github.com/bitnami/charts/commit/a3c6c77e3ed1f94056b2fc4212167b326c66bff6)), closes [#30740](https://github.com/bitnami/charts/issues/30740)
+
+## <small>11.0.2 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/argo-workflows] Release 11.0.2 (#30715) ([c186498](https://github.com/bitnami/charts/commit/c18649871d5e3d7b757dffd00b3b9bf4a71dc95f)), closes [#30715](https://github.com/bitnami/charts/issues/30715)
+
+## <small>11.0.1 (2024-11-15)</small>
+
+* [bitnami/argo-workflows] Release 11.0.1 (#30474) ([1c7a861](https://github.com/bitnami/charts/commit/1c7a8616140ab171241f0e0896aa1e74ac31fcc0)), closes [#30474](https://github.com/bitnami/charts/issues/30474)
 
 ## 11.0.0 (2024-11-12)
 

@@ -1,8 +1,149 @@
 # Changelog
 
-## 6.3.23 (2024-11-28)
+## 7.1.1 (2025-05-28)
 
-* [bitnam/influxdb] gcloud backups, replace gsutil ([#30595](https://github.com/bitnami/charts/pull/30595))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33950](https://github.com/bitnami/charts/pull/33950))
+
+## 7.1.0 (2025-05-27)
+
+* [bitnami/influxdb] ci: enable S3 storage on VIB testing (#33900) ([e58cbd3](https://github.com/bitnami/charts/commit/e58cbd3e9b2891172701a3d1a0e9c22745f0e039)), closes [#33900](https://github.com/bitnami/charts/issues/33900)
+
+## <small>7.0.3 (2025-05-23)</small>
+
+* [bitnami/influxdb] bugfix: address limitations with read-only restrictive environments (#33852) ([ca6d3ba](https://github.com/bitnami/charts/commit/ca6d3ba87f395ca75c8ce09052d1f06f06787fe0)), closes [#33852](https://github.com/bitnami/charts/issues/33852)
+
+## <small>7.0.2 (2025-05-22)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33842) ([d06f954](https://github.com/bitnami/charts/commit/d06f95414a039530f74b16ddf7d140596e48e91d)), closes [#33842](https://github.com/bitnami/charts/issues/33842)
+
+## <small>7.0.1 (2025-05-22)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33830) ([26689cf](https://github.com/bitnami/charts/commit/26689cf48486b8969087f96457c05aa5dda5242d)), closes [#33830](https://github.com/bitnami/charts/issues/33830)
+
+## 7.0.0 (2025-05-22)
+
+* [bitnami/influxdb] feat: InfluxDB 3 major version (#33743) ([78a8a8d](https://github.com/bitnami/charts/commit/78a8a8da38974586285f81d2c66fd27dc4d0c62f)), closes [#33743](https://github.com/bitnami/charts/issues/33743)
+
+## <small>6.6.16 (2025-05-21)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33821) ([7d35e67](https://github.com/bitnami/charts/commit/7d35e670e5abfdb86f136ef4fd0882412b5e80e0)), closes [#33821](https://github.com/bitnami/charts/issues/33821)
+
+## <small>6.6.15 (2025-05-21)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33806) ([4a7dfd0](https://github.com/bitnami/charts/commit/4a7dfd0f7669ff4445772c6346c5e3b6bf0a92dc)), closes [#33806](https://github.com/bitnami/charts/issues/33806)
+
+## <small>6.6.14 (2025-05-19)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33771) ([9b9aea7](https://github.com/bitnami/charts/commit/9b9aea70ab497f534a2395fcb409ef22233916f6)), closes [#33771](https://github.com/bitnami/charts/issues/33771)
+
+## <small>6.6.13 (2025-05-15)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33737) ([800375b](https://github.com/bitnami/charts/commit/800375b153cad7c744b58a9112c6f87d24dda3f9)), closes [#33737](https://github.com/bitnami/charts/issues/33737)
+
+## <small>6.6.12 (2025-05-13)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33654) ([61b330a](https://github.com/bitnami/charts/commit/61b330aa4f93c52321e12c690153688c101213a9)), closes [#33654](https://github.com/bitnami/charts/issues/33654)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>6.6.11 (2025-05-07)</small>
+
+* [bitnami/influxdb] Release 6.6.11 (#33529) ([40152ae](https://github.com/bitnami/charts/commit/40152ae66be8dddb6b7123ceb5d1294c0fba8d7a)), closes [#33529](https://github.com/bitnami/charts/issues/33529)
+
+## <small>6.6.10 (2025-05-06)</small>
+
+* [bitnami/influxdb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3337 ([695f099](https://github.com/bitnami/charts/commit/695f09932a34a2e6fe754ea34d7052d45483355b)), closes [#33374](https://github.com/bitnami/charts/issues/33374)
+
+## <small>6.6.9 (2025-04-28)</small>
+
+*  [bitnami/influxdb] Fix backup functionality, closes bitnami#33110 (#33111) ([2f8efe4](https://github.com/bitnami/charts/commit/2f8efe49372ea6c45c197154d093f49bcfb3d625)), closes [bitnami#33110](https://github.com/bitnami/issues/33110) [#33111](https://github.com/bitnami/charts/issues/33111) [bitnami#33110](https://github.com/bitnami/issues/33110)
+
+## <small>6.6.8 (2025-04-22)</small>
+
+* [bitnami/influxdb] Fix typo in backup cronjob (#32843) ([408bc3f](https://github.com/bitnami/charts/commit/408bc3f3ece7839e610a4e02ced15cfb692c5ee1)), closes [#32843](https://github.com/bitnami/charts/issues/32843)
+
+## <small>6.6.7 (2025-04-21)</small>
+
+* [bitnami/influxdb] Fix backup functionality, closes bitnami#33038 (#33092) ([25f2b73](https://github.com/bitnami/charts/commit/25f2b73042b394eb4d2bfdfb6625c3559bbc945d)), closes [bitnami#33038](https://github.com/bitnami/issues/33038) [#33092](https://github.com/bitnami/charts/issues/33092) [#33038](https://github.com/bitnami/charts/issues/33038)
+
+## <small>6.6.6 (2025-04-21)</small>
+
+* [bitnami/influxdb] Add revisionHistoryLimit variable (#32509) ([54ba28d](https://github.com/bitnami/charts/commit/54ba28d9a28249fb731b151b58dcaac00bbfa076)), closes [#32509](https://github.com/bitnami/charts/issues/32509)
+
+## <small>6.6.5 (2025-04-15)</small>
+
+* [bitnami/influxdb] Release 6.6.5 (#33009) ([b6c0dc4](https://github.com/bitnami/charts/commit/b6c0dc442aa40f42aea91ff3af6a847e70b3c912)), closes [#33009](https://github.com/bitnami/charts/issues/33009)
+
+## <small>6.6.4 (2025-04-15)</small>
+
+* [bitnami/influxdb] fix invalid template syntax (#33001) ([3fb2db6](https://github.com/bitnami/charts/commit/3fb2db63a542daaa83a04520df4505f3f86e4cb6)), closes [#33001](https://github.com/bitnami/charts/issues/33001)
+
+## <small>6.6.3 (2025-04-14)</small>
+
+* [bitnami/influxdb] bugfix: replace references to .Release.Namespace (#32985) ([b0f1dff](https://github.com/bitnami/charts/commit/b0f1dff958692696851a7c169cbe2d4924023de5)), closes [#32985](https://github.com/bitnami/charts/issues/32985)
+
+## <small>6.6.2 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/influxdb] Release 6.6.2 (#32739) ([7cbd52e](https://github.com/bitnami/charts/commit/7cbd52ec214f321e3cad390eaf0f7e2667a06309)), closes [#32739](https://github.com/bitnami/charts/issues/32739)
+
+## <small>6.6.1 (2025-03-05)</small>
+
+* [bitnami/influxdb] Release 6.6.1 (#32332) ([c15d866](https://github.com/bitnami/charts/commit/c15d866508518a783f4cb6fd56f12609ace756fd)), closes [#32332](https://github.com/bitnami/charts/issues/32332)
+
+## 6.6.0 (2025-02-26)
+
+* [bitnami/influxdb] Set `usePasswordFiles=true` by default (#32106) ([dddc4ff](https://github.com/bitnami/charts/commit/dddc4fffacf074669c9e354adfdfd59fb012088e)), closes [#32106](https://github.com/bitnami/charts/issues/32106)
+
+## <small>6.5.6 (2025-02-19)</small>
+
+* [bitnami/influxdb] Release 6.5.6 (#32003) ([a568190](https://github.com/bitnami/charts/commit/a568190d35ce528080a72e1b966dadf12bd0630e)), closes [#32003](https://github.com/bitnami/charts/issues/32003)
+
+## <small>6.5.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/influxdb] Release 6.5.5 (#31891) ([aa14ac9](https://github.com/bitnami/charts/commit/aa14ac945ee0cc775dabfe5b85e7ef1e22be984c)), closes [#31891](https://github.com/bitnami/charts/issues/31891)
+
+## <small>6.5.4 (2025-02-04)</small>
+
+* [bitnami/influxdb] Release 6.5.4 (#31761) ([12626a7](https://github.com/bitnami/charts/commit/12626a7766e8f7236c31acf52e2adc24c4bed28a)), closes [#31761](https://github.com/bitnami/charts/issues/31761)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.5.3 (2025-01-24)</small>
+
+* [bitnami/influxdb] Release 6.5.3 (#31565) ([6442881](https://github.com/bitnami/charts/commit/6442881d5de8ad5de7cce74e7a96d4a52003ee12)), closes [#31565](https://github.com/bitnami/charts/issues/31565)
+
+## <small>6.5.2 (2025-01-17)</small>
+
+* [bitnami/influxdb] Release 6.5.2 (#31426) ([cf843ee](https://github.com/bitnami/charts/commit/cf843ee793068cf3aa51f0f59faf8ad5fe650fcf)), closes [#31426](https://github.com/bitnami/charts/issues/31426)
+
+## <small>6.5.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/influxdb] Release 6.5.1 (#31316) ([fc98895](https://github.com/bitnami/charts/commit/fc98895cb3833a31b183db63161a6ff72009f1ff)), closes [#31316](https://github.com/bitnami/charts/issues/31316)
+
+## 6.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/influxdb] Detect non-standard images (#30882) ([9406b31](https://github.com/bitnami/charts/commit/9406b319964695555717ff20832743fd65c35c40)), closes [#30882](https://github.com/bitnami/charts/issues/30882)
+
+## <small>6.4.2 (2024-12-04)</small>
+
+* [bitnami/influxdb] Release 6.4.2 (#30757) ([a472136](https://github.com/bitnami/charts/commit/a472136ebbbcb99b0414275ca419ef47028e8970)), closes [#30757](https://github.com/bitnami/charts/issues/30757)
+
+## <small>6.4.1 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/influxdb] Release 6.4.1 (#30717) ([61c79ed](https://github.com/bitnami/charts/commit/61c79ed90c424650e432fcb52f51d6f2df51a564)), closes [#30717](https://github.com/bitnami/charts/issues/30717)
+
+## 6.4.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/influxdb] Feature - Add CA bundle option to influxdb backup job (#30659) ([622f64d](https://github.com/bitnami/charts/commit/622f64d352e68038cd4f205a40922a08900c3014)), closes [#30659](https://github.com/bitnami/charts/issues/30659)
+
+## <small>6.3.23 (2024-11-28)</small>
+
+* [bitnam/influxdb] gcloud backups, replace gsutil (#30595) ([9914b1b](https://github.com/bitnami/charts/commit/9914b1bbc403330378c28711371bdf53b76ffc19)), closes [#30595](https://github.com/bitnami/charts/issues/30595)
 
 ## <small>6.3.22 (2024-11-07)</small>
 
@@ -775,7 +916,7 @@
 
 ## <small>2.3.13 (2021-10-01)</small>
 
-* [bitnami/influxdb] extrahosts creates the same paths as hostname (#7654) ([0b46c43](https://github.com/bitnami/charts/commit/0b46c43c141f21eeab971db035a66be16bbb2354)), closes [#7654](https://github.com/bitnami/charts/issues/7654) [/github.com/bitnami/charts/blob/31f75b5950840b3939c65360a781bc1d66b9e9d2/bitnami/influxdb/Chart.yaml#L27](https://github.com//github.com/bitnami/charts/blob/31f75b5950840b3939c65360a781bc1d66b9e9d2/bitnami/influxdb/Chart.yaml/issues/L27)
+* [bitnami/influxdb] extrahosts creates the same paths as hostname (#7654) ([0b46c43](https://github.com/bitnami/charts/commit/0b46c43c141f21eeab971db035a66be16bbb2354)), closes [#7654](https://github.com/bitnami/charts/issues/7654)
 * [bitnami/several] Regenerate README tables ([c3367d9](https://github.com/bitnami/charts/commit/c3367d910710aece8db3ece72554597fce871ae1))
 
 ## <small>2.3.12 (2021-10-01)</small>

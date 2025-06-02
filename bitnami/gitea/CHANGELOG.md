@@ -1,8 +1,111 @@
 # Changelog
 
-## 3.0.3 (2024-11-27)
+## 3.2.7 (2025-05-13)
 
-* [bitnami/gitea] Release 3.0.3 ([#30642](https://github.com/bitnami/charts/pull/30642))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#33622](https://github.com/bitnami/charts/pull/33622))
+
+## <small>3.2.6 (2025-05-08)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33558) ([cf1e13b](https://github.com/bitnami/charts/commit/cf1e13bcd7c791faedb003185ab2c50c0f5dd487)), closes [#33558](https://github.com/bitnami/charts/issues/33558)
+
+## <small>3.2.5 (2025-05-07)</small>
+
+* [bitnami/gitea] Release 3.2.5 (#33479) ([a1595ee](https://github.com/bitnami/charts/commit/a1595eee53e221b0b22cbdef0db922dc72ef825d)), closes [#33479](https://github.com/bitnami/charts/issues/33479)
+
+## <small>3.2.4 (2025-05-06)</small>
+
+* [bitnami/gitea] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33365) ([6850abe](https://github.com/bitnami/charts/commit/6850abe386dcae0781ee5b1f4e61b548784a292b)), closes [#33365](https://github.com/bitnami/charts/issues/33365)
+
+## <small>3.2.3 (2025-04-09)</small>
+
+* [bitnami/gitea] Release 3.2.3 (#32905) ([cf465ce](https://github.com/bitnami/charts/commit/cf465ce64050d29fdd2ead91540bfa185b836bb3)), closes [#32905](https://github.com/bitnami/charts/issues/32905)
+
+## <small>3.2.2 (2025-04-08)</small>
+
+* [bitnami/gitea] Release 3.2.2 (#32856) ([8a6e278](https://github.com/bitnami/charts/commit/8a6e2781db8ba84cfc81a654daac1fcee3de9eda)), closes [#32856](https://github.com/bitnami/charts/issues/32856)
+
+## <small>3.2.1 (2025-04-01)</small>
+
+* [bitnami/gitea] Release 3.2.1 (#32730) ([bad3639](https://github.com/bitnami/charts/commit/bad3639d7d8dc68ecc2ff9ae0fad8f189f1cfa21)), closes [#32730](https://github.com/bitnami/charts/issues/32730)
+
+## 3.2.0 (2025-03-27)
+
+* [bitnami/gitea] Set `usePasswordFiles=true` by default (#32347) ([f82ce08](https://github.com/bitnami/charts/commit/f82ce081fed5aaddc123caae618776df141bf691)), closes [#32347](https://github.com/bitnami/charts/issues/32347)
+
+## <small>3.1.14 (2025-03-24)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/gitea] Release 3.1.14 (#32586) ([bdb0cd7](https://github.com/bitnami/charts/commit/bdb0cd798e223e1603551f5000c63c733d6d5966)), closes [#32586](https://github.com/bitnami/charts/issues/32586)
+
+## <small>3.1.13 (2025-03-05)</small>
+
+* [bitnami/gitea] Release 3.1.13 (#32299) ([f435581](https://github.com/bitnami/charts/commit/f435581f5edee10b0eb96962d4c1e42e0e7231c3)), closes [#32299](https://github.com/bitnami/charts/issues/32299)
+
+## <small>3.1.12 (2025-03-05)</small>
+
+* [bitnami/gitea] Release 3.1.12 (#32289) ([7e1b8f8](https://github.com/bitnami/charts/commit/7e1b8f8163da5e9724da1c0f76ec5e3b94262fb8)), closes [#32289](https://github.com/bitnami/charts/issues/32289)
+
+## <small>3.1.11 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/gitea] Release 3.1.11 (#32040) ([158c59f](https://github.com/bitnami/charts/commit/158c59fef6c9af660e63e983b10476c366919834)), closes [#32040](https://github.com/bitnami/charts/issues/32040)
+
+## <small>3.1.10 (2025-02-06)</small>
+
+* [bitnami/gitea] Release 3.1.10 (#31806) ([b32c026](https://github.com/bitnami/charts/commit/b32c0264329e5914869a5ab25e22f0c53037b782)), closes [#31806](https://github.com/bitnami/charts/issues/31806)
+
+## <small>3.1.9 (2025-02-05)</small>
+
+* [bitnami/gitea] Release 3.1.9 (#31799) ([1f04ad3](https://github.com/bitnami/charts/commit/1f04ad3e970269382ff2586e244c9b202e26fb08)), closes [#31799](https://github.com/bitnami/charts/issues/31799)
+
+## <small>3.1.8 (2025-02-04)</small>
+
+* [bitnami/gitea] Release 3.1.8 (#31753) ([987ba6c](https://github.com/bitnami/charts/commit/987ba6c0cd5f5c157a7cd314a4aecd50bbfe47ff)), closes [#31753](https://github.com/bitnami/charts/issues/31753)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>3.1.7 (2025-01-24)</small>
+
+* [bitnami/gitea] Release 3.1.7 (#31553) ([bca599d](https://github.com/bitnami/charts/commit/bca599dce849e43865249c76024417786a3fb5b5)), closes [#31553](https://github.com/bitnami/charts/issues/31553)
+
+## <small>3.1.6 (2025-01-23)</small>
+
+* [bitnami/gitea] Release 3.1.6 (#31530) ([85b96e6](https://github.com/bitnami/charts/commit/85b96e69b4087501b590240f2ad0a7840af544d5)), closes [#31530](https://github.com/bitnami/charts/issues/31530)
+
+## <small>3.1.5 (2025-01-17)</small>
+
+* [bitnami/gitea] Release 3.1.5 (#31417) ([c941f2d](https://github.com/bitnami/charts/commit/c941f2d742e004a5b13163187c5b77a6a1be3ecc)), closes [#31417](https://github.com/bitnami/charts/issues/31417)
+
+## <small>3.1.4 (2025-01-10)</small>
+
+* [bitnami/gitea] Release 3.1.4 (#31285) ([6afa662](https://github.com/bitnami/charts/commit/6afa662c1cb7c25a9e165b607ffa404364ebf8d4)), closes [#31285](https://github.com/bitnami/charts/issues/31285)
+
+## <small>3.1.3 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/gitea] Release 3.1.3 (#31276) ([50dc1bd](https://github.com/bitnami/charts/commit/50dc1bd4f77cc356862d39c919d31cba2d671b58)), closes [#31276](https://github.com/bitnami/charts/issues/31276)
+
+## <small>3.1.2 (2024-12-13)</small>
+
+* [bitnami/gitea] Release 3.1.2 (#31031) ([f137d21](https://github.com/bitnami/charts/commit/f137d2178d93c2c257339ca6fd8688cbb5a74034)), closes [#31031](https://github.com/bitnami/charts/issues/31031)
+
+## <small>3.1.1 (2024-12-11)</small>
+
+* [bitnami/gitea] Release 3.1.1 (#31000) ([893a7e0](https://github.com/bitnami/charts/commit/893a7e0b2ea7cddd98553f14d290849c0e5d0d07)), closes [#31000](https://github.com/bitnami/charts/issues/31000)
+
+## 3.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/gitea] Detect non-standard images (#30889) ([00a7a4e](https://github.com/bitnami/charts/commit/00a7a4e5ed1d81a90cf5f5c9f1b816eb1b0becac)), closes [#30889](https://github.com/bitnami/charts/issues/30889)
+
+## <small>3.0.4 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/gitea] Release 3.0.4 (#30750) ([61e17d8](https://github.com/bitnami/charts/commit/61e17d8e5b627d9bd2174a28708edfb2b611ca53)), closes [#30750](https://github.com/bitnami/charts/issues/30750)
+
+## <small>3.0.3 (2024-11-27)</small>
+
+* [bitnami/gitea] Release 3.0.3 (#30642) ([6278bcc](https://github.com/bitnami/charts/commit/6278bcc27deabce0d3bf6c9f475974c78d4441a1)), closes [#30642](https://github.com/bitnami/charts/issues/30642)
 
 ## <small>3.0.2 (2024-11-07)</small>
 

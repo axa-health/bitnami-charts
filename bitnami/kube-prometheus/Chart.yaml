@@ -3,20 +3,21 @@
 
 annotations:
   category: Analytics
-  licenses: Apache-2.0
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.27.0-debian-12-r26
+      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r8
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.25.0-debian-12-r20
+      image: docker.io/bitnami/blackbox-exporter:0.26.0-debian-12-r9
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.55.1-debian-12-r3
+      image: docker.io/bitnami/prometheus:3.4.1-debian-12-r0
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.78.2-debian-12-r0
+      image: docker.io/bitnami/prometheus-operator:0.83.0-debian-12-r1
     - name: thanos
-      image: docker.io/bitnami/thanos:0.36.1-debian-12-r5
+      image: docker.io/bitnami/thanos:0.38.0-debian-12-r3
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.78.2
+appVersion: 0.83.0
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
@@ -25,7 +26,7 @@ dependencies:
 - condition: exporters.enabled,exporters.kube-state-metrics.enabled
   name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 4.x.x
+  version: 5.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -34,9 +35,10 @@ dependencies:
 - name: kube-prometheus-crds
   repository: file://./charts/kube-prometheus-crds
   version: 0.x.x
-description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
+description: Prometheus Operator provides easy monitoring definitions for Kubernetes
+  services and deployment and management of Prometheus instances.
 home: https://bitnami.com
-icon: https://bitnami.com/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
 keywords:
 - prometheus
 - alertmanager
@@ -49,4 +51,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 10.1.0
+version: 11.1.17

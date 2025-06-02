@@ -1,8 +1,94 @@
 # Changelog
 
+## 5.1.18 (2025-05-13)
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#33626](https://github.com/bitnami/charts/pull/33626))
+
+## <small>5.1.17 (2025-05-08)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#33563) ([b8d13a9](https://github.com/bitnami/charts/commit/b8d13a9b6ad550197fa318ec12e3d812e71c3e72)), closes [#33563](https://github.com/bitnami/charts/issues/33563)
+
+## <small>5.1.16 (2025-05-07)</small>
+
+* [bitnami/jaeger] Release 5.1.16 (#33498) ([6958ffa](https://github.com/bitnami/charts/commit/6958ffa03c00d311c0b6131858903c8016277461)), closes [#33498](https://github.com/bitnami/charts/issues/33498)
+
+## <small>5.1.15 (2025-05-07)</small>
+
+* [bitnami/jaeger] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33375) ([aa10601](https://github.com/bitnami/charts/commit/aa1060191c244c76b538a46e41c9a276c984298b)), closes [#33375](https://github.com/bitnami/charts/issues/33375)
+
+## <small>5.1.14 (2025-04-15)</small>
+
+* [bitnami/jaeger] Release 5.1.14 (#33010) ([c200116](https://github.com/bitnami/charts/commit/c200116294bcb06831957c334a07580ecba1fc4a)), closes [#33010](https://github.com/bitnami/charts/issues/33010)
+
+## <small>5.1.13 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jaeger] Release 5.1.13 (#32741) ([2466579](https://github.com/bitnami/charts/commit/24665791672ee53d82a226d7a3c7fa150795eaf4)), closes [#32741](https://github.com/bitnami/charts/issues/32741)
+
+## <small>5.1.12 (2025-03-08)</small>
+
+* [bitnami/jaeger] Release 5.1.12 (#32372) ([0c4e213](https://github.com/bitnami/charts/commit/0c4e213f95debcad6d09674ba05e0e87ac5da530)), closes [#32372](https://github.com/bitnami/charts/issues/32372)
+
+## <small>5.1.11 (2025-03-05)</small>
+
+* [bitnami/jaeger] Release 5.1.11 (#32311) ([2ddba1b](https://github.com/bitnami/charts/commit/2ddba1b315b59895bb47401ac339d9081517d2ec)), closes [#32311](https://github.com/bitnami/charts/issues/32311)
+
+## <small>5.1.10 (2025-02-19)</small>
+
+* [bitnami/jaeger] Release 5.1.10 (#32002) ([84c85d3](https://github.com/bitnami/charts/commit/84c85d35b58326f48d492979fabd9ef2a6da67a7)), closes [#32002](https://github.com/bitnami/charts/issues/32002)
+
+## <small>5.1.9 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/jaeger] Release 5.1.9 (#31892) ([d7f3794](https://github.com/bitnami/charts/commit/d7f37949bb03a4f47fd0c5ee1ced5c2992320755)), closes [#31892](https://github.com/bitnami/charts/issues/31892)
+
+## <small>5.1.8 (2025-02-10)</small>
+
+* [bitnami/jaeger] Release 5.1.8 (#31848) ([1d98775](https://github.com/bitnami/charts/commit/1d987751f63ba414c9ec360d24be0179b8d11874)), closes [#31848](https://github.com/bitnami/charts/issues/31848)
+
+## <small>5.1.7 (2025-02-07)</small>
+
+* [bitnami/jaeger] Release 5.1.7 (#31834) ([f53468d](https://github.com/bitnami/charts/commit/f53468d8cc664b48a273f17e9b91ed64045bc3a6)), closes [#31834](https://github.com/bitnami/charts/issues/31834)
+
+## <small>5.1.6 (2025-02-04)</small>
+
+* [bitnami/jaeger] Release 5.1.6 (#31760) ([230c8b5](https://github.com/bitnami/charts/commit/230c8b5c991115ea771f786ac795d5ef04a34bcf)), closes [#31760](https://github.com/bitnami/charts/issues/31760)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>5.1.5 (2025-01-24)</small>
+
+* [bitnami/jaeger] Release 5.1.5 (#31560) ([dc8441b](https://github.com/bitnami/charts/commit/dc8441b4737ad2d8769689690e78739e34985a82)), closes [#31560](https://github.com/bitnami/charts/issues/31560)
+
+## <small>5.1.4 (2025-01-21)</small>
+
+*  [bitnami/jaeger] Migration job not using namespace overwrite 31207 (#31405) ([2e7a486](https://github.com/bitnami/charts/commit/2e7a486cda512311b84ad6a5d80d2a6fa90f25ff)), closes [#31405](https://github.com/bitnami/charts/issues/31405)
+
+## <small>5.1.3 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/jaeger] Release 5.1.3 (#31251) ([accc2a4](https://github.com/bitnami/charts/commit/accc2a409a6e4c3f52ccc0dd574680c8d645dd4e)), closes [#31251](https://github.com/bitnami/charts/issues/31251)
+
+## <small>5.1.2 (2024-12-12)</small>
+
+* [bitnami/jaeger] Release 5.1.2 (#31021) ([ee3a9bd](https://github.com/bitnami/charts/commit/ee3a9bdcc8437615b82b8033c33be35a397e2689)), closes [#31021](https://github.com/bitnami/charts/issues/31021)
+
+## <small>5.1.1 (2024-12-10)</small>
+
+* [bitnami/jaeger] Fix typo in NOTES.txt (#30909) ([b7f1b92](https://github.com/bitnami/charts/commit/b7f1b926ecabfec95ef6c081d8b12f40d950d30e)), closes [#30909](https://github.com/bitnami/charts/issues/30909)
+
+## 5.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/jaeger] Detect non-standard images (#30881) ([4773008](https://github.com/bitnami/charts/commit/47730085e639cddd081ec93d62339322a36b0fc5)), closes [#30881](https://github.com/bitnami/charts/issues/30881)
+
+## <small>5.0.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/jaeger] Release 5.0.1 (#30758) ([1672922](https://github.com/bitnami/charts/commit/16729228545387e22171fe81cb0982202363a1db)), closes [#30758](https://github.com/bitnami/charts/issues/30758)
+
 ## 5.0.0 (2024-11-20)
 
-* [bitnami/jaeger] Release 5.0.0 ([#30529](https://github.com/bitnami/charts/pull/30529))
+* [bitnami/jaeger] Release 5.0.0 (#30529) ([8e7120e](https://github.com/bitnami/charts/commit/8e7120edd246ee4e5bb6467ffef905446a8b27c3)), closes [#30529](https://github.com/bitnami/charts/issues/30529)
 
 ## 4.0.0 (2024-11-13)
 

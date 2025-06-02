@@ -175,6 +175,14 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.tracking.auth.enabled }}
+            - name: MLFLOW_FLASK_SERVER_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mlflow.v0.tracking.secretName" . }}
+                  key: {{ include "mlflow.v0.tracking.flaskServerSecretKey" . | quote }}
+            {{- end }}
+
             {{- if (include "mlflow.v0.database.enabled" .) }}
             - name: MLFLOW_DATABASE_PASSWORD
               valueFrom:
@@ -209,21 +217,27 @@ spec:
 
             {{- if (include "mlflow.v0.azureBlob.enabled" .) }}
             {{- if .Values.externalAzureBlob.useCredentialsInSecret }}
+            {{- if .Values.externalAzureBlob.existingConnectionStringKey }}
             - name: AZURE_STORAGE_CONNECTION_STRING
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.externalAzureBlob.existingSecret }}
                   key: {{ .Values.externalAzureBlob.existingConnectionStringKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.existingAccessKeyKey }}
             - name: AZURE_STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.externalAzureBlob.existingSecret }}
                   key: {{ .Values.externalAzureBlob.existingAccessKeyKey }}
+            {{- end }}
+            {{- if .Values.externalAzureBlob.clientSecretKey }}
             - name: AZURE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.externalAzureBlob.existingSecret }}
                   key: {{ .Values.externalAzureBlob.clientSecretKey }}
+            {{- end }}
             {{- else }}
             {{- if .Values.externalAzureBlob.connectionString }}
             - name: AZURE_STORAGE_CONNECTION_STRING

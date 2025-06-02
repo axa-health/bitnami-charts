@@ -1,8 +1,8 @@
 <!--- app-name: Redis&reg; Cluster -->
 
-# Bitnami package for Redis(R) Cluster
+# Bitnami package for Redis&reg; Cluster
 
-Redis(R) is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
+Redis&reg; is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
 
 [Overview of Redis&reg; Cluster](http://redis.io)
 
@@ -19,8 +19,6 @@ Looking to use Redisreg; Cluster in production? Try [VMware Tanzu Application Ca
 ## Introduction
 
 This chart bootstraps a [Redis&reg;](https://github.com/bitnami/containers/tree/main/bitnami/redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ### Choose between Redis&reg; Helm Chart and Redis&reg; Cluster Helm Chart
 
@@ -67,7 +65,25 @@ helm install --timeout 600s myrelease oci://REGISTRY_NAME/REPOSITORY_NAME/redis-
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [redis_exporter](https://github.com/oliver006/redis_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -123,7 +139,7 @@ The cluster will continue up while restarting pods one by one as the quorum is n
 If you are using external access, to add a new node you will need to perform two upgrades. First upgrade the release to add a new Redis&reg; node and to get a LoadBalancerIP service. For example:
 
 ```console
-helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
+helm upgrade <release> --set "password=${REDIS_PASSWORD},cluster.externalAccess.enabled=true,cluster.externalAccess.service.type=LoadBalancer,cluster.externalAccess.service.loadBalancerIP[0]=<loadBalancerip-0>,cluster.externalAccess.service.loadBalancerIP[1]=<loadbalanacerip-1>,cluster.externalAccess.service.loadBalancerIP[2]=<loadbalancerip-2>,cluster.externalAccess.service.loadBalancerIP[3]=<loadbalancerip-3>,cluster.externalAccess.service.loadBalancerIP[4]=<loadbalancerip-4>,cluster.externalAccess.service.loadBalancerIP[5]=<loadbalancerip-5>,cluster.externalAccess.service.loadBalancerIP[6]=,cluster.nodes=7,cluster.init=false" oci://REGISTRY_NAME/REPOSITORY_NAME/redis-cluster
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -373,21 +389,23 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.redis.password`                               | Redis&reg; password (overrides `password`)                                                                                                                                                                                                                                                                                                                          | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.redis.password`                               | Redis&reg; password (overrides `password`)                                                                                                                                                                                                                                                                                                                          | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
-### Redis&reg; Cluster Common parameters
+### Redis(R) Cluster Common parameters
 
 | Name                                                        | Description                                                                                                                                                                                                                                           | Value                           |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | `nameOverride`                                              | String to partially override common.names.fullname template (will maintain the release name)                                                                                                                                                          | `""`                            |
 | `fullnameOverride`                                          | String to fully override common.names.fullname template                                                                                                                                                                                               | `""`                            |
+| `namespaceOverride`                                         | String to fully override common.names.namespace template                                                                                                                                                                                              | `""`                            |
 | `clusterDomain`                                             | Kubernetes Cluster Domain                                                                                                                                                                                                                             | `cluster.local`                 |
 | `commonAnnotations`                                         | Annotations to add to all deployed objects                                                                                                                                                                                                            | `{}`                            |
 | `commonLabels`                                              | Labels to add to all deployed objects                                                                                                                                                                                                                 | `{}`                            |
@@ -437,7 +455,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `password`                                                  | Redis&reg; password (ignored if existingSecret set)                                                                                                                                                                                                   | `""`                            |
 | `existingSecret`                                            | Name of existing secret object (for password authentication)                                                                                                                                                                                          | `""`                            |
 | `existingSecretPasswordKey`                                 | Name of key containing password to be retrieved from the existing secret                                                                                                                                                                              | `""`                            |
-| `usePasswordFile`                                           | Mount passwords as files instead of environment variables                                                                                                                                                                                             | `false`                         |
+| `usePasswordFiles`                                          | Mount passwords as files instead of environment variables                                                                                                                                                                                             | `true`                          |
 | `tls.enabled`                                               | Enable TLS support for replication traffic                                                                                                                                                                                                            | `false`                         |
 | `tls.authClients`                                           | Require clients to authenticate or not                                                                                                                                                                                                                | `true`                          |
 | `tls.autoGenerated`                                         | Generate automatically self-signed TLS certificates                                                                                                                                                                                                   | `false`                         |
@@ -455,6 +473,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `service.type`                                              | Service type for default redis service                                                                                                                                                                                                                | `ClusterIP`                     |
 | `service.clusterIP`                                         | Service Cluster IP                                                                                                                                                                                                                                    | `""`                            |
 | `service.loadBalancerIP`                                    | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                                                                                                                  | `""`                            |
+| `service.loadBalancerClass`                                 | Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                                                                                                                                                      | `""`                            |
 | `service.loadBalancerSourceRanges`                          | Service Load Balancer sources                                                                                                                                                                                                                         | `[]`                            |
 | `service.externalTrafficPolicy`                             | Service external traffic policy                                                                                                                                                                                                                       | `Cluster`                       |
 | `service.sessionAffinity`                                   | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                                  | `None`                          |
@@ -485,6 +504,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `volumePermissions.containerSecurityContext.privileged`     | Run container as privileged                                                                                                                                                                                                                           | `false`                         |
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                          |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                            |
+| `serviceBindings.enabled`                                   | Create secret for service binding (Experimental)                                                                                                                                                                                                      | `false`                         |
 | `podSecurityPolicy.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later                                                                                                           | `false`                         |
 
 ### Redis&reg; statefulset parameters
@@ -587,7 +607,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 
 | Name                                                      | Description                                                                                                | Value          |
 | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
-| `cluster.init`                                            | Enable the initialization of the Redis&reg; Cluster                                                        | `true`         |
+| `cluster.init`                                            | Enable the initialization of the Redis(R) Cluster                                                          | `true`         |
 | `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail                     | `6`            |
 | `cluster.replicas`                                        | Number of replicas for every master in the cluster                                                         | `1`            |
 | `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                                 | `false`        |
@@ -597,8 +617,9 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                             | `LoadBalancer` |
 | `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                             | `6379`         |
 | `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes              | `[]`           |
+| `cluster.externalAccess.service.loadBalancerClass`        | Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                           | `""`           |
 | `cluster.externalAccess.service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                              | `[]`           |
-| `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster                      | `{}`           |
+| `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis(R) Cluster                        | `{}`           |
 | `cluster.update.addNodes`                                 | Boolean to specify if you want to add nodes after the upgrade                                              | `false`        |
 | `cluster.update.currentNumberOfNodes`                     | Number of currently deployed Redis&reg; nodes                                                              | `6`            |
 | `cluster.update.currentNumberOfReplicas`                  | Number of currently deployed Redis&reg; replicas                                                           | `1`            |
@@ -648,6 +669,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `metrics.priorityClassName`                                 | Metrics exporter pod priorityClassName                                                                                                                                                                                            | `""`                             |
 | `metrics.service.type`                                      | Kubernetes Service type (redis metrics)                                                                                                                                                                                           | `ClusterIP`                      |
 | `metrics.service.loadBalancerIP`                            | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                                                                                                                  | `""`                             |
+| `metrics.service.loadBalancerClass`                         | Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                                                                                                                                  | `""`                             |
 | `metrics.service.annotations`                               | Annotations for the services to monitor.                                                                                                                                                                                          | `{}`                             |
 | `metrics.service.labels`                                    | Additional labels for the metrics service                                                                                                                                                                                         | `{}`                             |
 | `metrics.service.ports.http`                                | Metrics HTTP service port                                                                                                                                                                                                         | `9121`                           |
@@ -702,6 +724,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 10.0.0
 
@@ -776,7 +802,7 @@ The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate t
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

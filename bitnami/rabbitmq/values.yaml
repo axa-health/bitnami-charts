@@ -21,6 +21,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -44,7 +49,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 4.0.4-debian-12-r1
+  tag: 4.1.0-debian-12-r3
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -102,6 +107,9 @@ serviceBindings:
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: true
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -246,7 +254,7 @@ memoryHighWatermark:
   ## Memory high watermark value.
   ## @param memoryHighWatermark.value Memory high watermark value
   ## The default value of 0.4 stands for 40% of available RAM
-  ## Note: the memory relative limit is applied to the resource.limits.memory to calculate the memory threshold
+  ## Note: the memory relative limit is applied to the resourcesPreset memory limit or the resource.limits.memory to calculate the memory threshold
   ## You can also use an absolute value, e.g.: 256Mi
   ##
   value: 0.4
@@ -347,6 +355,18 @@ containerPorts:
   manager: 15672
   epmd: 4369
   metrics: 9419
+## Host Ports
+## @param hostPorts.amqp
+## @param hostPorts.amqpTls
+## @param hostPorts.manager
+## @param hostPorts.metrics
+##
+hostPorts:
+  amqp: ""
+  amqpTls: ""
+  manager: ""
+  metrics: ""
+
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
@@ -380,6 +400,9 @@ extraContainerPorts: []
 ## See : https://www.rabbitmq.com/networking.html for additional information
 ##
 tcpListenOptions:
+  ## @param tcpListenOptions.enabled Enable TCP listen options of RabbitMQ
+  ##
+  enabled: true
   ## @param tcpListenOptions.backlog Maximum size of the unaccepted TCP connections queue
   ##
   backlog: 128
@@ -506,6 +529,8 @@ configuration: |-
   {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
   {{- end }}
+  {{- end }}
+  {{- if .Values.tcpListenOptions.enabled }}
   ## TCP Listen Options
   ##
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
@@ -1147,6 +1172,10 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## @param service.trafficDistribution Traffic Distribution provides another
+  ## way to influence traffic routing within a Kubernetes Service.
+  ##
+  trafficDistribution: "PreferClose"
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -1565,7 +1594,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r46
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

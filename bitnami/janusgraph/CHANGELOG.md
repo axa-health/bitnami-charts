@@ -1,8 +1,66 @@
 # Changelog
 
+## 1.4.4 (2025-05-16)
+
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#33759](https://github.com/bitnami/charts/pull/33759))
+
+## <small>1.4.3 (2025-05-06)</small>
+
+* [bitnami/janusgraph] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([13c6491](https://github.com/bitnami/charts/commit/13c649109e42ad575c7fbe7f52b02e48fd52c123)), closes [#33376](https://github.com/bitnami/charts/issues/33376)
+
+## <small>1.4.2 (2025-04-25)</small>
+
+* [bitnami/janusgraph] Release 1.4.2 (#33174) ([1113c4d](https://github.com/bitnami/charts/commit/1113c4d507d6ce746fe5f773cdd1c7559be359fe)), closes [#33174](https://github.com/bitnami/charts/issues/33174)
+
+## <small>1.4.1 (2025-03-26)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/janusgraph] Release 1.4.1 (#32611) ([04eccb6](https://github.com/bitnami/charts/commit/04eccb60428b949baf2eb572bf823e23e65d8210)), closes [#32611](https://github.com/bitnami/charts/issues/32611)
+
+## 1.4.0 (2025-02-24)
+
+* [bitnami/janusgraph] Set `usePasswordFiles=true` by default (#32107) ([8850cf3](https://github.com/bitnami/charts/commit/8850cf3c6442af4c85b2c0c830c1a8b8c47a6681)), closes [#32107](https://github.com/bitnami/charts/issues/32107)
+
+## <small>1.3.1 (2025-02-24)</small>
+
+* [bitnami/janusgraph] Release 1.3.1 (#32140) ([8cef05e](https://github.com/bitnami/charts/commit/8cef05e10f079ed402adba00a2f849ad472721a9)), closes [#32140](https://github.com/bitnami/charts/issues/32140)
+
+## 1.3.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/janusgraph] feat: use new helper for checking API versions (#32050) ([7b30ac8](https://github.com/bitnami/charts/commit/7b30ac8e4c15b963ba52af27f7265b92b852fec3)), closes [#32050](https://github.com/bitnami/charts/issues/32050)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.2.3 (2025-01-28)</small>
+
+* [bitnami/janusgraph] Release 1.2.3 (#31623) ([6b46ea1](https://github.com/bitnami/charts/commit/6b46ea1284885a7d18edf92858c10e81fbed384e)), closes [#31623](https://github.com/bitnami/charts/issues/31623)
+
+## <small>1.2.2 (2025-01-28)</small>
+
+* [bitnami/janusgraph] Release 1.2.2 (#31611) ([f3ff98f](https://github.com/bitnami/charts/commit/f3ff98f6008da6920a12a8946b2f10fcfec4fcbe)), closes [#31611](https://github.com/bitnami/charts/issues/31611)
+
+## <small>1.2.1 (2024-12-19)</small>
+
+* [bitnami/janusgraph] Release 1.2.1 (#31098) ([06badcc](https://github.com/bitnami/charts/commit/06badcc25f8b22afec9026f49f4b187cda7d97fe)), closes [#31098](https://github.com/bitnami/charts/issues/31098)
+
+## 1.2.0 (2024-12-18)
+
+* [birtnami/janusgraph] chore(jmx-exporter): Upgrade image and change args (#31090) ([1c6465d](https://github.com/bitnami/charts/commit/1c6465d5502b8298898896c38302e4500bcae4a4)), closes [#31090](https://github.com/bitnami/charts/issues/31090)
+
+## 1.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/janusgraph] Detect non-standard images (#30906) ([d4d178a](https://github.com/bitnami/charts/commit/d4d178aaad7845199be64ae58b96c73219c072be)), closes [#30906](https://github.com/bitnami/charts/issues/30906)
+
+## <small>1.0.1 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/janusgraph] chore: :bulb: :memo: :rotating_light: Rename prometheus "@section" to avoid lin ([5afb864](https://github.com/bitnami/charts/commit/5afb864a77fdf1069d28bd498e52e36b45c17e1b)), closes [#30684](https://github.com/bitnami/charts/issues/30684)
+
 ## 1.0.0 (2024-11-22)
 
-* [bitnami/janusgraph] Remove subchart image from values.yaml ([#30590](https://github.com/bitnami/charts/pull/30590))
+* [bitnami/janusgraph] Remove subchart image from values.yaml (#30590) ([01871b7](https://github.com/bitnami/charts/commit/01871b7fa6479528609a785189a09af0186744a4)), closes [#30590](https://github.com/bitnami/charts/issues/30590)
 
 ## <small>0.3.26 (2024-11-09)</small>
 

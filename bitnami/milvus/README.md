@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Milvus](https://github.com/grafana/loki) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -50,7 +48,25 @@ The command deploys milvus on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataCoord`, `dataNode`, `indexCoord`, `indexNode`, `proxy`, `queryCoord`, `queryNode` and `rootCoord` sections) to true. This will expose the Milvus native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `dataCoord`, `dataNode`, `indexCoord`, `indexNode`, `proxy`, `queryCoord`, `queryNode` and `rootCoord` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -61,6 +77,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Milvus configuration
 
 The Milvus configuration file `milvus.yaml` is shared across the different components: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode` and `indexNode`. This is set in the `milvus.defaultConfig` value. This configuration can be extended with extra settings using the `milvus.extraConfig` value. For specific component configuration edit the `extraConfig` section inside each of the previously mentioned components. Check the official [Milvis documentation](https://milvus.io/docs) for the list of possible configurations.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Additional environment variables
 
@@ -206,7 +226,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -248,18 +268,20 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                     | Description                                                                               | Value           |
 | ------------------------ | ----------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                               | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname                                        | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                            | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                     | `{}`            |
@@ -267,6 +289,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `clusterDomain`          | Kubernetes cluster domain name                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                         | `[]`            |
 | `enableServiceLinks`     | Whether information about services should be injected into all pods' environment variable | `false`         |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                         | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                           | `["infinity"]`  |
@@ -1801,15 +1824,15 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 ### kafka sub-chart paramaters
 
-| Name                              | Description                                                                                   | Value                                |
-| --------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                   | Enable/disable Kafka chart installation                                                       | `true`                               |
-| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes                                 | `1`                                  |
-| `kafka.service.ports.client`      | Kafka svc port for client connections                                                         | `9092`                               |
-| `kafka.extraConfig`               | Additional configuration to be appended at the end of the generated Kafka configuration file. | `offsets.topic.replication.factor=1` |
-| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener                                         | `SASL_PLAINTEXT`                     |
-| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
-| `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
+| Name                              | Description                                                   | Value            |
+| --------------------------------- | ------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                   | Enable/disable Kafka chart installation                       | `true`           |
+| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes | `1`              |
+| `kafka.service.ports.client`      | Kafka svc port for client connections                         | `9092`           |
+| `kafka.overrideConfiguration`     | Kafka common configuration override                           | `{}`             |
+| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener         | `SASL_PLAINTEXT` |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                 | `PLAIN`          |
+| `kafka.sasl.client.users`         | Kafka client users                                            | `["user"]`       |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
@@ -1841,6 +1864,26 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major updates the `etcd` subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1200).
+
+### To 13.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600) (effective in 13.2.0).
+
+### To 12.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
+
+### To 11.0.0
+
+This major updates the `etcd` subchart to it newest major, 11.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1100).
+
+### To 10.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 10.0.0
 
@@ -1895,7 +1938,7 @@ This major updates the Kafka subchart to its newest major, 23.0.0. For more info
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

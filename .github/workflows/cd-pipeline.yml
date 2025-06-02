@@ -20,6 +20,7 @@ jobs:
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
+    if: ${{ github.repository_owner == 'bitnami' }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -85,13 +86,17 @@ jobs:
           VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
           VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
           VIB_ENV_S3_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          # Set docker credentials
+          VIB_ENV_CHARTS_REGISTRY: oci://registry-1.docker.io/bitnamicharts
+          VIB_ENV_CHARTS_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          VIB_ENV_CHARTS_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
   update-deprecated-index:
     runs-on: ubuntu-latest
     needs:
       - vib-publish
     name: Update branch deprecated-index
     steps:
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
@@ -127,8 +132,8 @@ jobs:
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/
 
           cd deprecated-index
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
+          git config user.name "Bitnami Bot"
+          git config user.email "bitnami.bot@broadcom.com"
 
           attempts=0
           max_attempts=5
@@ -165,3 +170,15 @@ jobs:
             echo "Could not update the index after $max_attempts attempts"
             exit 1
           fi
+  notify:
+    name: Send notification
+    needs:
+      - vib-publish
+      - update-deprecated-index
+    if: ${{ always() && (needs.vib-publish.result == 'failure' || needs.update-deprecated-index.result == 'failure') }}
+    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    with:
+      workflow: ${{ github.workflow }}
+      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}

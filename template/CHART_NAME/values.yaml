@@ -19,6 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -38,6 +43,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""

@@ -1,8 +1,59 @@
 # Changelog
 
-## 16.0.1 (2024-11-16)
+## 17.1.3 (2025-05-23)
 
-* [bitnami/ejbca] Release 16.0.1 ([#30485](https://github.com/bitnami/charts/pull/30485))
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references ([#33853](https://github.com/bitnami/charts/pull/33853))
+
+## <small>17.1.2 (2025-05-07)</small>
+
+* [bitnami/ejbca] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33355) ([db6d4c8](https://github.com/bitnami/charts/commit/db6d4c8aa79ff444a008dc2d390cc694bbe860cb)), closes [#33355](https://github.com/bitnami/charts/issues/33355)
+
+## <small>17.1.1 (2025-04-23)</small>
+
+* [bitnami/ejbca] Release 17.1.1 (#33136) ([30e4c1d](https://github.com/bitnami/charts/commit/30e4c1d01245b09dc537d1a3c54acbec6f15d8b3)), closes [#33136](https://github.com/bitnami/charts/issues/33136)
+
+## 17.1.0 (2025-04-04)
+
+* [bitnami/ejbca] Set `usePasswordFiles=true` by default (#32343) ([cfa2cc8](https://github.com/bitnami/charts/commit/cfa2cc85a37e59b73aea8bad93948a843182df59)), closes [#32343](https://github.com/bitnami/charts/issues/32343)
+
+## <small>17.0.4 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/ejbca] Release 17.0.4 (#32674) ([7284153](https://github.com/bitnami/charts/commit/7284153ab6d0283ce1cdf1a2baa27e233ac0fe5d)), closes [#32674](https://github.com/bitnami/charts/issues/32674)
+
+## <small>17.0.3 (2025-03-08)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ejbca] Release 17.0.3 (#32370) ([f419d29](https://github.com/bitnami/charts/commit/f419d2908a049a6e9608bf2ea63939554baa14c2)), closes [#32370](https://github.com/bitnami/charts/issues/32370)
+
+## <small>17.0.2 (2025-02-05)</small>
+
+* [bitnami/ejbca] Release 17.0.2 (#31802) ([2878ff7](https://github.com/bitnami/charts/commit/2878ff7b71b392b49e189bfc1f2e94de971ecd2e)), closes [#31802](https://github.com/bitnami/charts/issues/31802)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>17.0.1 (2024-12-27)</small>
+
+* [bitnami/ejbca] Release 17.0.1 (#31178) ([bcf57b8](https://github.com/bitnami/charts/commit/bcf57b8a708139f72542da86b39bd0539a798c30)), closes [#31178](https://github.com/bitnami/charts/issues/31178)
+
+## 17.0.0 (2024-12-27)
+
+* [bitnami/ejbca] Release 17.0.0 (#31177) ([e8b6077](https://github.com/bitnami/charts/commit/e8b60778ed8c75de8246e09ea1728d4dd904170c)), closes [#31177](https://github.com/bitnami/charts/issues/31177)
+
+## <small>16.1.1 (2024-12-26)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/ejbca] Release 16.1.1 (#31166) ([847cc5e](https://github.com/bitnami/charts/commit/847cc5e0c84831ff8a803a41a50be56977e9893a)), closes [#31166](https://github.com/bitnami/charts/issues/31166)
+
+## 16.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/ejbca] Detect non-standard images (#30879) ([fad04d3](https://github.com/bitnami/charts/commit/fad04d3543a597a4b9b595f97f108560a327f170)), closes [#30879](https://github.com/bitnami/charts/issues/30879)
+
+## <small>16.0.1 (2024-11-16)</small>
+
+* [bitnami/ejbca] Release 16.0.1 (#30485) ([efd14a3](https://github.com/bitnami/charts/commit/efd14a3db551878a23b069b1ef6f4ac37b145e32)), closes [#30485](https://github.com/bitnami/charts/issues/30485)
 
 ## 16.0.0 (2024-11-12)
 

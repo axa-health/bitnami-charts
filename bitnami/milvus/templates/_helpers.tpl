@@ -716,7 +716,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -797,7 +796,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -856,7 +854,7 @@ Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.waitForKafkaInitContainer" -}}
 - name: wait-for-kafka
-  image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
+  image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
@@ -870,7 +868,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -923,7 +920,7 @@ Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.waitForProxyInitContainer" -}}
 - name: wait-for-proxy
-  image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
+  image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
@@ -937,7 +934,6 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
       retry_while() {
         local -r cmd="${1:?cmd is missing}"
         local -r retries="${2:-12}"
@@ -980,9 +976,7 @@ Init container definition for waiting for the database to be ready
 Init container definition for waiting for the database to be ready
 */}}
 {{- define "milvus.prepareMilvusInitContainer" -}}
-# This init container renders and merges the Milvus configuration files.
-# We need to use a volume because we're working with ReadOnlyRootFilesystem
-- name: prepare-milvus
+- name: copy-default-configuration
   image: {{ template "milvus.image" .context }}
   imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
   {{- $block := index .context.Values .component }}
@@ -998,12 +992,47 @@ Init container definition for waiting for the database to be ready
     - bash
     - -ec
     - |
-      #!/bin/bash
-      # Remove previously existing files and copy the default configuration files to ensure they are present in mounted configs directory
-      rm -rf /bitnami/milvus/rendered-conf/*
+      echo "Copying milvus default configuration"
       cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /bitnami/milvus/rendered-conf
+      subPath: app-rendered-conf-dir
+# This init container renders and merges the Milvus configuration files.
+# We need to use a volume because we're working with ReadOnlyRootFilesystem
+- name: prepare-milvus
+  image: {{ template "milvus.wait-container.image" .context }}
+  imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
+  {{- $block := index .context.Values .component }}
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
+  {{- end }}
+  {{- if $block.resources }}
+  resources: {{- toYaml $block.resources | nindent 4 }}
+  {{- else if ne $block.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $block.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - bash
+    - -ec
+    - |
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /bitnami/milvus/rendered-conf/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
+
+      {{- if .context.Values.usePasswordFiles }}
+      {{- if (include "milvus.kafka.deployed" .context) }}
+      {{- if (include "milvus.kafka.authEnabled" .context) }}
+      export MILVUS_KAFKA_PASSWORD="$(< $MILVUS_KAFKA_PASSWORD_FILE)"
+      {{- end }}
+      {{- if and .context.Values.externalKafka.tls.enabled .context.Values.externalKafka.tls.keyPassword .context.Values.externalKafka.tls.existingSecret }}
+      export MILVUS_KAFKA_TLS_KEY_PASSWORD="$(< $MILVUS_KAFKA_TLS_KEY_PASSWORD_FILE)"
+      {{- end }}
+      {{- end }}
+      {{- if (include "milvus.s3.deployed" .context) }}
+      export MILVUS_S3_ACCESS_ID="$(< $MILVUS_S3_ACCESS_ID_FILE)"
+      export MILVUS_S3_SECRET_ACCESS_KEY="$(< $MILVUS_S3_SECRET_ACCESS_KEY_FILE)"
+      {{- end }}
+      {{- end }}
 
       # Kafka settings
       {{- if (include "milvus.kafka.deployed" .context) }}
@@ -1057,13 +1086,22 @@ Init container definition for waiting for the database to be ready
       value: {{ ternary "true" "false" (or .context.Values.milvus.image.debug .context.Values.diagnosticMode.enabled) | quote }}
     {{- if (include "milvus.kafka.deployed" .context) }}
     {{- if (include "milvus.kafka.authEnabled" .context) }}
+    {{- if .context.Values.usePasswordFiles }}
+    - name: MILVUS_KAFKA_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.kafka.secretPasswordKey" .context) }}
+    {{- else }}
     - name: MILVUS_KAFKA_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "milvus.kafka.secretName" .context }}
           key: {{ include "milvus.kafka.secretPasswordKey" .context }}
     {{- end }}
+    {{- end }}
     {{- if and .context.Values.externalKafka.tls.enabled .context.Values.externalKafka.tls.keyPassword .context.Values.externalKafka.tls.existingSecret }}
+    {{- if .context.Values.usePasswordFiles }}
+    - name: MILVUS_KAFKA_TLS_KEY_PASSWORD_FILE
+      value: "/opt/bitnami/milvus/secrets/key-password"
+    {{- else }}
     - name: MILVUS_KAFKA_TLS_KEY_PASSWORD
       valueFrom:
         secretKeyRef:
@@ -1071,7 +1109,14 @@ Init container definition for waiting for the database to be ready
           key: key-password
     {{- end }}
     {{- end }}
-    {{- if and (include "milvus.s3.deployed" .context) }}
+    {{- end }}
+    {{- if (include "milvus.s3.deployed" .context) }}
+    {{- if .context.Values.usePasswordFiles }}
+    - name: MILVUS_S3_ACCESS_ID_FILE
+      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.s3.accessKeyIDKey" .context) }}
+    - name: MILVUS_S3_SECRET_ACCESS_KEY_FILE
+      value: {{ printf "/opt/bitnami/milvus/secrets/%s" (include "milvus.s3.secretAccessKeyKey" .context) }}
+    {{- else }}
     - name: MILVUS_S3_ACCESS_ID
       valueFrom:
         secretKeyRef:
@@ -1082,6 +1127,7 @@ Init container definition for waiting for the database to be ready
         secretKeyRef:
           name: {{ include "milvus.s3.secretName" .context }}
           key: {{ include "milvus.s3.secretAccessKeyKey" .context }}
+    {{- end }}
     {{- end }}
     {{- if $block.extraEnvVars }}
     {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" $) | nindent 4 }}
@@ -1098,6 +1144,11 @@ Init container definition for waiting for the database to be ready
   volumeMounts:
     - name: config-common
       mountPath: /bitnami/milvus/conf/00_default
+    {{- if and .context.Values.usePasswordFiles (or (include "milvus.s3.deployed" .context) (and (include "milvus.kafka.deployed" .context)
+        (or (include "milvus.kafka.authEnabled" .context) (and .context.Values.externalKafka.tls.enabled .context.Values.externalKafka.tls.keyPassword .context.Values.externalKafka.tls.existingSecret)))) }}
+    - name: milvus-secrets
+      mountPath: /opt/bitnami/milvus/secrets
+    {{- end }}
     {{- if or .context.Values.milvus.extraConfig .context.Values.milvus.extraConfigExistingConfigMap }}
     - name: extra-config-common
       mountPath: /bitnami/milvus/conf/01_extra_common

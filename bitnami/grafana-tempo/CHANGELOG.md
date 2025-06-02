@@ -1,8 +1,86 @@
 # Changelog
 
-## 3.7.13 (2024-11-07)
+## 4.0.6 (2025-05-13)
 
-* [bitnami/grafana-tempo] Release 3.7.13 ([#30269](https://github.com/bitnami/charts/pull/30269))
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#33653](https://github.com/bitnami/charts/pull/33653))
+
+## <small>4.0.5 (2025-05-07)</small>
+
+* [bitnami/grafana-tempo] Release 4.0.5 (#33475) ([dcd04cd](https://github.com/bitnami/charts/commit/dcd04cd70f312155d3462da589e31f5b397dec92)), closes [#33475](https://github.com/bitnami/charts/issues/33475)
+
+## <small>4.0.4 (2025-05-06)</small>
+
+* [bitnami/grafana-tempo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([8ff7408](https://github.com/bitnami/charts/commit/8ff7408e9951d6d188393420e62f740a0bd121ad)), closes [#33371](https://github.com/bitnami/charts/issues/33371)
+
+## <small>4.0.3 (2025-05-01)</small>
+
+* [bitnami/grafana-tempo] Release 4.0.3 (#33291) ([010e8c6](https://github.com/bitnami/charts/commit/010e8c6e33b5c0cb0c1cf429f17d8b05cae97c59)), closes [#33291](https://github.com/bitnami/charts/issues/33291)
+
+## <small>4.0.2 (2025-04-01)</small>
+
+* [bitnami/grafana-tempo] Release 4.0.2 (#32738) ([4f9b827](https://github.com/bitnami/charts/commit/4f9b827acb409ae1951a8a2e4c54324490c1edf1)), closes [#32738](https://github.com/bitnami/charts/issues/32738)
+
+## <small>4.0.1 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/grafana-tempo] Release 4.0.1 (#32608) ([5f46177](https://github.com/bitnami/charts/commit/5f4617731516a19148070f1fe4eaae4cf048876b)), closes [#32608](https://github.com/bitnami/charts/issues/32608)
+
+## 4.0.0 (2025-03-10)
+
+* [bitnami/grafana-tempo] Add persistence options for Grafana Tempo metrics generator (#31495) ([54531ce](https://github.com/bitnami/charts/commit/54531ce059d1156a615749485e11e2f30143ea16)), closes [#31495](https://github.com/bitnami/charts/issues/31495)
+
+## <small>3.8.8 (2025-03-05)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.8 (#32293) ([db224f4](https://github.com/bitnami/charts/commit/db224f45293da4a8d9ef81b3e1620272f4e83c8c)), closes [#32293](https://github.com/bitnami/charts/issues/32293)
+
+## <small>3.8.7 (2025-02-19)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.7 (#32001) ([772bb0f](https://github.com/bitnami/charts/commit/772bb0fdf4b08bbb8c2a9f3957502848196c75c3)), closes [#32001](https://github.com/bitnami/charts/issues/32001)
+
+## <small>3.8.6 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/grafana-tempo] Release 3.8.6 (#31936) ([3032c3c](https://github.com/bitnami/charts/commit/3032c3c4b84eb75e2b6e1e0370ef4635d5976aa8)), closes [#31936](https://github.com/bitnami/charts/issues/31936)
+
+## <small>3.8.5 (2025-02-04)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.5 (#31757) ([1acfc9f](https://github.com/bitnami/charts/commit/1acfc9ffccc1f081c200dc8a0b9b37f477ce46da)), closes [#31757](https://github.com/bitnami/charts/issues/31757)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>3.8.4 (2025-01-24)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.4 (#31557) ([b291adb](https://github.com/bitnami/charts/commit/b291adb57d77f42c00903a6bdf0f6e3fd82842c6)), closes [#31557](https://github.com/bitnami/charts/issues/31557)
+
+## <small>3.8.3 (2025-01-17)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.3 (#31423) ([e30df1e](https://github.com/bitnami/charts/commit/e30df1e7e90673f0e80a30dafff3e98271434401)), closes [#31423](https://github.com/bitnami/charts/issues/31423)
+
+## <small>3.8.2 (2025-01-14)</small>
+
+* [bitnami/grafana-tempo] Release 3.8.2 (#31353) ([34e557d](https://github.com/bitnami/charts/commit/34e557d61a81aab6a20a39494e9cc9df5d62841b)), closes [#31353](https://github.com/bitnami/charts/issues/31353)
+
+## <small>3.8.1 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/grafana-tempo] Release 3.8.1 (#31315) ([03166d0](https://github.com/bitnami/charts/commit/03166d03a6c5de421ee01c691eeec322658d4b8e)), closes [#31315](https://github.com/bitnami/charts/issues/31315)
+* Update README.md (#31141) ([0ca0ca4](https://github.com/bitnami/charts/commit/0ca0ca4014dda6d04f62849e8ee78516d692a639)), closes [#31141](https://github.com/bitnami/charts/issues/31141)
+
+## 3.8.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/grafana-tempo] Detect non-standard images (#30885) ([212c966](https://github.com/bitnami/charts/commit/212c9666abe26c0897ee42e2e3ed376f8e0d2769)), closes [#30885](https://github.com/bitnami/charts/issues/30885)
+
+## <small>3.7.14 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/grafana-tempo] Release 3.7.14 (#30755) ([e824b8d](https://github.com/bitnami/charts/commit/e824b8dc038b776f5bc78dacbe4e74116bdb4447)), closes [#30755](https://github.com/bitnami/charts/issues/30755)
+
+## <small>3.7.13 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/grafana-tempo] Release 3.7.13 (#30269) ([7a5479f](https://github.com/bitnami/charts/commit/7a5479f60aa186487878ef21269be6e898ccb45c)), closes [#30269](https://github.com/bitnami/charts/issues/30269)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.7.12 (2024-10-16)</small>
 

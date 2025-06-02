@@ -20,9 +20,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if .Values.provisioning.cleanupAfterFinished.enabled }} 
-  ttlSecondsAfterFinished: {{ .Values.provisioning.cleanupAfterFinished.seconds }} 
-  {{- end }} 
+  {{- if .Values.provisioning.cleanupAfterFinished.enabled }}
+  ttlSecondsAfterFinished: {{ .Values.provisioning.cleanupAfterFinished.seconds }}
+  {{- end }}
   parallelism: 1
   template:
     metadata:
@@ -44,7 +44,7 @@ spec:
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
       initContainers:
         - name: wait-for-available-minio
-          image: {{ include "minio.image" . }}
+          image: {{ include "minio.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
@@ -82,6 +82,20 @@ spec:
             - |-
               set -e;
               echo "Start Minio provisioning";
+
+              retry_while() {
+                local -r cmd="${1:?cmd is missing}"
+                local -r retries="${2:-12}"
+                local -r sleep_time="${3:-5}"
+                local return_value=1
+
+                read -r -a command <<< "$cmd"
+                for ((i = 1 ; i <= retries ; i+=1 )); do
+                    "${command[@]}" && return_value=0 && break
+                    sleep "$sleep_time"
+                done
+                return $return_value
+              }
 
               function attachPolicy() {
                 local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
@@ -128,8 +142,8 @@ spec:
               };
 
               {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
-              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles) }}
-              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles) }}
+              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.usePasswordFiles) }}
+              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.usePasswordFiles) }}
               mc alias set {{ $minioAlias }} {{ $minioUrl }} {{ $minioRootUser }} {{ $minioRootPassword }};
 
               {{- range $config := .Values.provisioning.config }}
@@ -146,13 +160,12 @@ spec:
               # Adding a sleep to ensure that the check below does not cause
               # a race condition. We check for the MinIO port because the
               # "mc admin service restart --wait" command is not working as expected
-              sleep 5;
+              sleep {{ .Values.provisioning.sleepTime | default 5 }};
               echo "Waiting for Minio to be available after restart";
-              wait-for-port \
-                --host={{ include "common.names.fullname" . }} \
-                --state=inuse \
-                --timeout=120 \
-                {{ .Values.service.ports.api | int64 }};
+              if ! retry_while "mc admin info {{ $minioAlias }}"; then
+                  echo "Error connecting to Minio"
+                  exit 1
+              fi
               echo "Minio is available. Executing provisioning commands";
 
               {{- range $policy := .Values.provisioning.policies }}
@@ -243,11 +256,11 @@ spec:
           env:
             - name: MINIO_SCHEME
               value: {{ ternary "https" "http" .Values.tls.enabled | quote }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: MINIO_ROOT_USER_FILE
-              value: "/opt/bitnami/minio/secrets/root-user"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.rootUserKey" .) }}
             - name: MINIO_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/minio/secrets/root-password"
+              value: {{ printf "/opt/bitnami/minio/secrets/%s" (include "minio.rootPasswordKey" .) }}
             {{- else }}
             - name: MINIO_ROOT_USER
               valueFrom:
@@ -292,7 +305,7 @@ spec:
             - name: minio-provisioning
               mountPath: /etc/ilm
             {{- end }}
-            {{- if .Values.auth.useCredentialsFiles }}
+            {{- if .Values.auth.usePasswordFiles }}
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
@@ -323,7 +336,7 @@ spec:
           configMap:
             name: {{ $fullname }}
         {{- end }}
-        {{- if .Values.auth.useCredentialsFiles }}
+        {{- if .Values.auth.usePasswordFiles }}
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}

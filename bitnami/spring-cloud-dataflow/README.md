@@ -6,6 +6,10 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued, therefore, this Helm chart will be deprecated as well.
+
 ## TL;DR
 
 ```console
@@ -17,8 +21,6 @@ Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Applicati
 ## Introduction
 
 This chart bootstraps a [Spring Cloud Data Flow](https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -46,7 +48,29 @@ These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a Deployment with [prometheus-rsocket-proxy](https://github.com/micrometer-metrics/prometheus-rsocket-proxy) and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -101,10 +125,11 @@ mariadb.enabled=false
 externalDatabase.scheme=mariadb
 externalDatabase.host=myexternalhost
 externalDatabase.port=3306
-externalDatabase.password=mypassword
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.skipper.database=myskipperdatabase
 ```
 
@@ -114,11 +139,12 @@ To use an alternate database vendor (other than MariaDB) you can use the `extern
 
 ```console
 mariadb.enabled=false
-externalDatabase.password=mypassword
 externalDatabase.dataflow.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.dataflow.user=mydataflowuser
+externalDatabase.dataflow.username=mydataflowuser
+externalDatabase.dataflow.password=mydataflowpassword
 externalDatabase.skipper.url=jdbc:sqlserver://mssql-server:1433
-externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.username=myskipperuser
+externalDatabase.skipper.password=myskipperpassword
 externalDatabase.hibernateDialect=org.hibernate.dialect.SQLServer2012Dialect
 ```
 
@@ -233,12 +259,13 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -674,41 +701,37 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ### Database parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                | Value                     |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `mariadb.enabled`                                     | Enable/disable MariaDB chart installation                                                                                                                                                                                  | `true`                    |
-| `mariadb.jdbcParameter.useMysqlMetadata`              | Use MariaDB useMysqlMetadata parameter.                                                                                                                                                                                    | `true`                    |
-| `mariadb.image.registry`                              | MariaDB image registry                                                                                                                                                                                                     | `REGISTRY_NAME`           |
-| `mariadb.image.repository`                            | MariaDB image repository                                                                                                                                                                                                   | `REPOSITORY_NAME/mariadb` |
-| `mariadb.image.digest`                                | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                    | `""`                      |
-| `mariadb.architecture`                                | MariaDB architecture. Allowed values: `standalone` or `replication`                                                                                                                                                        | `standalone`              |
-| `mariadb.auth.rootPassword`                           | Password for the MariaDB `root` user                                                                                                                                                                                       | `""`                      |
-| `mariadb.auth.username`                               | Username of new user to create                                                                                                                                                                                             | `dataflow`                |
-| `mariadb.auth.password`                               | Password for the new user                                                                                                                                                                                                  | `change-me`               |
-| `mariadb.auth.database`                               | Database name to create                                                                                                                                                                                                    | `dataflow`                |
-| `mariadb.auth.forcePassword`                          | Force users to specify required passwords in the database                                                                                                                                                                  | `false`                   |
-| `mariadb.auth.usePasswordFiles`                       | Mount credentials as a file instead of using an environment variable                                                                                                                                                       | `false`                   |
-| `mariadb.initdbScripts`                               | Specify dictionary of scripts to be run at first boot                                                                                                                                                                      | `{}`                      |
-| `mariadb.primary.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`                   |
-| `mariadb.primary.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                      |
-| `flyway.enabled`                                      | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup                                                                                                                                    | `true`                    |
-| `externalDatabase.host`                               | Host of the external database                                                                                                                                                                                              | `localhost`               |
-| `externalDatabase.port`                               | External database port number                                                                                                                                                                                              | `3306`                    |
-| `externalDatabase.driver`                             | The fully qualified name of the JDBC Driver class                                                                                                                                                                          | `""`                      |
-| `externalDatabase.scheme`                             | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL                                                                                                                              | `""`                      |
-| `externalDatabase.hibernateDialect`                   | Hibernate Dialect used by Dataflow/Skipper servers                                                                                                                                                                         | `""`                      |
-| `externalDatabase.dataflow.url`                       | JDBC URL for dataflow server. Overrides external scheme, host, port, password, and dataflow.database parameters.                                                                                                           | `""`                      |
-| `externalDatabase.dataflow.database`                  | Name of the existing database to be used by Dataflow server. Ignored if url is provided                                                                                                                                    | `dataflow`                |
-| `externalDatabase.dataflow.username`                  | Existing username in the external db to be used by Dataflow server                                                                                                                                                         | `dataflow`                |
-| `externalDatabase.dataflow.password`                  | Password for the above username. Ignored if existing secret is provided                                                                                                                                                    | `""`                      |
-| `externalDatabase.dataflow.existingSecret`            | Name of the existing secret containing database credentials for Dataflow server                                                                                                                                            | `""`                      |
-| `externalDatabase.dataflow.existingSecretPasswordKey` | Key of the above existing secret with database password, defaults to `datasource-password`                                                                                                                                 | `""`                      |
-| `externalDatabase.skipper.url`                        | JDBC URL for skipper. Overrides external scheme, host, port, database, and skipper.database parameters.                                                                                                                    | `""`                      |
-| `externalDatabase.skipper.database`                   | Name of the existing database to be used by Skipper server. Ignored if url is provided                                                                                                                                     | `skipper`                 |
-| `externalDatabase.skipper.username`                   | Existing username in the external db to be used by Skipper server                                                                                                                                                          | `skipper`                 |
-| `externalDatabase.skipper.password`                   | Password for the above username. Ignored if existing secret is provided                                                                                                                                                    | `""`                      |
-| `externalDatabase.skipper.existingSecret`             | Name of the existing secret containing database credentials for Skipper server                                                                                                                                             | `""`                      |
-| `externalDatabase.skipper.existingSecretPasswordKey`  | Key of the above existing secret with database password, defaults to `datasource-password`                                                                                                                                 | `""`                      |
+| Name                                                  | Description                                                                                                                                                                                                                | Value        |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `mariadb.enabled`                                     | Enable/disable MariaDB chart installation                                                                                                                                                                                  | `true`       |
+| `mariadb.jdbcParameter.useMysqlMetadata`              | Use MariaDB useMysqlMetadata parameter.                                                                                                                                                                                    | `true`       |
+| `mariadb.architecture`                                | MariaDB architecture. Allowed values: `standalone` or `replication`                                                                                                                                                        | `standalone` |
+| `mariadb.auth.rootPassword`                           | Password for the MariaDB `root` user                                                                                                                                                                                       | `""`         |
+| `mariadb.auth.username`                               | Username of new user to create                                                                                                                                                                                             | `dataflow`   |
+| `mariadb.auth.password`                               | Password for the new user                                                                                                                                                                                                  | `change-me`  |
+| `mariadb.auth.database`                               | Database name to create                                                                                                                                                                                                    | `dataflow`   |
+| `mariadb.auth.forcePassword`                          | Force users to specify required passwords in the database                                                                                                                                                                  | `false`      |
+| `mariadb.initdbScripts`                               | Specify dictionary of scripts to be run at first boot                                                                                                                                                                      | `{}`         |
+| `mariadb.primary.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`      |
+| `mariadb.primary.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`         |
+| `flyway.enabled`                                      | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup                                                                                                                                    | `true`       |
+| `externalDatabase.host`                               | Host of the external database                                                                                                                                                                                              | `localhost`  |
+| `externalDatabase.port`                               | External database port number                                                                                                                                                                                              | `3306`       |
+| `externalDatabase.driver`                             | The fully qualified name of the JDBC Driver class                                                                                                                                                                          | `""`         |
+| `externalDatabase.scheme`                             | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL                                                                                                                              | `""`         |
+| `externalDatabase.hibernateDialect`                   | Hibernate Dialect used by Dataflow/Skipper servers                                                                                                                                                                         | `""`         |
+| `externalDatabase.dataflow.url`                       | JDBC URL for dataflow server. Overrides external scheme, host, port, password, and dataflow.database parameters.                                                                                                           | `""`         |
+| `externalDatabase.dataflow.database`                  | Name of the existing database to be used by Dataflow server. Ignored if url is provided                                                                                                                                    | `dataflow`   |
+| `externalDatabase.dataflow.username`                  | Existing username in the external db to be used by Dataflow server                                                                                                                                                         | `dataflow`   |
+| `externalDatabase.dataflow.password`                  | Password for the above username. Ignored if existing secret is provided                                                                                                                                                    | `""`         |
+| `externalDatabase.dataflow.existingSecret`            | Name of the existing secret containing database credentials for Dataflow server                                                                                                                                            | `""`         |
+| `externalDatabase.dataflow.existingSecretPasswordKey` | Key of the above existing secret with database password, defaults to `datasource-password`                                                                                                                                 | `""`         |
+| `externalDatabase.skipper.url`                        | JDBC URL for skipper. Overrides external scheme, host, port, database, and skipper.database parameters.                                                                                                                    | `""`         |
+| `externalDatabase.skipper.database`                   | Name of the existing database to be used by Skipper server. Ignored if url is provided                                                                                                                                     | `skipper`    |
+| `externalDatabase.skipper.username`                   | Existing username in the external db to be used by Skipper server                                                                                                                                                          | `skipper`    |
+| `externalDatabase.skipper.password`                   | Password for the above username. Ignored if existing secret is provided                                                                                                                                                    | `""`         |
+| `externalDatabase.skipper.existingSecret`             | Name of the existing secret containing database credentials for Skipper server                                                                                                                                             | `""`         |
+| `externalDatabase.skipper.existingSecretPasswordKey`  | Key of the above existing secret with database password, defaults to `datasource-password`                                                                                                                                 | `""`         |
 
 ### RabbitMQ chart parameters
 
@@ -729,16 +752,16 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ### Kafka chart parameters
 
-| Name                               | Description                                                                                                                                                                                                                      | Value                                |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation                                                                                                                                                                                          | `false`                              |
-| `kafka.controller.replicaCount`    | Number of Kafka controller+brokers nodes                                                                                                                                                                                         | `1`                                  |
-| `kafka.controller.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `small`                              |
-| `kafka.controller.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`                                 |
-| `kafka.extraConfig`                | Kafka extra configuration to be appended to dynamic settings                                                                                                                                                                     | `offsets.topic.replication.factor=1` |
-| `externalKafka.enabled`            | Enable/disable external Kafka                                                                                                                                                                                                    | `false`                              |
-| `externalKafka.brokers`            | External Kafka brokers                                                                                                                                                                                                           | `localhost:9092`                     |
-| `externalKafka.zkNodes`            | External Zookeeper nodes                                                                                                                                                                                                         | `localhost:2181`                     |
+| Name                               | Description                                                                                                                                                                                                                      | Value            |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                    | Enable/disable Kafka chart installation                                                                                                                                                                                          | `false`          |
+| `kafka.controller.replicaCount`    | Number of Kafka controller+brokers nodes                                                                                                                                                                                         | `1`              |
+| `kafka.controller.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `small`          |
+| `kafka.controller.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`             |
+| `kafka.overrideConfiguration`      | Kafka common configuration override                                                                                                                                                                                              | `{}`             |
+| `externalKafka.enabled`            | Enable/disable external Kafka                                                                                                                                                                                                    | `false`          |
+| `externalKafka.brokers`            | External Kafka brokers                                                                                                                                                                                                           | `localhost:9092` |
+| `externalKafka.zkNodes`            | External Zookeeper nodes                                                                                                                                                                                                         | `localhost:2181` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -764,6 +787,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/sprin
 Find more information about how to deal with common errors related to Bitnami Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 37.0.0
+
+This version uses the MariaDB version provided by the bitnami/mariadb subchart, MariaDB 11.4.x, instead of overriding it with version 10.11.x.
+
+### To 36.0.0
+
+This major updates the RabbitMQ subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [RabbitMQ upgrade notes](https://www.rabbitmq.com/docs/4.1/upgrade).
+
+### To 35.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
+
+### To 34.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 34.0.0
 
@@ -1023,7 +1062,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

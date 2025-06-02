@@ -1,8 +1,130 @@
 # Changelog
 
-## 14.8.5 (2024-11-08)
+## 16.0.11 (2025-06-02)
 
-* [bitnami/minio] Release 14.8.5 ([#30312](https://github.com/bitnami/charts/pull/30312))
+* [bitnami/minio] Update dependencies ([#34029](https://github.com/bitnami/charts/pull/34029))
+
+## <small>16.0.10 (2025-05-07)</small>
+
+* [bitnami/minio] Release 16.0.10 (#33488) ([055477f](https://github.com/bitnami/charts/commit/055477f89bc7da14e5674c15f1f280f9ae0bdf0c)), closes [#33488](https://github.com/bitnami/charts/issues/33488)
+
+## <small>16.0.9 (2025-05-07)</small>
+
+* [bitnami/minio] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33402) ([5216440](https://github.com/bitnami/charts/commit/5216440c5e490930e43e523cae0540c78f2dd514)), closes [#33402](https://github.com/bitnami/charts/issues/33402)
+
+## <small>16.0.8 (2025-04-23)</small>
+
+* [bitnami/minio] Release 16.0.8 (#33132) ([990c323](https://github.com/bitnami/charts/commit/990c323b2ca280d5f7b9ed94f2302d9f63ff6765)), closes [#33132](https://github.com/bitnami/charts/issues/33132)
+
+## <small>16.0.7 (2025-04-09)</small>
+
+* [bitnami/minio] Release 16.0.7 (#32944) ([d60498a](https://github.com/bitnami/charts/commit/d60498aba9a35307591b36f1dae948ba5a9f3c19)), closes [#32944](https://github.com/bitnami/charts/issues/32944)
+
+## <small>16.0.6 (2025-04-09)</small>
+
+* [bitnami/minio] Release 16.0.6 (#32930) ([a10696b](https://github.com/bitnami/charts/commit/a10696bedd25e2c6c678f2f4ac12c91ff4e002f9)), closes [#32930](https://github.com/bitnami/charts/issues/32930)
+
+## <small>16.0.5 (2025-04-09)</small>
+
+* [bitnami/minio] Release 16.0.5 (#32892) ([f707614](https://github.com/bitnami/charts/commit/f7076146788b35017b744a06f4b66f5725838043)), closes [#32892](https://github.com/bitnami/charts/issues/32892)
+
+## <small>16.0.4 (2025-04-09)</small>
+
+* [bitnami/minio] Fix issue when using custom secret keys (#32882) ([05bd253](https://github.com/bitnami/charts/commit/05bd253ba79de4518ee665da2a9c6e8f5cd5b4f7)), closes [#32882](https://github.com/bitnami/charts/issues/32882)
+
+## <small>16.0.3 (2025-04-08)</small>
+
+* [bitnami/minio] Release 16.0.3 (#32877) ([3dc1ea0](https://github.com/bitnami/charts/commit/3dc1ea0dbbcf21bd58182639486c7be75b20524d)), closes [#32877](https://github.com/bitnami/charts/issues/32877)
+
+## <small>16.0.2 (2025-04-03)</small>
+
+* [bitnami/minio] Release 16.0.2 (#32806) ([c163d18](https://github.com/bitnami/charts/commit/c163d18d92e8a2c3fcfd16596b395659ca83a675)), closes [#32806](https://github.com/bitnami/charts/issues/32806)
+
+## <small>16.0.1 (2025-04-02)</small>
+
+* [bitnami/minio] Release 16.0.1 (#32749) ([351fb51](https://github.com/bitnami/charts/commit/351fb511b701966825902719875eac6a8a1c08be)), closes [#32749](https://github.com/bitnami/charts/issues/32749)
+
+## 16.0.0 (2025-03-27)
+
+* [bitnami/minio] Set `usePasswordFiles=true` by default (#32361) ([4f16379](https://github.com/bitnami/charts/commit/4f1637923c52c3f209a20e3dc617c3433de4083c)), closes [#32361](https://github.com/bitnami/charts/issues/32361)
+
+## <small>15.0.7 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/minio] Release 15.0.7 (#32425) ([48a854a](https://github.com/bitnami/charts/commit/48a854ac39c08841258ab185f7af68024ab8569e)), closes [#32425](https://github.com/bitnami/charts/issues/32425)
+
+## <small>15.0.6 (2025-03-05)</small>
+
+* [bitnami/minio] Release 15.0.6 (#32305) ([b92a3c3](https://github.com/bitnami/charts/commit/b92a3c35e7ef2cba0216fbd9b28d276d7961d397)), closes [#32305](https://github.com/bitnami/charts/issues/32305)
+
+## <small>15.0.5 (2025-02-28)</small>
+
+* [bitnami/minio] Release 15.0.5 (#32222) ([a1e4a21](https://github.com/bitnami/charts/commit/a1e4a216587f5caab4653cbee8f83b615bd73934)), closes [#32222](https://github.com/bitnami/charts/issues/32222)
+
+## <small>15.0.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/minio] Release 15.0.4 (#32019) ([cb930d3](https://github.com/bitnami/charts/commit/cb930d302faf70eccc8a6383df4584ba44a2a4cc)), closes [#32019](https://github.com/bitnami/charts/issues/32019)
+
+## <small>15.0.3 (2025-02-08)</small>
+
+* [bitnami/minio] Release 15.0.3 (#31841) ([4d202ee](https://github.com/bitnami/charts/commit/4d202eee46ee58372c9b906b1426a3cd80fba4e9)), closes [#31841](https://github.com/bitnami/charts/issues/31841)
+
+## <small>15.0.2 (2025-02-05)</small>
+
+* [bitnami/minio] Release 15.0.2 (#31768) ([1da85ac](https://github.com/bitnami/charts/commit/1da85ac792b1c42d7a83e654fe1725aa43d1550e)), closes [#31768](https://github.com/bitnami/charts/issues/31768)
+
+## <small>15.0.1 (2025-02-04)</small>
+
+* [bitnami/minio] Release 15.0.1 (#31727) ([7377ec7](https://github.com/bitnami/charts/commit/7377ec7a66b8397305bc388f8fd3d0e1199d36d8)), closes [#31727](https://github.com/bitnami/charts/issues/31727)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 15.0.0 (2025-01-29)
+
+* [bitnami/minio] Release 15.0.0 (#31655) ([a9e8635](https://github.com/bitnami/charts/commit/a9e8635362eea50a02cd7eecb3faf968329a5f07)), closes [#31655](https://github.com/bitnami/charts/issues/31655)
+
+## <small>14.10.5 (2025-01-20)</small>
+
+* [bitnami/minio] chore: :recycle: Do not use wait-for-port in minio image (#31475) ([755f508](https://github.com/bitnami/charts/commit/755f508a920d3f3486adbf7212a5d8f59e52acb6)), closes [#31475](https://github.com/bitnami/charts/issues/31475)
+
+## <small>14.10.4 (2025-01-17)</small>
+
+* [bitnami/minio] Release 14.10.4 (#31433) ([163a43f](https://github.com/bitnami/charts/commit/163a43f4443e89720a5eb931309c1f41d26f8fcf)), closes [#31433](https://github.com/bitnami/charts/issues/31433)
+
+## <small>14.10.3 (2024-12-20)</small>
+
+* [bitnami/minio] Fix rendering of CIDR block list for loadBalancerSourceRanges (#31032) ([a84ea6d](https://github.com/bitnami/charts/commit/a84ea6da98c0489efd1cca4e28fa398a02e5885b)), closes [#31032](https://github.com/bitnami/charts/issues/31032)
+
+## <small>14.10.2 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/minio] Release 14.10.2 (#31099) ([c2900ec](https://github.com/bitnami/charts/commit/c2900ec91df4a918b05f82ea5f4f97c43fce191b)), closes [#31099](https://github.com/bitnami/charts/issues/31099)
+
+## <small>14.10.1 (2024-12-16)</small>
+
+* [bitnami/minio] Release 14.10.1 (#31050) ([91b6f97](https://github.com/bitnami/charts/commit/91b6f97217eed1670f665232cd841e3e73d8032e)), closes [#31050](https://github.com/bitnami/charts/issues/31050)
+
+## 14.10.0 (2024-12-13)
+
+* [bitnami/minio]: Templating sleep sleep time so that it can be passed using values.yaml (#30718) ([ea21cb8](https://github.com/bitnami/charts/commit/ea21cb82ebb71e0d159846aaeb39786e1d577913)), closes [#30718](https://github.com/bitnami/charts/issues/30718)
+
+## 14.9.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/minio] Detect non-standard images (#30924) ([a5d33d4](https://github.com/bitnami/charts/commit/a5d33d4add1c48085781da15b5d349c79b007595)), closes [#30924](https://github.com/bitnami/charts/issues/30924)
+
+## <small>14.8.6 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/minio] Release 14.8.6 (#30766) ([fd14ff8](https://github.com/bitnami/charts/commit/fd14ff8a9f4621f35ca43b68e97dc5d856133ac8)), closes [#30766](https://github.com/bitnami/charts/issues/30766)
+
+## <small>14.8.5 (2024-11-08)</small>
+
+* [bitnami/minio] Release 14.8.5 (#30312) ([b10ded8](https://github.com/bitnami/charts/commit/b10ded8570d4f70da7cc75a75685f4ff97a55717)), closes [#30312](https://github.com/bitnami/charts/issues/30312)
 
 ## <small>14.8.4 (2024-11-07)</small>
 
@@ -2508,7 +2630,7 @@
 
 ## <small>0.1.6 (2019-05-29)</small>
 
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>0.1.5 (2019-05-28)</small>
 

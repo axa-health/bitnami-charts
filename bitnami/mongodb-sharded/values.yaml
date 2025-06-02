@@ -21,6 +21,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -87,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 8.0.3-debian-12-r0
+  tag: 8.0.9-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -125,9 +130,9 @@ auth:
   ## NOTE: When it's set the previous parameters are ignored.
   ##
   existingSecret: ""
-  ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
   ##
-  usePasswordFile: false
+  usePasswordFiles: true
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
@@ -254,7 +259,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r46
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -600,6 +605,10 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param configsvr.persistence.selector Selector to match an existing Persistent Volume for Config Server data PVC
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ##
+    selector: {}
   ## Persistent Volume Claim Retention Policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
@@ -1458,6 +1467,17 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param shardsvr.persistence.selector Selector to match an existing Persistent Volume for Shard data PVC
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## Selector can be defined with static and dynamic options:
+    ## selector:
+    ##   matchLabels:
+    ##     app: web
+    ##     shard: shard{{ .Index }}
+    ##
+    ## shard{{ .Index }} will be substituted to shard0, shard1 accordingly
+    ##
+    selector: {}
   ## Persistent Volume Claim Retention Policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
@@ -1775,7 +1795,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.41.2-debian-12-r1
+    tag: 0.45.0-debian-12-r0
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.

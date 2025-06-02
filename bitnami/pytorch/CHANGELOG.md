@@ -1,8 +1,62 @@
 # Changelog
 
-## 4.2.22 (2024-11-08)
+## 4.3.10 (2025-05-13)
 
-* [bitnami/pytorch] Unify seLinuxOptions default value ([#30331](https://github.com/bitnami/charts/pull/30331))
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#33657](https://github.com/bitnami/charts/pull/33657))
+
+## <small>4.3.9 (2025-05-06)</small>
+
+* [bitnami/pytorch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33425 ([e20b5e3](https://github.com/bitnami/charts/commit/e20b5e3ee4d4eb6f4fae1db2f518432927283687)), closes [#33425](https://github.com/bitnami/charts/issues/33425)
+
+## <small>4.3.8 (2025-04-23)</small>
+
+* [bitnami/pytorch] Release 4.3.8 (#33148) ([52441d4](https://github.com/bitnami/charts/commit/52441d4d4b73f537cd73bf8a6d3a58eaa6778b59)), closes [#33148](https://github.com/bitnami/charts/issues/33148)
+
+## <small>4.3.7 (2025-03-30)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/pytorch] Release 4.3.7 (#32683) ([2a1b864](https://github.com/bitnami/charts/commit/2a1b8643c7c0e0db962efd7a0eaefb0d00228d0e)), closes [#32683](https://github.com/bitnami/charts/issues/32683)
+
+## <small>4.3.6 (2025-03-11)</small>
+
+* [bitnami/pytorch] Update Chart.yaml (#32411) ([0a8723b](https://github.com/bitnami/charts/commit/0a8723b979c6d111fafdbea07409f642c653721c)), closes [#32411](https://github.com/bitnami/charts/issues/32411)
+
+## <small>4.3.5 (2025-03-11)</small>
+
+* [bitnami/pytorch] Bump version to apply test changes (#32402) ([9540a5d](https://github.com/bitnami/charts/commit/9540a5d434b6b1e5750ecba704663cf1504593da)), closes [#32402](https://github.com/bitnami/charts/issues/32402)
+
+## <small>4.3.4 (2025-03-02)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/pytorch] Release 4.3.4 (#32224) ([366c617](https://github.com/bitnami/charts/commit/366c6174add0ac20742448b95c0af92592052516)), closes [#32224](https://github.com/bitnami/charts/issues/32224)
+
+## <small>4.3.3 (2025-01-31)</small>
+
+* [bitnami/pytorch] Release 4.3.3 (#31670) ([9d4509c](https://github.com/bitnami/charts/commit/9d4509c1d763733dcfa5ccccb9274c024d7de461)), closes [#31670](https://github.com/bitnami/charts/issues/31670)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.3.2 (2025-01-09)</small>
+
+* [bitnami/pytorch] Release 4.3.2 (#31240) ([16d06c1](https://github.com/bitnami/charts/commit/16d06c10fc21e75802c8d40a41a6e009215a7c10)), closes [#31240](https://github.com/bitnami/charts/issues/31240)
+
+## <small>4.3.1 (2025-01-07)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/pytorch] Release 4.3.1 (#31236) ([bf8598c](https://github.com/bitnami/charts/commit/bf8598c47ffa6e86e7031e9a00a1e961528dca8d)), closes [#31236](https://github.com/bitnami/charts/issues/31236)
+
+## 4.3.0 (2024-12-10)
+
+* [bitnami/pytorch] Detect non-standard images (#30939) ([e492f64](https://github.com/bitnami/charts/commit/e492f6436f48e2e93b0eb69456339dc0aa7ec073)), closes [#30939](https://github.com/bitnami/charts/issues/30939)
+
+## <small>4.2.23 (2024-12-10)</small>
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/pytorch] Release 4.2.23 (#30859) ([d5fbf33](https://github.com/bitnami/charts/commit/d5fbf33084bb513868174b99340c16d49957b19a)), closes [#30859](https://github.com/bitnami/charts/issues/30859)
+
+## <small>4.2.22 (2024-11-08)</small>
+
+* [bitnami/pytorch] Unify seLinuxOptions default value (#30331) ([0d5f923](https://github.com/bitnami/charts/commit/0d5f923906477e309181330ff4976e6cd1dc0cf5)), closes [#30331](https://github.com/bitnami/charts/issues/30331)
 
 ## <small>4.2.21 (2024-10-31)</small>
 
@@ -954,7 +1008,7 @@
 ## <small>0.0.4 (2019-05-29)</small>
 
 * Check secondary images ([5327cfa](https://github.com/bitnami/charts/commit/5327cfa319191dd8067ce538d53f4c44edfdc012))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

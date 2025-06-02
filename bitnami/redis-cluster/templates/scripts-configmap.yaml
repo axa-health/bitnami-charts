@@ -7,23 +7,20 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}-scripts
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
   ping_readiness_local.sh: |-
-    #!/bin/sh
+    #!/bin/bash
     set -e
 
     REDIS_STATUS_FILE=/tmp/.redis_cluster_check
 
-    {{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDISCLI_AUTH=$password_aux
-    {{- else }}
-    if [ ! -z "$REDIS_PASSWORD" ]; then export REDISCLI_AUTH=$REDIS_PASSWORD; fi;
+    {{- if .Values.usePassword }}
+    export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
     {{- end }}
     response=$(
       timeout -s 15 $1 \
@@ -78,14 +75,11 @@ data:
     fi
 {{- end }}
   ping_liveness_local.sh: |-
-    #!/bin/sh
+    #!/bin/bash
     set -e
 
-    {{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDISCLI_AUTH=$password_aux
-    {{- else }}
-    if [ ! -z "$REDIS_PASSWORD" ]; then export REDISCLI_AUTH=$REDIS_PASSWORD; fi;
+    {{- if .Values.usePassword }}
+    export REDISCLI_AUTH={{ ternary "`cat $REDIS_PASSWORD_FILE`" "$REDIS_PASSWORD" .Values.usePasswordFiles }}
     {{- end }}
     response=$(
       timeout -s 15 $1 \

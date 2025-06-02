@@ -20,6 +20,11 @@ global:
   imagePullSecrets: []
   defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -43,6 +48,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override grafana.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
@@ -52,6 +60,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## @section Grafana parameters
 
 ## Bitnami Grafana image version
@@ -66,7 +77,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 11.3.0-debian-12-r3
+  tag: 12.0.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -555,9 +566,15 @@ grafana:
   ## @param grafana.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Grafana nodes
   ##
   extraEnvVarsCM: ""
+  ## @param grafana.extraEnvVarsCMOptional Whether to still run the Grafana node if the ConfigMap does not exist
+  ##
+  extraEnvVarsCMOptional: false
   ## @param grafana.extraEnvVarsSecret Name of existing Secret containing extra env vars for Grafana nodes
   ##
   extraEnvVarsSecret: ""
+  ## @param grafana.extraEnvVarsSecretOptional Whether to still run the Grafana node if the Secret does not exist
+  ##
+  extraEnvVarsSecretOptional: false
   ## @param grafana.extraEnvVars Array containing extra env vars to configure Grafana
   ## For example:
   ## extraEnvVars:
@@ -959,7 +976,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r32
+    tag: 12-debian-12-r45
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

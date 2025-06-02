@@ -1,8 +1,76 @@
 # Changelog
 
-## 4.4.17 (2024-11-07)
+## 4.5.13 (2025-05-07)
 
-* [bitnami/node-exporter] Release 4.4.17 ([#30287](https://github.com/bitnami/charts/pull/30287))
+* [bitnami/node-exporter] Release 4.5.13 ([#33537](https://github.com/bitnami/charts/pull/33537))
+
+## <small>4.5.12 (2025-05-06)</small>
+
+* [bitnami/node-exporter] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([11acc98](https://github.com/bitnami/charts/commit/11acc98ce0f6d57c6c7f0a4386f3ae345ef2336b)), closes [#33415](https://github.com/bitnami/charts/issues/33415)
+
+## <small>4.5.11 (2025-05-02)</small>
+
+* [bitnami/node-exporter] Release 4.5.11 (#33299) ([2818119](https://github.com/bitnami/charts/commit/28181193f440e0bf2debbd7cc3e6ebd4972b4479)), closes [#33299](https://github.com/bitnami/charts/issues/33299)
+
+## <small>4.5.10 (2025-04-02)</small>
+
+* [bitnami/node-exporter] Release 4.5.10 (#32756) ([9508cb4](https://github.com/bitnami/charts/commit/9508cb48d7587b215ba84d08acc992fa042ce942)), closes [#32756](https://github.com/bitnami/charts/issues/32756)
+
+## <small>4.5.9 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/node-exporter] Release 4.5.9 (#32716) ([a6119aa](https://github.com/bitnami/charts/commit/a6119aaf9253fc48d3d4368feeb7a7c4f4b18922)), closes [#32716](https://github.com/bitnami/charts/issues/32716)
+
+## <small>4.5.8 (2025-03-05)</small>
+
+* [bitnami/node-exporter] Release 4.5.8 (#32309) ([923bbe5](https://github.com/bitnami/charts/commit/923bbe5daf868a45e96fdfacb80bc9407abf983a)), closes [#32309](https://github.com/bitnami/charts/issues/32309)
+
+## <small>4.5.7 (2025-02-20)</small>
+
+* [bitnami/node-exporter] Release 4.5.7 (#32024) ([af56254](https://github.com/bitnami/charts/commit/af56254abd92dc5f594e0960efcd763e30d1c4ca)), closes [#32024](https://github.com/bitnami/charts/issues/32024)
+
+## <small>4.5.6 (2025-02-17)</small>
+
+* [bitnami/node-exporter] Release 4.5.6 (#31950) ([d5c57ee](https://github.com/bitnami/charts/commit/d5c57ee01ff2ba388b64fa7437c25ba6f2721b56)), closes [#31950](https://github.com/bitnami/charts/issues/31950)
+
+## <small>4.5.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/node-exporter] Release 4.5.5 (#31904) ([3853ffd](https://github.com/bitnami/charts/commit/3853ffd2338c526cc7108b7ee6adc082efb5eddf)), closes [#31904](https://github.com/bitnami/charts/issues/31904)
+
+## <small>4.5.4 (2025-02-05)</small>
+
+* [bitnami/node-exporter] Release 4.5.4 (#31772) ([f06a76e](https://github.com/bitnami/charts/commit/f06a76e802690eec4ef4efd997c4be21f1b784b3)), closes [#31772](https://github.com/bitnami/charts/issues/31772)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.5.3 (2025-01-24)</small>
+
+* [bitnami/node-exporter] Release 4.5.3 (#31574) ([6c16122](https://github.com/bitnami/charts/commit/6c1612203c16b46cbd65f9ff0013a33c0f4c45ca)), closes [#31574](https://github.com/bitnami/charts/issues/31574)
+
+## <small>4.5.2 (2025-01-17)</small>
+
+* [bitnami/node-exporter] Release 4.5.2 (#31438) ([5b52be5](https://github.com/bitnami/charts/commit/5b52be5d111931d193fe2abd369838f2b8368299)), closes [#31438](https://github.com/bitnami/charts/issues/31438)
+
+## <small>4.5.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/node-exporter] Release 4.5.1 (#31322) ([2a79a91](https://github.com/bitnami/charts/commit/2a79a9190d05e3994acae2a2775deeba261f0143)), closes [#31322](https://github.com/bitnami/charts/issues/31322)
+
+## 4.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/node-exporter] Detect non-standard images (#30932) ([1550707](https://github.com/bitnami/charts/commit/1550707a5720a351ee35855e3ae7dfe8dfc439f2)), closes [#30932](https://github.com/bitnami/charts/issues/30932)
+
+## <small>4.4.18 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/node-exporter] Release 4.4.18 (#30769) ([4d95e2d](https://github.com/bitnami/charts/commit/4d95e2d019f0c4800e8bd291179da70b0ba431df)), closes [#30769](https://github.com/bitnami/charts/issues/30769)
+
+## <small>4.4.17 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/node-exporter] Release 4.4.17 (#30287) ([7b2f581](https://github.com/bitnami/charts/commit/7b2f581869ba457e0707cff46254630af2ecae16)), closes [#30287](https://github.com/bitnami/charts/issues/30287)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>4.4.16 (2024-10-02)</small>
 

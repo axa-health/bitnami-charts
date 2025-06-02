@@ -1,8 +1,66 @@
 # Changelog
 
-## 1.1.16 (2024-11-08)
+## 1.2.11 (2025-05-07)
 
-* [bitnami/whereabouts] Unify seLinuxOptions default value ([#30318](https://github.com/bitnami/charts/pull/30318))
+* [bitnami/whereabouts] Release 1.2.11 ([#33522](https://github.com/bitnami/charts/pull/33522))
+
+## <small>1.2.10 (2025-05-06)</small>
+
+* [bitnami/whereabouts] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3 ([74a51c1](https://github.com/bitnami/charts/commit/74a51c173ec5d8ffd02b300cd05658222d016cb2)), closes [#33447](https://github.com/bitnami/charts/issues/33447)
+
+## <small>1.2.9 (2025-04-09)</small>
+
+* [bitnami/whereabouts] Release 1.2.9 (#32923) ([b2da8b0](https://github.com/bitnami/charts/commit/b2da8b0769f2569f2d1afa16ea0d63c68ed98f08)), closes [#32923](https://github.com/bitnami/charts/issues/32923)
+
+## <small>1.2.8 (2025-04-03)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/whereabouts] Release 1.2.8 (#32798) ([69994d3](https://github.com/bitnami/charts/commit/69994d3efbda2763507e74c64a345bb315708886)), closes [#32798](https://github.com/bitnami/charts/issues/32798)
+
+## <small>1.2.7 (2025-03-05)</small>
+
+* [bitnami/whereabouts] Release 1.2.7 (#32319) ([500c06e](https://github.com/bitnami/charts/commit/500c06e104108c7aded29e0d5e2ac9d5f986ad6e)), closes [#32319](https://github.com/bitnami/charts/issues/32319)
+
+## <small>1.2.6 (2025-02-20)</small>
+
+* [bitnami/whereabouts] Release 1.2.6 (#32070) ([4b36606](https://github.com/bitnami/charts/commit/4b36606ceccee96e4b5ade45df4ad3ce713d2095)), closes [#32070](https://github.com/bitnami/charts/issues/32070)
+
+## <small>1.2.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/whereabouts] Release 1.2.5 (#31903) ([7d59616](https://github.com/bitnami/charts/commit/7d59616e053f98fdc7e04c09c99cd9eb9e997e0a)), closes [#31903](https://github.com/bitnami/charts/issues/31903)
+
+## <small>1.2.4 (2025-02-05)</small>
+
+* [bitnami/whereabouts] Release 1.2.4 (#31782) ([7ecea37](https://github.com/bitnami/charts/commit/7ecea371aeadf29a2ad90d7421958fc64434fd7d)), closes [#31782](https://github.com/bitnami/charts/issues/31782)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.2.3 (2025-01-24)</small>
+
+* [bitnami/whereabouts] Release 1.2.3 (#31587) ([841d0a7](https://github.com/bitnami/charts/commit/841d0a756f380234e164859a49c71f0de31f3e87)), closes [#31587](https://github.com/bitnami/charts/issues/31587)
+
+## <small>1.2.2 (2025-01-17)</small>
+
+* [bitnami/whereabouts] Release 1.2.2 (#31447) ([892157d](https://github.com/bitnami/charts/commit/892157ddd2086064088a1b439cafea02228eb3b8)), closes [#31447](https://github.com/bitnami/charts/issues/31447)
+
+## <small>1.2.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/whereabouts] Release 1.2.1 (#31326) ([03d96f7](https://github.com/bitnami/charts/commit/03d96f76490d77c02fa4cdd40ee3bbac5f5d06c1)), closes [#31326](https://github.com/bitnami/charts/issues/31326)
+
+## 1.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/whereabouts] Detect non-standard images (#30953) ([0da5ab8](https://github.com/bitnami/charts/commit/0da5ab850e004dd1afc1d7052247ea954b70d1d1)), closes [#30953](https://github.com/bitnami/charts/issues/30953)
+
+## <small>1.1.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/whereabouts] Release 1.1.17 (#30781) ([168257a](https://github.com/bitnami/charts/commit/168257a00e4a297ed4efadeddaafa395553fc71f)), closes [#30781](https://github.com/bitnami/charts/issues/30781)
+
+## <small>1.1.16 (2024-11-08)</small>
+
+* [bitnami/whereabouts] Unify seLinuxOptions default value (#30318) ([5f02b3c](https://github.com/bitnami/charts/commit/5f02b3c19acb3e4bf7c74c4315e634321ef07284)), closes [#30318](https://github.com/bitnami/charts/issues/30318)
 
 ## <small>1.1.15 (2024-11-07)</small>
 

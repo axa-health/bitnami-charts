@@ -1,8 +1,74 @@
 # Changelog
 
-## 14.0.12 (2024-11-04)
+## 14.2.6 (2025-05-23)
 
-* [bitnami/mariadb-galera] Release 14.0.12 ([#30200](https://github.com/bitnami/charts/pull/30200))
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#33855](https://github.com/bitnami/charts/pull/33855))
+
+## <small>14.2.5 (2025-05-14)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mariadb-galera] Release 14.2.5 (#33553) ([5c50a37](https://github.com/bitnami/charts/commit/5c50a37a3cc3810cbdcd6aa989362c9b88ed6ac1)), closes [#33553](https://github.com/bitnami/charts/issues/33553)
+
+## <small>14.2.4 (2025-05-06)</small>
+
+* [bitnami/mariadb-galera] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([4d78a11](https://github.com/bitnami/charts/commit/4d78a1166ea7bc0cc61cec76feef94fa7c29d4e2)), closes [#33394](https://github.com/bitnami/charts/issues/33394)
+
+## <small>14.2.3 (2025-05-01)</small>
+
+* [bitnami/mariadb-galera] Release 14.2.3 (#33284) ([66b41fa](https://github.com/bitnami/charts/commit/66b41fa1e056bf0b065100045888bffe7c3026d0)), closes [#33284](https://github.com/bitnami/charts/issues/33284)
+
+## <small>14.2.2 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mariadb-galera] Release 14.2.2 (#32712) ([325f550](https://github.com/bitnami/charts/commit/325f550908ee29765e2d8b22fcd1aa600d8ae7f0)), closes [#32712](https://github.com/bitnami/charts/issues/32712)
+
+## <small>14.2.1 (2025-03-02)</small>
+
+* [bitnami/mariadb-galera] Release 14.2.1 (#32229) ([02368ff](https://github.com/bitnami/charts/commit/02368ff70a363aa1d5aebc42469c5af7daa3ccb7)), closes [#32229](https://github.com/bitnami/charts/issues/32229)
+
+## 14.2.0 (2025-02-26)
+
+* [bitnami/mariadb-galera] Set `usePasswordFiles=true` by default (#32111) ([d312db4](https://github.com/bitnami/charts/commit/d312db4016edce2d8a4dbb8ea3d49886bb1cb918)), closes [#32111](https://github.com/bitnami/charts/issues/32111)
+
+## <small>14.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mariadb-galera] Release 14.1.4 (#32013) ([622c686](https://github.com/bitnami/charts/commit/622c68659e0c9085b0ba3240ff231de266565352)), closes [#32013](https://github.com/bitnami/charts/issues/32013)
+
+## <small>14.1.3 (2025-02-07)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.3 (#31790) ([dc056e9](https://github.com/bitnami/charts/commit/dc056e927ffd96cfcbc8037f17a8b263e80d1c55)), closes [#31790](https://github.com/bitnami/charts/issues/31790)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>14.1.2 (2025-01-15)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.2 (#31381) ([54eddfc](https://github.com/bitnami/charts/commit/54eddfcd09984cca6de3f3ed85f5c6064fdaa74d)), closes [#31381](https://github.com/bitnami/charts/issues/31381)
+
+## <small>14.1.1 (2025-01-12)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.1 (#31307) ([48ae84d](https://github.com/bitnami/charts/commit/48ae84d4ea739100fa94661e0efe1419ff482dbb)), closes [#31307](https://github.com/bitnami/charts/issues/31307)
+* Update README.md (#31195) ([d5777a0](https://github.com/bitnami/charts/commit/d5777a0a496ea4ff9f7f587934dc7630fc6c7fb7)), closes [#31195](https://github.com/bitnami/charts/issues/31195)
+
+## 14.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mariadb-galera] Detect non-standard images (#30920) ([f1dd6c8](https://github.com/bitnami/charts/commit/f1dd6c867e871139ba31ff28ba208ae25248a556)), closes [#30920](https://github.com/bitnami/charts/issues/30920)
+
+## <small>14.0.14 (2024-12-03)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.14 (#30736) ([a5cdf9b](https://github.com/bitnami/charts/commit/a5cdf9be50a545f51549780d3beaafe56b39d25a)), closes [#30736](https://github.com/bitnami/charts/issues/30736)
+
+## <small>14.0.13 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/mariadb-galera] Release 14.0.13 (#30735) ([2344562](https://github.com/bitnami/charts/commit/2344562e63dd67e0c401b7dcd1955f5123c6f845)), closes [#30735](https://github.com/bitnami/charts/issues/30735)
+
+## <small>14.0.12 (2024-11-04)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.12 (#30200) ([fde08ae](https://github.com/bitnami/charts/commit/fde08ae54de37cef63e0015b906dd65c54c451f8)), closes [#30200](https://github.com/bitnami/charts/issues/30200)
 
 ## <small>14.0.11 (2024-11-02)</small>
 

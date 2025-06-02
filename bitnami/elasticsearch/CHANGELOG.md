@@ -1,8 +1,100 @@
 # Changelog
 
-## 21.3.26 (2024-11-22)
+## 22.0.4 (2025-05-12)
 
-* [bitnami/elasticsearch] Release 21.3.26 ([#30594](https://github.com/bitnami/charts/pull/30594))
+* [bitnami/elasticsearch] add shareProcessNamespace support ([#33232](https://github.com/bitnami/charts/pull/33232))
+
+## <small>22.0.3 (2025-05-07)</small>
+
+* [bitnami/elasticsearch] Release 22.0.3 (#33547) ([338e18a](https://github.com/bitnami/charts/commit/338e18a44389a547e16154e0c74abee522a68e77)), closes [#33547](https://github.com/bitnami/charts/issues/33547)
+
+## <small>22.0.2 (2025-05-06)</small>
+
+* [bitnami/elasticsearch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([97dc9b1](https://github.com/bitnami/charts/commit/97dc9b1af8160f11f01df6d24cf041c22b4f62d3)), closes [#33356](https://github.com/bitnami/charts/issues/33356)
+
+## <small>22.0.1 (2025-04-30)</small>
+
+* [bitnami/elasticsearch] Update kibana subchart (#33256) ([628723c](https://github.com/bitnami/charts/commit/628723c5629d638280f4e69af6ef6bf0e6f3539c)), closes [#33256](https://github.com/bitnami/charts/issues/33256)
+
+## 22.0.0 (2025-04-29)
+
+* [bitnami/elasticsearch] Release 22.0.0 (#33246) ([5ff40ae](https://github.com/bitnami/charts/commit/5ff40ae91813f230cdf1e8b11e9ab5a3a1892417)), closes [#33246](https://github.com/bitnami/charts/issues/33246)
+
+## <small>21.6.3 (2025-04-28)</small>
+
+* [bitnami/elasticsearch] Release 21.6.3 (#33223) ([ea673bf](https://github.com/bitnami/charts/commit/ea673bfa7f91f385512dfa2dba42222fdc5e2210)), closes [#33223](https://github.com/bitnami/charts/issues/33223)
+
+## <small>21.6.2 (2025-04-22)</small>
+
+* [bitnami/elasticsearch] tests: Enable security during testing (#33100) ([6285807](https://github.com/bitnami/charts/commit/62858076100c5e868eb3022125d1e13df29b9339)), closes [#33100](https://github.com/bitnami/charts/issues/33100)
+
+## <small>21.6.1 (2025-04-21)</small>
+
+* [bitnami/elasticsearch] fix coordinating security.enabled (#32840) ([1357e5c](https://github.com/bitnami/charts/commit/1357e5c51767e632accff2258deb4c6dd16b9d5b)), closes [#32840](https://github.com/bitnami/charts/issues/32840)
+
+## 21.6.0 (2025-04-16)
+
+* [bitnami/elasticsearch] Fixes #32794, add enableDefaultInitContainers to elasticsearch chart (#32855 ([652f468](https://github.com/bitnami/charts/commit/652f4680167a2c5fd88f1978959668837ea85d33)), closes [#32794](https://github.com/bitnami/charts/issues/32794) [#32855](https://github.com/bitnami/charts/issues/32855) [#32794](https://github.com/bitnami/charts/issues/32794)
+
+## <small>21.5.1 (2025-04-15)</small>
+
+* [bitnami/elasticsearch] Release 21.5.1 (#33016) ([2add1cd](https://github.com/bitnami/charts/commit/2add1cdd0bc988f860ef182c0da3dc500317fa50)), closes [#33016](https://github.com/bitnami/charts/issues/33016)
+
+## 21.5.0 (2025-04-04)
+
+* [bitnami/elasticsearch] Set `usePasswordFiles=true` by default (#32344) ([3ab212e](https://github.com/bitnami/charts/commit/3ab212e680be626360e561dd6eab6e324b557834)), closes [#32344](https://github.com/bitnami/charts/issues/32344)
+
+## <small>21.4.9 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/elasticsearch] Release 21.4.9 (#32601) ([2db1009](https://github.com/bitnami/charts/commit/2db10093cf6f47e959774f6c262b9314480a7bcb)), closes [#32601](https://github.com/bitnami/charts/issues/32601)
+
+## <small>21.4.8 (2025-03-04)</small>
+
+* [bitnami/elasticsearch] Release 21.4.8 (#32267) ([cf51c62](https://github.com/bitnami/charts/commit/cf51c629158459e458f2957971aeb190581a54cd)), closes [#32267](https://github.com/bitnami/charts/issues/32267)
+
+## <small>21.4.7 (2025-02-27)</small>
+
+* [bitnami/elasticsearch] fix: 🐛 Mount emptyDir in /bitnami/elasticsear… (#31607) ([5d7d47f](https://github.com/bitnami/charts/commit/5d7d47f34e21d61c8e117a75dcf8713554140f7b)), closes [#31607](https://github.com/bitnami/charts/issues/31607)
+
+## <small>21.4.6 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/elasticsearch] Release 21.4.6 (#31990) ([c932f82](https://github.com/bitnami/charts/commit/c932f826afc34883609f2973434b9ae15b5bfa82)), closes [#31990](https://github.com/bitnami/charts/issues/31990)
+
+## <small>21.4.5 (2025-02-11)</small>
+
+* [bitnami/elasticsearch] Release 21.4.5 (#31869) ([5b89741](https://github.com/bitnami/charts/commit/5b89741af8a02f9192c24596600d73a2ae9cac2c)), closes [#31869](https://github.com/bitnami/charts/issues/31869)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>21.4.4 (2025-01-29)</small>
+
+* [bitnami/elasticsearch] Release 21.4.4 (#31666) ([138e966](https://github.com/bitnami/charts/commit/138e966874b8eabc8e37ef92b175723383f2e52b)), closes [#31666](https://github.com/bitnami/charts/issues/31666)
+
+## <small>21.4.3 (2025-01-21)</small>
+
+* [bitnami/elasticsearch] Release 21.4.3 (#31498) ([64f4223](https://github.com/bitnami/charts/commit/64f42238458b7115e706e9ad14d1e70f4a578c7a)), closes [#31498](https://github.com/bitnami/charts/issues/31498)
+
+## <small>21.4.2 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* bitnami/elasticsearch: mount cerst to master node instead empty-dir (#30989) ([bb91a17](https://github.com/bitnami/charts/commit/bb91a17b630dc07a7ff0bb1f9d198f0916177fff)), closes [#30989](https://github.com/bitnami/charts/issues/30989)
+
+## <small>21.4.1 (2024-12-12)</small>
+
+* [bitnami/elasticsearch] Release 21.4.1 (#31023) ([53a4725](https://github.com/bitnami/charts/commit/53a4725c3a3eea865a91fc352308f1f8c0a09fea)), closes [#31023](https://github.com/bitnami/charts/issues/31023)
+
+## 21.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/elasticsearch] Detect non-standard images (#30880) ([c74993f](https://github.com/bitnami/charts/commit/c74993fc926949dcc570189ce5bbdef4ec76334c)), closes [#30880](https://github.com/bitnami/charts/issues/30880)
+
+## <small>21.3.26 (2024-11-22)</small>
+
+* [bitnami/elasticsearch] Release 21.3.26 (#30594) ([5aad9d6](https://github.com/bitnami/charts/commit/5aad9d642bb534555244da524ef133f2d8a8d7a0)), closes [#30594](https://github.com/bitnami/charts/issues/30594)
 
 ## <small>21.3.25 (2024-11-15)</small>
 
@@ -1955,7 +2047,7 @@
 
 ## <small>5.1.5 (2019-05-29)</small>
 
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 
 ## <small>5.1.4 (2019-05-28)</small>
 

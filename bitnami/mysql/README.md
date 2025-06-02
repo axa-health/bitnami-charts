@@ -20,8 +20,6 @@ Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https
 
 This chart bootstraps a [MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -48,7 +46,25 @@ These commands deploy MySQL on the Kubernetes cluster in the default configurati
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) in all pods and will expose it via the MariaDB service. This service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -112,7 +128,7 @@ initContainers:
         containerPort: 1234
 ```
 
-### TLS
+### Securing traffic using TLS
 
 This chart supports encrypting communications using TLS. To enable this feature, set the `tls.enabled`.
 
@@ -197,6 +213,10 @@ This chart allows you to set your custom affinity using the `XXX.affinity` param
 
 As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
@@ -209,13 +229,14 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -253,7 +274,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.replicationUser`      | MySQL replication user                                                                                                                                                              | `replicator`            |
 | `auth.replicationPassword`  | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                    |
 | `auth.existingSecret`       | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
-| `auth.usePasswordFiles`     | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                 |
+| `auth.usePasswordFiles`     | Mount credentials as files instead of using an environment variable                                                                                                                 | `true`                  |
 | `auth.customPasswordFiles`  | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
 | `auth.authenticationPolicy` | Sets the authentication policy, by default it will use `* ,,`                                                                                                                       | `""`                    |
 | `initdbScripts`             | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
@@ -379,6 +400,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `primary.service.clusterIP`                                 | MySQL Primary K8s service clusterIP IP                                                                                                                                                                                            | `""`                |
 | `primary.service.loadBalancerIP`                            | MySQL Primary loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                                    | `""`                |
 | `primary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                                                                                                              | `Cluster`           |
+| `primary.service.externalIPs`                               | MySQL Primary K8s service externalIPs                                                                                                                                                                                             | `[]`                |
 | `primary.service.loadBalancerSourceRanges`                  | Addresses that are allowed when MySQL Primary service is LoadBalancer                                                                                                                                                             | `[]`                |
 | `primary.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                    | `[]`                |
 | `primary.service.annotations`                               | Additional custom annotations for MySQL primary service                                                                                                                                                                           | `{}`                |
@@ -488,6 +510,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `secondary.service.clusterIP`                                 | MySQL secondary Kubernetes service clusterIP IP                                                                                                                                                                                       | `""`                |
 | `secondary.service.loadBalancerIP`                            | MySQL secondary loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                                      | `""`                |
 | `secondary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                                                                                                                  | `Cluster`           |
+| `secondary.service.externalIPs`                               | MySQL Secondary K8s service externalIPs                                                                                                                                                                                               | `[]`                |
 | `secondary.service.loadBalancerSourceRanges`                  | Addresses that are allowed when MySQL secondary service is LoadBalancer                                                                                                                                                               | `[]`                |
 | `secondary.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                        | `[]`                |
 | `secondary.service.annotations`                               | Additional custom annotations for MySQL secondary service                                                                                                                                                                             | `{}`                |
@@ -667,6 +690,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 13.0.0
+
+This major bump uses mysql `9.3` image. Follow the [official instructions](https://dev.mysql.com/doc/refman/9.3/en/upgrading.html) to upgrade.
+
+### To 12.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```console
@@ -771,7 +802,7 @@ kubectl delete statefulset mysql-slave --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

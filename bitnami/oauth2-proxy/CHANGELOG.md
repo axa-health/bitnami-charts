@@ -1,8 +1,89 @@
 # Changelog
 
-## 6.0.6 (2024-11-07)
+## 7.0.0 (2025-05-07)
 
-* [bitnami/oauth2-proxy] Release 6.0.6 ([#30288](https://github.com/bitnami/charts/pull/30288))
+* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33507](https://github.com/bitnami/charts/pull/33507))
+
+## <small>6.2.14 (2025-05-07)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.14 (#33487) ([a4f0f8d](https://github.com/bitnami/charts/commit/a4f0f8d94ef4b7efc07f32c6a83eb9b72904718c)), closes [#33487](https://github.com/bitnami/charts/issues/33487)
+
+## <small>6.2.13 (2025-05-06)</small>
+
+* [bitnami/oauth2-proxy] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (# ([4d0bf5d](https://github.com/bitnami/charts/commit/4d0bf5daa6b9684f4493075626c13b74cc052cdc)), closes [#33416](https://github.com/bitnami/charts/issues/33416)
+
+## <small>6.2.12 (2025-04-28)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.12 (#33229) ([4cda3c6](https://github.com/bitnami/charts/commit/4cda3c63f74239944e3cd4f2ab20f43c2395125e)), closes [#33229](https://github.com/bitnami/charts/issues/33229)
+
+## <small>6.2.11 (2025-04-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.11 (#32757) ([ecbac45](https://github.com/bitnami/charts/commit/ecbac4538b79d8a8d52585116ccbeba86eb52490)), closes [#32757](https://github.com/bitnami/charts/issues/32757)
+
+## <small>6.2.10 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/oauth2-proxy] Release 6.2.10 (#32609) ([218d09f](https://github.com/bitnami/charts/commit/218d09fa753c6fd3a6e2d4405b460a1116ba3964)), closes [#32609](https://github.com/bitnami/charts/issues/32609)
+
+## <small>6.2.9 (2025-03-05)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.9 (#32310) ([4938a37](https://github.com/bitnami/charts/commit/4938a374362519323a13e081c2174445728ccddf)), closes [#32310](https://github.com/bitnami/charts/issues/32310)
+
+## <small>6.2.8 (2025-02-20)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.8 (#32025) ([ebb4e1a](https://github.com/bitnami/charts/commit/ebb4e1ab1cd30071c0e918a2353730db27a41dec)), closes [#32025](https://github.com/bitnami/charts/issues/32025)
+
+## <small>6.2.7 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/oauth2-proxy] Release 6.2.7 (#31899) ([40b41aa](https://github.com/bitnami/charts/commit/40b41aaa03bc66f4e7596992d06138b284448a6d)), closes [#31899](https://github.com/bitnami/charts/issues/31899)
+
+## <small>6.2.6 (2025-02-05)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.6 (#31773) ([4851a17](https://github.com/bitnami/charts/commit/4851a17bd2244c0d485d1d0c2caa82b06a87f84d)), closes [#31773](https://github.com/bitnami/charts/issues/31773)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.2.5 (2025-01-24)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.5 (#31577) ([6293023](https://github.com/bitnami/charts/commit/6293023d7fcaf2ca2d17f2fbd0f902469e0eaac9)), closes [#31577](https://github.com/bitnami/charts/issues/31577)
+
+## <small>6.2.4 (2025-01-17)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.4 (#31439) ([14f55cc](https://github.com/bitnami/charts/commit/14f55cc57e45480ca38bf8259c5083daf592f745)), closes [#31439](https://github.com/bitnami/charts/issues/31439)
+
+## <small>6.2.3 (2025-01-15)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.3 (#31383) ([26bae82](https://github.com/bitnami/charts/commit/26bae8237377e9c8a63d65b0438e1bf74642bddb)), closes [#31383](https://github.com/bitnami/charts/issues/31383)
+
+## <small>6.2.2 (2025-01-14)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.2 (#31357) ([92f3960](https://github.com/bitnami/charts/commit/92f3960af8766a3e952dd22d34f787d3e54d916f)), closes [#31357](https://github.com/bitnami/charts/issues/31357)
+
+## <small>6.2.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/oauth2-proxy] Release 6.2.1 (#31323) ([51cefd2](https://github.com/bitnami/charts/commit/51cefd2b742a0b106ed56dbb99346a09bb3b5ebb)), closes [#31323](https://github.com/bitnami/charts/issues/31323)
+
+## 6.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/oauth2-proxy] Detect non-standard images (#30933) ([81f3a51](https://github.com/bitnami/charts/commit/81f3a51a0ee4bdc1de6e479643e9f1a35d95e5a9)), closes [#30933](https://github.com/bitnami/charts/issues/30933)
+
+## <small>6.1.1 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/oauth2-proxy] Release 6.1.1 (#30770) ([8805060](https://github.com/bitnami/charts/commit/8805060f570e254bb8b66121537e5a3f7d54bce9)), closes [#30770](https://github.com/bitnami/charts/issues/30770)
+
+## 6.1.0 (2024-11-28)
+
+* [bitnami/oauth2-proxy] add useApplicationDefaultCredentials google (#30309) ([5ee114c](https://github.com/bitnami/charts/commit/5ee114cbf81aa174da2fd4e62cd3f1af10c96417)), closes [#30309](https://github.com/bitnami/charts/issues/30309)
+
+## <small>6.0.6 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/oauth2-proxy] Release 6.0.6 (#30288) ([763b6aa](https://github.com/bitnami/charts/commit/763b6aad5acfa854f0e62dfdb026ef78e2803f57)), closes [#30288](https://github.com/bitnami/charts/issues/30288)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>6.0.5 (2024-10-08)</small>
 

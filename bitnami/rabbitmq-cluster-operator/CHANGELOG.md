@@ -1,8 +1,80 @@
 # Changelog
 
-## 4.3.27 (2024-11-08)
+## 4.4.13 (2025-06-02)
 
-* [bitnami/rabbitmq-cluster-operator] Unify seLinuxOptions default value ([#30332](https://github.com/bitnami/charts/pull/30332))
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#34036](https://github.com/bitnami/charts/pull/34036))
+
+## <small>4.4.12 (2025-06-02)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34030) ([09387be](https://github.com/bitnami/charts/commit/09387be464f3a831e6d0e7f965496764bead0a16)), closes [#34030](https://github.com/bitnami/charts/issues/34030)
+
+## <small>4.4.11 (2025-05-13)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#33644) ([cb75447](https://github.com/bitnami/charts/commit/cb7544718c618ca1572c66d869387c1f7f7c02f8)), closes [#33644](https://github.com/bitnami/charts/issues/33644)
+
+## <small>4.4.10 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.10 (#33494) ([ee56fcc](https://github.com/bitnami/charts/commit/ee56fcc8cc520b6c5731bb0c265ccca6b88cff23)), closes [#33494](https://github.com/bitnami/charts/issues/33494)
+
+## <small>4.4.9 (2025-05-06)</small>
+
+* [bitnami/rabbitmq-cluster-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23  ([d275c76](https://github.com/bitnami/charts/commit/d275c7622ed02fc17054266efcede9fac07d15a5)), closes [#33427](https://github.com/bitnami/charts/issues/33427)
+
+## <small>4.4.8 (2025-04-28)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.8 (#33216) ([10fcf9a](https://github.com/bitnami/charts/commit/10fcf9afff42aa53dd67a24be41410cc9ca09441)), closes [#33216](https://github.com/bitnami/charts/issues/33216)
+
+## <small>4.4.7 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.7 (#32761) ([b848724](https://github.com/bitnami/charts/commit/b848724711fdc36dc2df939140e1c650b02deafa)), closes [#32761](https://github.com/bitnami/charts/issues/32761)
+
+## <small>4.4.6 (2025-03-05)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.6 (#32315) ([557c15a](https://github.com/bitnami/charts/commit/557c15afb9ee31f586ab5013519169eb5b22311e)), closes [#32315](https://github.com/bitnami/charts/issues/32315)
+
+## <small>4.4.5 (2025-02-14)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.5 (#31927) ([b9cb046](https://github.com/bitnami/charts/commit/b9cb046d16aad56db72a1399449e229c225e7b2b)), closes [#31927](https://github.com/bitnami/charts/issues/31927)
+
+## <small>4.4.4 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.4 (#31830) ([4842a9a](https://github.com/bitnami/charts/commit/4842a9a0ce9f02b9aa1ba6bcb62333ac5ad8af82)), closes [#31830](https://github.com/bitnami/charts/issues/31830)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.4.3 (2025-01-24)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.3 (#31581) ([f16551b](https://github.com/bitnami/charts/commit/f16551b6fcfb6d4bc727575030a70ae9fa5d3f77)), closes [#31581](https://github.com/bitnami/charts/issues/31581)
+
+## <small>4.4.2 (2025-01-17)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.2 (#31448) ([0656c74](https://github.com/bitnami/charts/commit/0656c7413772219335816bfab8d3d4affaec3153)), closes [#31448](https://github.com/bitnami/charts/issues/31448)
+
+## <small>4.4.1 (2024-12-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.1 (#31126) ([22f7911](https://github.com/bitnami/charts/commit/22f79115cfdde74662fc06f76ac372fffd557023)), closes [#31126](https://github.com/bitnami/charts/issues/31126)
+
+## 4.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/rabbitmq-cluster-operator] Detect non-standard images (#30941) ([b95e85b](https://github.com/bitnami/charts/commit/b95e85b077668be0add122fad290e7eecdcdf16c)), closes [#30941](https://github.com/bitnami/charts/issues/30941)
+
+## <small>4.3.29 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.29 (#30776) ([41e2431](https://github.com/bitnami/charts/commit/41e2431f244f5660314c435d6687264be2331fe5)), closes [#30776](https://github.com/bitnami/charts/issues/30776)
+
+## <small>4.3.28 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/rabbitmq-cluster-operator] Fix msg topology operator PodDisruptionBudget (#30445) ([2e5147c](https://github.com/bitnami/charts/commit/2e5147c9c5772350575a925ad41ee16bcf7b4a6f)), closes [#30445](https://github.com/bitnami/charts/issues/30445)
+
+## <small>4.3.27 (2024-11-08)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Unify seLinuxOptions default value (#30332) ([1fabdf7](https://github.com/bitnami/charts/commit/1fabdf79e682fe49ac116aa65064bab744e6f429)), closes [#30332](https://github.com/bitnami/charts/issues/30332)
 
 ## <small>4.3.26 (2024-11-07)</small>
 

@@ -1,12 +1,12 @@
 <!--- app-name: Bitnami Object Storage based on MinIO&reg; -->
 
-# Bitnami Object Storage based on MinIO(R)
+# Bitnami Object Storage based on MinIO&reg;
 
-MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.).
+MinIO&reg; is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.).
 
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
-Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
+Disclaimer: All software products, projects and company names are trademark&trade; or registered&reg; trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO&reg; is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO&reg; is licensed under GNU AGPL v3.0.
 
 ## TL;DR
 
@@ -14,13 +14,13 @@ Disclaimer: All software products, projects and company names are trademark(TM) 
 helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.minio-cnab) to see the listing on Azure Marketplace.
+
 Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
 This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/containers/tree/main/bitnami/minio) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -48,7 +48,36 @@ These commands deploy MinIO&reg; on the Kubernetes cluster in the default config
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://min.io/docs/minio/linux/administration/identity-access-management/minio-user-management.html)
+- Update the password secret with the new values (replace the SECRET_NAME, USER and PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=root-user=USER --from-literal=root-password=PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose MinIO(TM) native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -106,7 +135,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -192,6 +221,10 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami Object Storage based on MinIO(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/minio) image stores data at the `/bitnami/minio/data` path of the container by default.
@@ -212,13 +245,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -253,7 +287,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `auth.rootUserSecretKey`     | Key where the MINIO_ROOT_USER username is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.rootPasswordSecretKey` | Key where the MINIO_ROOT_USER password is being stored inside the existing secret `auth.existingSecret`                               | `""`                           |
 | `auth.forcePassword`         | Force users to specify required passwords                                                                                             | `false`                        |
-| `auth.useCredentialsFiles`   | Mount credentials as a files instead of using an environment variable                                                                 | `false`                        |
+| `auth.usePasswordFiles`      | Mount credentials as a files instead of using an environment variable                                                                 | `true`                         |
 | `auth.useSecret`             | Uses a secret to mount the credential files.                                                                                          | `true`                         |
 | `auth.forceNewKeys`          | Force root credentials (user and password) to be reconfigured every time they change in the secrets                                   | `false`                        |
 | `defaultBuckets`             | Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)                            | `""`                           |
@@ -281,6 +315,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `statefulset.zones`                                              | Number of zones (only for MinIO&reg; distributed mode)                                                                                                                                                                                      | `1`              |
 | `statefulset.drivesPerNode`                                      | Number of drives attached to every node (only for MinIO&reg; distributed mode)                                                                                                                                                              | `1`              |
 | `provisioning.enabled`                                           | Enable MinIO&reg; provisioning Job                                                                                                                                                                                                          | `false`          |
+| `provisioning.sleepTime`                                         | Sleep time before checking Minio availability                                                                                                                                                                                               | `5`              |
 | `provisioning.schedulerName`                                     | Name of the k8s scheduler (other than default) for MinIO&reg; provisioning                                                                                                                                                                  | `""`             |
 | `provisioning.nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                                                                                                                                    | `{}`             |
 | `provisioning.podLabels`                                         | Extra labels for provisioning pods                                                                                                                                                                                                          | `{}`             |
@@ -534,6 +569,20 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.0.0
+
+This major bump introduces the following changes:
+
+- `auth.useCredentialsFiles` has been renamed to `auth.usePasswordFiles`. Its default value has been changed from `false` to `true`.
+
+## To 15.0.0
+
+This version updates MinIO&reg; to major version 2025.
+
+### To 14.9.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 14.0.0
 
 This major bump changes the following security defaults:
@@ -545,6 +594,10 @@ This major bump changes the following security defaults:
 
 This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
+## To 13.0.0
+
+This version updates MinIO&reg; to major version 2024.
+
 ### To 12.0.0
 
 This version updates MinIO&reg; to major version 2023. All gateway features have been removed from Minio since upstream completely dropped this feature. The related options have been removed in version 12.1.0.
@@ -554,6 +607,10 @@ This version updates MinIO&reg; to major version 2023. All gateway features have
 This version deprecates the usage of `MINIO_ACCESS_KEY` and `MINIO_SECRET_KEY` environment variables in MINIO&reg; container in favor of `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`.
 
 If you were already using the new variables, no issues are expected during upgrade.
+
+## To 10.0.0
+
+This version updates MinIO&reg; to major version 2022.
 
 ### To 9.0.0
 
@@ -579,6 +636,10 @@ Please note that Web UI, previously running on port 9000 will now use port 9001 
 ### To 7.0.0
 
 This version introduces pod and container securityContext support. The previous configuration of `securityContext` has moved to `podSecurityContext` and `containerSecurityContext`. Apart from this case, no issues are expected to appear when upgrading.
+
+## To 6.0.0
+
+This version updates MinIO&reg; to major version 2021.
 
 ### To 5.0.0
 
@@ -611,7 +672,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

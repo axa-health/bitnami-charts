@@ -20,8 +20,6 @@ Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Applic
 
 This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/tree/main/bitnami/schema-registry) statefulset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -47,7 +45,7 @@ These commands deploy Schema Registry on the Kubernetes cluster with the default
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -83,6 +81,8 @@ kafka.auth.jaas.clientUsers[0]=clientUser
 kafka.auth.jaas.clientPasswords[0]=clientPassword
 ```
 
+### Securing Traffic using TLS
+
 In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `kafka.auth.tls.existingSecrets` parameter when deploying the chart.
 
 > **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `kafka.auth.tls.password` parameter to provide your password.
@@ -116,6 +116,10 @@ In case you want to ignore hostname verification on Kafka certificates, set the 
 kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
 kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
 ```
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Adding extra flags
 
@@ -200,13 +204,14 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
-| `kubeVersion`                                         | Override Kubernetes version                                                                                                                                                                                                                                                                                                                                         | `""`   |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
+| `kubeVersion`                                         | Override Kubernetes version                                                                                                                                                                                                                                                                                                                                         | `""`    |
 
 ### Common parameters
 
@@ -219,6 +224,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                                | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -387,20 +393,20 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Kafka chart parameters
 
-| Name                                | Description                                                                                                                  | Value                                |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                               |
-| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                                  |
-| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                          |
-| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                               |
-| `kafka.extraConfig`                 | Additional configuration to be appended at the end of the generated Kafka configuration file.                                | `offsets.topic.replication.factor=1` |
-| `kafka.sasl.client.users`           | Comma-separated list of usernames for Kafka client listener when SASL is enabled                                             | `["user"]`                           |
-| `kafka.sasl.client.passwords`       | Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users            | `""`                                 |
-| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]`     |
-| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                          |
-| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                               |
-| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                                 |
-| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                                 |
+| Name                                | Description                                                                                                                  | Value                            |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                           |
+| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                              |
+| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                      |
+| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                           |
+| `kafka.overrideConfiguration`       | Kafka common configuration override                                                                                          | `{}`                             |
+| `kafka.sasl.client.users`           | Comma-separated list of usernames for Kafka client listener when SASL is enabled                                             | `["user"]`                       |
+| `kafka.sasl.client.passwords`       | Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users            | `""`                             |
+| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]` |
+| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                      |
+| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                           |
+| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                             |
+| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -428,6 +434,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/schem
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 24.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
+
+### To 23.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 22.0.0
 
@@ -531,7 +545,7 @@ This version bump the version of charts used as dependency in a major. Kafka fro
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

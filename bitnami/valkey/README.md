@@ -20,8 +20,6 @@ Looking to use Valkey in production? Try [VMware Tanzu Application Catalog](http
 
 This chart bootstraps a [Valkey](https://github.com/bitnami/containers/tree/main/bitnami/valkey) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -48,7 +46,32 @@ The command deploys Valkey on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Update credentials
+
+The Bitnami Valkey chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `auth.password`
+- Run `helm upgrade` specifying a new secret in `auth.existingSecret`
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [redis_exporter](https://github.com/oliver006/redis_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
@@ -124,7 +147,7 @@ When installing the chart with `architecture=standalone`, it will deploy a stand
 
 #### Primary-Replicas with Sentinel
 
-When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Valkey primary StatefulSet (only one primary allowed) and a Valkey replicas StatefulSet. In this case, the pods will contain an extra container with Valkey Sentinel. This container will form a cluster of Valkey Sentinel nodes, which will promote a new primary in case the actual one fails.
+When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a single Valkey StatefulSet. In this case, the pods will contain an extra container with Valkey Sentinel. This container will form a cluster of Valkey Sentinel nodes, which will promote a new primary in case the actual one fails.
 
 On graceful termination of the Valkey primary pod, a failover of the primary is initiated to promote a new primary. The Valkey Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.valkeyShutdownWaitFailover=true` is set (the default), the Valkey container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new primary.
 
@@ -403,20 +426,22 @@ helm install my-release --set primary.persistence.existingClaim=PVC_NAME oci://R
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.valkey.password`                              | Global Valkey password (overrides `auth.password`)                                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.valkey.password`                              | Global Valkey password (overrides `auth.password`)                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                      | Description                                                                                                    | Value           |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`             | Override Kubernetes version                                                                                    | `""`            |
+| `apiVersions`             | Override Kubernetes API versions reported by .Capabilities                                                     | `[]`            |
 | `nameOverride`            | String to partially override common.names.fullname                                                             | `""`            |
 | `fullnameOverride`        | String to fully override common.names.fullname                                                                 | `""`            |
 | `namespaceOverride`       | String to fully override common.names.namespace                                                                | `""`            |
@@ -453,7 +478,7 @@ helm install my-release --set primary.persistence.existingClaim=PVC_NAME oci://R
 | `auth.password`                  | Valkey password                                                                   | `""`          |
 | `auth.existingSecret`            | The name of an existing secret with Valkey credentials                            | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                 | `""`          |
-| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable               | `false`       |
+| `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable               | `true`        |
 | `auth.usePasswordFileFromSecret` | Mount password file from secret                                                   | `true`        |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                               | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Valkey nodes | `""`          |
@@ -1013,6 +1038,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 2.0.0
 
 This major updates all the references from `master/slave` to `primary/replica` to follow the upstream project strategy:
@@ -1037,7 +1066,7 @@ helm install valkey oci://REGISTRY_NAME/REPOSITORY_NAME/valkey --set auth.passwo
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

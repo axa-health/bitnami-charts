@@ -1,8 +1,90 @@
 # Changelog
 
+## 37.0.5 (2025-05-29)
+
+* Deprecate Spring Cloud ([#33958](https://github.com/bitnami/charts/pull/33958))
+
+## <small>37.0.4 (2025-05-20)</small>
+
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references (#33793) ([67deb62](https://github.com/bitnami/charts/commit/67deb626e62f6da42035c75ce329a09dd915e1b0)), closes [#33793](https://github.com/bitnami/charts/issues/33793)
+
+## <small>37.0.3 (2025-05-15)</small>
+
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references (#33734) ([d4b9512](https://github.com/bitnami/charts/commit/d4b9512348c2887052eb17b77d125deb6ed26355)), closes [#33734](https://github.com/bitnami/charts/issues/33734)
+
+## <small>37.0.2 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mysql] Update MySQL docs (#33613) ([b0ca2e2](https://github.com/bitnami/charts/commit/b0ca2e239a09b9e9eca7fe2f67b0f85b3f5d696c)), closes [#33613](https://github.com/bitnami/charts/issues/33613)
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references (#33647) ([861fb2e](https://github.com/bitnami/charts/commit/861fb2e132dfdb0d1ff0131f9e70d609f74663de)), closes [#33647](https://github.com/bitnami/charts/issues/33647)
+
+## <small>37.0.1 (2025-05-06)</small>
+
+* [bitnami/spring-cloud-dataflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 refe ([3dc1f8e](https://github.com/bitnami/charts/commit/3dc1f8e114ce5a787d21308d0072683712c264e5)), closes [#33438](https://github.com/bitnami/charts/issues/33438)
+
+## 37.0.0 (2025-04-29)
+
+* [bitnami/spring-cloud-dataflow] Major 37.0.0: Upgrade MariaDB to 11.4.x (#33243) ([f3400ee](https://github.com/bitnami/charts/commit/f3400eecb2f39db9aec724fdd61cb279b4c9e6d3)), closes [#33243](https://github.com/bitnami/charts/issues/33243)
+
+## <small>36.0.1 (2025-04-28)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 36.0.1 (#33218) ([d265ecd](https://github.com/bitnami/charts/commit/d265ecdbb29ca6418a4c54e144ba9870eac1a4c1)), closes [#33218](https://github.com/bitnami/charts/issues/33218)
+
+## 36.0.0 (2025-04-24)
+
+* [bitnami/spring-cloud-dataflow] Update RabbitMQ to major 16 (#33163) ([6632365](https://github.com/bitnami/charts/commit/66323656953e2f43a172026729301eff75ec3b1d)), closes [#33163](https://github.com/bitnami/charts/issues/33163)
+
+## <small>35.0.2 (2025-04-01)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 35.0.2 (#32714) ([e82b3be](https://github.com/bitnami/charts/commit/e82b3be8c90675079d8e308e5e8109b0f6a1eb20)), closes [#32714](https://github.com/bitnami/charts/issues/32714)
+
+## <small>35.0.1 (2025-04-01)</small>
+
+* bitnami/spring-cloud-dataflow fix for #32453 (#32677) ([f4c345d](https://github.com/bitnami/charts/commit/f4c345daab91d654148de2017ec7cfc0a55248d7)), closes [#32453](https://github.com/bitnami/charts/issues/32453) [#32677](https://github.com/bitnami/charts/issues/32677) [#32453](https://github.com/bitnami/charts/issues/32453)
+
+## 35.0.0 (2025-03-26)
+
+* [bitnami/spring-cloud-dataflow] feat: bump major due to major bump on Kafka dep (#32619) ([66ba328](https://github.com/bitnami/charts/commit/66ba328a95e0bc9426e952a7f3f0ae68ceb1b510)), closes [#32619](https://github.com/bitnami/charts/issues/32619)
+
+## <small>34.2.2 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/spring-cloud-dataflow] fix incorrect application of externalDatabase.skipper.password value ([c4f8ddf](https://github.com/bitnami/charts/commit/c4f8ddfa8f1f34f34d6e91e1283d0df883f80a5f)), closes [#32251](https://github.com/bitnami/charts/issues/32251)
+
+## <small>34.2.1 (2025-03-02)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.2.1 (#32230) ([4b9681d](https://github.com/bitnami/charts/commit/4b9681d82f879514596211815f7cb9f5e12d2667)), closes [#32230](https://github.com/bitnami/charts/issues/32230)
+
+## 34.2.0 (2025-02-26)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/spring-cloud-dataflow] Use subchart default value for `usePasswordFiles` (#32120) ([b9d42d0](https://github.com/bitnami/charts/commit/b9d42d04ad7b8ba4a8bbd66e3e4570853a9acf64)), closes [#32120](https://github.com/bitnami/charts/issues/32120)
+
+## <small>34.1.2 (2025-02-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 34.1.2 (#31688) ([d39f48a](https://github.com/bitnami/charts/commit/d39f48aec34ce2a277bece9196709afa63c32ec3)), closes [#31688](https://github.com/bitnami/charts/issues/31688)
+* Typo fix  CHANGELOG.md (#31536) ([315f9c2](https://github.com/bitnami/charts/commit/315f9c2f9b1c582eee30d983cc358bf66d3da0ad)), closes [#31536](https://github.com/bitnami/charts/issues/31536)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>34.1.1 (2025-01-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/spring-cloud-dataflow] Release 34.1.1 (#31451) ([2faecca](https://github.com/bitnami/charts/commit/2faeccac20cff398acfa3036c62140e1cfc70c14)), closes [#31451](https://github.com/bitnami/charts/issues/31451)
+
+## 34.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/spring-cloud-dataflow] Detect non-standard images (#30968) ([f1ceafb](https://github.com/bitnami/charts/commit/f1ceafba996e8b44a30abdff8594376a7e3b0399)), closes [#30968](https://github.com/bitnami/charts/issues/30968)
+
+## <small>34.0.1 (2024-12-08)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/spring-cloud-dataflow] Release 34.0.1 (#30829) ([99bdcc4](https://github.com/bitnami/charts/commit/99bdcc485b97dd97b1e74836d6b32805aab7323f)), closes [#30829](https://github.com/bitnami/charts/issues/30829)
+
 ## 34.0.0 (2024-11-12)
 
-* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 ([#30426](https://github.com/bitnami/charts/pull/30426))
+* [bitnami/spring-cloud-dataflow] Update kafka subchart to 31.0.0 (#30426) ([01bfb98](https://github.com/bitnami/charts/commit/01bfb98c9b21baf9c18d15ef67e8a116979994e9)), closes [#30426](https://github.com/bitnami/charts/issues/30426)
 
 ## 33.0.0 (2024-11-12)
 

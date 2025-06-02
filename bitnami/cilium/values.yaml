@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -37,6 +40,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -126,7 +132,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/cilium
-    tag: 1.16.4-debian-12-r0
+    tag: 1.17.4-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1003,7 +1009,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/cilium-operator
-    tag: 1.16.4-debian-12-r0
+    tag: 1.17.4-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1506,7 +1512,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/cilium-proxy
-    tag: 1.29.10-debian-12-r2
+    tag: 1.32.6-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2103,7 +2109,7 @@ hubble:
     image:
       registry: docker.io
       repository: bitnami/hubble-relay
-      tag: 1.16.4-debian-12-r0
+      tag: 1.17.4-debian-12-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2696,7 +2702,7 @@ hubble:
       image:
         registry: docker.io
         repository: bitnami/hubble-ui
-        tag: 0.13.1-debian-12-r10
+        tag: 0.13.2-debian-12-r9
         digest: ""
         ## Specify a imagePullPolicy
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2876,7 +2882,7 @@ hubble:
       image:
         registry: docker.io
         repository: bitnami/hubble-ui-backend
-        tag: 0.13.1-debian-12-r15
+        tag: 0.13.2-debian-12-r11
         digest: ""
         ## Specify a imagePullPolicy
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

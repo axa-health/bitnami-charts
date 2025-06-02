@@ -1,8 +1,86 @@
 # Changelog
 
-## 24.0.1 (2024-10-22)
+## 25.1.6 (2025-06-01)
 
-* [bitnami/parse] Release 24.0.1 ([#30039](https://github.com/bitnami/charts/pull/30039))
+* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#34026](https://github.com/bitnami/charts/pull/34026))
+
+## <small>25.1.5 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#33568) ([ed82cb6](https://github.com/bitnami/charts/commit/ed82cb692a590396ca28eaf235141196e6ccd08f)), closes [#33568](https://github.com/bitnami/charts/issues/33568)
+
+## <small>25.1.4 (2025-05-06)</small>
+
+* [bitnami/parse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33419) ([188a39d](https://github.com/bitnami/charts/commit/188a39d8630bf05e17d4d7ad24aa347680090f4b)), closes [#33419](https://github.com/bitnami/charts/issues/33419)
+
+## <small>25.1.3 (2025-05-01)</small>
+
+* [bitnami/parse] Release 25.1.3 (#33280) ([23c378a](https://github.com/bitnami/charts/commit/23c378a148067ae0f4bbe5a519966d78ef26d425)), closes [#33280](https://github.com/bitnami/charts/issues/33280)
+
+## <small>25.1.2 (2025-04-28)</small>
+
+* [bitnami/parse] Release 25.1.2 (#33213) ([c1f51d6](https://github.com/bitnami/charts/commit/c1f51d65c87430b62caab99531e8c0928bcc2634)), closes [#33213](https://github.com/bitnami/charts/issues/33213)
+
+## <small>25.1.1 (2025-04-09)</small>
+
+* [bitnami/parse] Release 25.1.1 (#32912) ([8c64016](https://github.com/bitnami/charts/commit/8c64016ca68781796e8996aa90d0b987e8c3d6ec)), closes [#32912](https://github.com/bitnami/charts/issues/32912)
+
+## 25.1.0 (2025-04-04)
+
+* [bitnami/parse] Set `usePasswordFiles=true` by default (#32709) ([5166f77](https://github.com/bitnami/charts/commit/5166f773fda498d5fc6ba9dbfa2adab226386824)), closes [#32709](https://github.com/bitnami/charts/issues/32709)
+
+## <small>25.0.3 (2025-04-04)</small>
+
+* [bitnami/parse] Release 25.0.3 (#32810) ([920a2d6](https://github.com/bitnami/charts/commit/920a2d667af0321b87ead6f38726c4fcb1742c60)), closes [#32810](https://github.com/bitnami/charts/issues/32810)
+
+## <small>25.0.2 (2025-03-31)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/parse] Release 25.0.2 (#32687) ([e95d3a8](https://github.com/bitnami/charts/commit/e95d3a8ee8c5087cc103997e3da4cdac938d6017)), closes [#32687](https://github.com/bitnami/charts/issues/32687)
+
+## <small>25.0.1 (2025-03-10)</small>
+
+* [bitnami/parse] Release 25.0.1 (#32377) ([8bd7796](https://github.com/bitnami/charts/commit/8bd7796d56dd6886ba7031e5e6d6e97bc0093a5a)), closes [#32377](https://github.com/bitnami/charts/issues/32377)
+
+## 25.0.0 (2025-03-10)
+
+* [bitnami/parse] Release 25.0.0 (#32374) ([bedc812](https://github.com/bitnami/charts/commit/bedc812c168c21fd205c2c6e09d4988c3f3a0b27)), closes [#32374](https://github.com/bitnami/charts/issues/32374)
+
+## <small>24.1.4 (2025-03-04)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/parse] Release 24.1.4 (#32266) ([857b09a](https://github.com/bitnami/charts/commit/857b09a38cdbba1b9704aa5d07246b5cd6afd967)), closes [#32266](https://github.com/bitnami/charts/issues/32266)
+
+## <small>24.1.3 (2025-02-03)</small>
+
+* [bitnami/parse] Release 24.1.3 (#31704) ([0b74962](https://github.com/bitnami/charts/commit/0b749624bf96d6cc8c08cad321c12f89ea9f9437)), closes [#31704](https://github.com/bitnami/charts/issues/31704)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>24.1.2 (2024-12-24)</small>
+
+* [bitnami/parse] Release 24.1.2 (#31158) ([d5df113](https://github.com/bitnami/charts/commit/d5df113d2e550d22591bbae7fca978569ddc1a00)), closes [#31158](https://github.com/bitnami/charts/issues/31158)
+
+## <small>24.1.1 (2024-12-24)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/parse] Release 24.1.1 (#31157) ([96d743d](https://github.com/bitnami/charts/commit/96d743d10370263773b03be1e24edf29b5ba9d88)), closes [#31157](https://github.com/bitnami/charts/issues/31157)
+
+## 24.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/parse] Detect non-standard images (#30962) ([cd40d8b](https://github.com/bitnami/charts/commit/cd40d8b162e95ca5b9a834b55fd62a0f63732b7f)), closes [#30962](https://github.com/bitnami/charts/issues/30962)
+
+## <small>24.0.2 (2024-12-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/parse] Release 24.0.2 (#30701) ([b8c4d9f](https://github.com/bitnami/charts/commit/b8c4d9ff01fe35a6a8e373d53c47889e93a63f94)), closes [#30701](https://github.com/bitnami/charts/issues/30701)
+
+## <small>24.0.1 (2024-10-22)</small>
+
+* [bitnami/parse] Release 24.0.1 (#30039) ([eea1a8e](https://github.com/bitnami/charts/commit/eea1a8e5e6b2595d78d3885792a8827c43dac9a6)), closes [#30039](https://github.com/bitnami/charts/issues/30039)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 24.0.0 (2024-10-08)
 

@@ -1,8 +1,83 @@
 # Changelog
 
-## 9.0.3 (2024-10-26)
+## 9.3.1 (2025-06-02)
 
-* [bitnami/mongodb-sharded] Release 9.0.3 ([#30088](https://github.com/bitnami/charts/pull/30088))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#34033](https://github.com/bitnami/charts/pull/34033))
+
+## 9.3.0 (2025-05-23)
+
+* [bitnami/mongodb-sharded] allow selector definitions for volumeClaimTemplates (#33574) ([8250811](https://github.com/bitnami/charts/commit/82508118e303da80196874242fb82d2ca32c1add)), closes [#33574](https://github.com/bitnami/charts/issues/33574)
+
+## <small>9.2.7 (2025-05-22)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#33820) ([933035b](https://github.com/bitnami/charts/commit/933035b248eec8383069a4601616545c24066ed6)), closes [#33820](https://github.com/bitnami/charts/issues/33820)
+
+## <small>9.2.6 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#33638) ([3e654df](https://github.com/bitnami/charts/commit/3e654dfd3e3d86723b6f56ae14418b0dbd649559)), closes [#33638](https://github.com/bitnami/charts/issues/33638)
+
+## <small>9.2.5 (2025-05-06)</small>
+
+* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([07e1ed1](https://github.com/bitnami/charts/commit/07e1ed1be815ad1edd28babc745ef230ece66c31)), closes [#33406](https://github.com/bitnami/charts/issues/33406)
+
+## <small>9.2.4 (2025-05-01)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.4 (#33285) ([7f09123](https://github.com/bitnami/charts/commit/7f0912397bd85bef38951545f9fefd1b15a815a0)), closes [#33285](https://github.com/bitnami/charts/issues/33285)
+
+## <small>9.2.3 (2025-04-14)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.3 (#32994) ([0217276](https://github.com/bitnami/charts/commit/0217276dd5d063a65c8b327c3641cdcc44e185eb)), closes [#32994](https://github.com/bitnami/charts/issues/32994)
+
+## <small>9.2.2 (2025-04-02)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.2 (#32751) ([828a6e1](https://github.com/bitnami/charts/commit/828a6e12d079ff09cc34f1ec26f4c2a929f04e7c)), closes [#32751](https://github.com/bitnami/charts/issues/32751)
+
+## <small>9.2.1 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mongodb-sharded] Release 9.2.1 (#32550) ([73a090e](https://github.com/bitnami/charts/commit/73a090eab45cd85a0623bb50906b3ae4d1d3c366)), closes [#32550](https://github.com/bitnami/charts/issues/32550)
+
+## 9.2.0 (2025-02-27)
+
+* [bitnami/mongodb-sharded] Set `usePasswordFiles=true` by default (#32112) ([6c1ce79](https://github.com/bitnami/charts/commit/6c1ce79e1f9dcd194f101ee60b85fd41b16971f2)), closes [#32112](https://github.com/bitnami/charts/issues/32112)
+
+## <small>9.1.3 (2025-02-21)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mongodb-sharded] Release 9.1.3 (#32134) ([65a30fa](https://github.com/bitnami/charts/commit/65a30fab023ed5b9d85d9bf80b435237c7a04226)), closes [#32134](https://github.com/bitnami/charts/issues/32134)
+
+## <small>9.1.2 (2025-02-03)</small>
+
+* [bitnami/mongodb-sharded] Release 9.1.2 (#31698) ([ae3a2f2](https://github.com/bitnami/charts/commit/ae3a2f21844f4a2f585800ae5b21e7c731fa96fa)), closes [#31698](https://github.com/bitnami/charts/issues/31698)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>9.1.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mongodb-sharded] Release 9.1.1 (#31389) ([3792427](https://github.com/bitnami/charts/commit/379242754da4f52c1d5cecfa6746124c75341fe5)), closes [#31389](https://github.com/bitnami/charts/issues/31389)
+
+## 9.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mongodb-sharded] Detect non-standard images (#30927) ([3c8ef42](https://github.com/bitnami/charts/commit/3c8ef421a131f3c69c1bf6b95bbae8d1c7ef6b31)), closes [#30927](https://github.com/bitnami/charts/issues/30927)
+
+## <small>9.0.5 (2024-12-06)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.5 (#30821) ([c926860](https://github.com/bitnami/charts/commit/c926860fff55e3718ed34b0b99b9196fd4331917)), closes [#30821](https://github.com/bitnami/charts/issues/30821)
+
+## <small>9.0.4 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mongodb-sharded] Release 9.0.4 (#30787) ([c3af04c](https://github.com/bitnami/charts/commit/c3af04cdff0ee39614f9da280ab4731aec555968)), closes [#30787](https://github.com/bitnami/charts/issues/30787)
+
+## <small>9.0.3 (2024-10-26)</small>
+
+* [bitnami/mongodb-sharded] Release 9.0.3 (#30088) ([a54742d](https://github.com/bitnami/charts/commit/a54742d636d66d841a3be0133f0ae2f368ae416b)), closes [#30088](https://github.com/bitnami/charts/issues/30088)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>9.0.2 (2024-10-09)</small>
 
@@ -665,7 +740,7 @@
 
 ## <small>4.0.6 (2022-02-23)</small>
 
-* Merge branch 'master' of https://github.com/bitnami/charts (#9163) ([7413cdb](https://github.com/bitnami/charts/commit/7413cdb88d22c2f158b6f47285c2ebdb653b9896)), closes [#9163](https://github.com/bitnami/charts/issues/9163)
+* Merge branch 'master' of https://github.com/bitnami/charts (#9163) ([7413cdb](https://github.com/bitnami/charts/commit/7413cdb88d22c2f158b6f47285c2ebdb653b9896))
 
 ## <small>4.0.5 (2022-02-21)</small>
 
@@ -877,7 +952,7 @@
 
 ## 3.6.0 (2021-06-11)
 
-* [bitnami/mongodb-sharded] Added `dataNodeSelectorLoopId` and `dataNodeTolerationLoopId` to /shard/sh ([ccae74f](https://github.com/bitnami/charts/commit/ccae74f2316acf0fe879b10a914739047a874178)), closes [#6601](https://github.com/bitnami/charts/issues/6601) [/github.com/bitnami/charts/pull/6601#pullrequestreview-679450792](https://github.com//github.com/bitnami/charts/pull/6601/issues/pullrequestreview-679450792)
+* [bitnami/mongodb-sharded] Added `dataNodeSelectorLoopId` and `dataNodeTolerationLoopId` to /shard/sh ([ccae74f](https://github.com/bitnami/charts/commit/ccae74f2316acf0fe879b10a914739047a874178)), closes [#6601](https://github.com/bitnami/charts/issues/6601)
 
 ## 3.5.0 (2021-06-09)
 

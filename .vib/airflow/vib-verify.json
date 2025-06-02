@@ -2,6 +2,15 @@
   "phases": {
     "package": {
       "context": {
+        "credentials": [
+          {
+            "url": "{VIB_ENV_CHARTS_REGISTRY}",
+            "authn": {
+              "username": "{VIB_ENV_CHARTS_REGISTRY_USERNAME}",
+              "password": "{VIB_ENV_CHARTS_REGISTRY_PASSWORD}"
+            }
+          }
+        ],
         "resources": {
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/airflow"
@@ -51,8 +60,9 @@
             "resources": {
               "path": "/.vib/airflow/cypress"
             },
-            "endpoint": "lb-airflow-http",
+            "endpoint": "lb-airflow-web-http",
             "app_protocol": "HTTP",
+            "port": 80,
             "env": {
               "username": "user",
               "password": "ComplicatedPassword123!4"

@@ -1,8 +1,96 @@
 # Changelog
 
-## 11.3.21 (2024-11-09)
+## 11.4.18 (2025-05-23)
 
-* [bitnami/consul] Release 11.3.21 ([#30374](https://github.com/bitnami/charts/pull/30374))
+* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#33864](https://github.com/bitnami/charts/pull/33864))
+
+## <small>11.4.17 (2025-05-07)</small>
+
+* [bitnami/consul] Release 11.4.17 (#33474) ([ce201e1](https://github.com/bitnami/charts/commit/ce201e13a95acf1b214be8a93144ceb61d16764d)), closes [#33474](https://github.com/bitnami/charts/issues/33474)
+
+## <small>11.4.16 (2025-05-06)</small>
+
+* [bitnami/consul] Release 11.4.16 (#33462) ([d27763a](https://github.com/bitnami/charts/commit/d27763a49e4f586aae2f81c7e44784b5a1f03e50)), closes [#33462](https://github.com/bitnami/charts/issues/33462)
+
+## <small>11.4.15 (2025-05-06)</small>
+
+* [bitnami/consul] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33349) ([059f766](https://github.com/bitnami/charts/commit/059f76645d06e7d7af07fb2d7fe7fabfc5b35ec2)), closes [#33349](https://github.com/bitnami/charts/issues/33349)
+
+## <small>11.4.14 (2025-04-30)</small>
+
+* [bitnami/consul] Fix mismatched serfLAN and serfWAN ports in consul-headless-service (#33114) ([9447571](https://github.com/bitnami/charts/commit/944757190dadada96f0eb7c86f745d6df7283ea0)), closes [#33114](https://github.com/bitnami/charts/issues/33114)
+
+## <small>11.4.13 (2025-04-28)</small>
+
+* [bitnami/consul] Release 11.4.13 (#33201) ([d1dbafc](https://github.com/bitnami/charts/commit/d1dbafc7ad5581e5d9f2b6a4387980272f996115)), closes [#33201](https://github.com/bitnami/charts/issues/33201)
+
+## <small>11.4.12 (2025-04-28)</small>
+
+* [bitnami/consul] Release 11.4.12 (#33200) ([0507ec6](https://github.com/bitnami/charts/commit/0507ec6480cbc335c2576f86f1478f871d5b571a)), closes [#33200](https://github.com/bitnami/charts/issues/33200)
+
+## <small>11.4.11 (2025-04-01)</small>
+
+* [bitnami/consul] Release 11.4.11 (#32726) ([754755d](https://github.com/bitnami/charts/commit/754755d846dc4e1d00f848a0f6db4fe7852781d3)), closes [#32726](https://github.com/bitnami/charts/issues/32726)
+
+## <small>11.4.10 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/consul] Release 11.4.10 (#32423) ([774ed2e](https://github.com/bitnami/charts/commit/774ed2e5b0d61eb21a1aa2102c6904947b5d96d3)), closes [#32423](https://github.com/bitnami/charts/issues/32423)
+
+## <small>11.4.9 (2025-03-04)</small>
+
+* [bitnami/consul] Release 11.4.9 (#32284) ([f33ca41](https://github.com/bitnami/charts/commit/f33ca419b007b5e257b0e270b66114e740d425aa)), closes [#32284](https://github.com/bitnami/charts/issues/32284)
+
+## <small>11.4.8 (2025-02-26)</small>
+
+* [bitnami/consul] Release 11.4.8 (#32176) ([f220ade](https://github.com/bitnami/charts/commit/f220ade638eee080aaf9f13bc2e51da1cf54356d)), closes [#32176](https://github.com/bitnami/charts/issues/32176)
+
+## <small>11.4.7 (2025-02-19)</small>
+
+* [bitnami/consul] Release 11.4.7 (#31981) ([1a9a009](https://github.com/bitnami/charts/commit/1a9a009bcacc416e3a230315eb4063a3baf498e3)), closes [#31981](https://github.com/bitnami/charts/issues/31981)
+
+## <small>11.4.6 (2025-02-13)</small>
+
+* [bitnami/consul] Release 11.4.6 (#31914) ([8a6808c](https://github.com/bitnami/charts/commit/8a6808c9d601e276e4f585a157a76f8d8f0b0bf0)), closes [#31914](https://github.com/bitnami/charts/issues/31914)
+
+## <small>11.4.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/consul] Release 11.4.5 (#31885) ([7fbd92d](https://github.com/bitnami/charts/commit/7fbd92db9094378cc77a6383760b13a55e1cc339)), closes [#31885](https://github.com/bitnami/charts/issues/31885)
+
+## <small>11.4.4 (2025-02-04)</small>
+
+* [bitnami/consul] Release 11.4.4 (#31748) ([519ca9c](https://github.com/bitnami/charts/commit/519ca9c99a05013258d83b24aab9bfbf8673e9ff)), closes [#31748](https://github.com/bitnami/charts/issues/31748)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.4.3 (2025-01-24)</small>
+
+* [bitnami/consul] Release 11.4.3 (#31547) ([7d467fd](https://github.com/bitnami/charts/commit/7d467fd2fdc3cba0dcf76a87c102377e34130081)), closes [#31547](https://github.com/bitnami/charts/issues/31547)
+
+## <small>11.4.2 (2025-01-17)</small>
+
+* [bitnami/consul] Release 11.4.2 (#31413) ([c8f4fa3](https://github.com/bitnami/charts/commit/c8f4fa37eca6aa96aaaa363b1de0738bf4eb5586)), closes [#31413](https://github.com/bitnami/charts/issues/31413)
+
+## <small>11.4.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/consul] Release 11.4.1 (#31252) ([4964e2d](https://github.com/bitnami/charts/commit/4964e2d57ab000c41f13cab5b92afbcb32d5b3b4)), closes [#31252](https://github.com/bitnami/charts/issues/31252)
+
+## 11.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/consul] Detect non-standard images (#30873) ([4b16ccc](https://github.com/bitnami/charts/commit/4b16ccce5d4ad4c82d0a8199ef5954910afcfec2)), closes [#30873](https://github.com/bitnami/charts/issues/30873)
+
+## <small>11.3.22 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/consul] Release 11.3.22 (#30744) ([ac8988c](https://github.com/bitnami/charts/commit/ac8988cc3a6f252bda827aa7ce11ed7ebc1ff75a)), closes [#30744](https://github.com/bitnami/charts/issues/30744)
+
+## <small>11.3.21 (2024-11-09)</small>
+
+* [bitnami/consul] Release 11.3.21 (#30374) ([0a42c1a](https://github.com/bitnami/charts/commit/0a42c1ad95be7b2466d4306d5a3abbbd989638c9)), closes [#30374](https://github.com/bitnami/charts/issues/30374)
 
 ## <small>11.3.20 (2024-11-07)</small>
 
@@ -1241,7 +1329,7 @@
 ## <small>4.2.8 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>4.2.7 (2019-05-28)</small>

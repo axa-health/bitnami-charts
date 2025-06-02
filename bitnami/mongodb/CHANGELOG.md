@@ -1,8 +1,138 @@
 # Changelog
 
-## 16.3.1 (2024-11-19)
+## 16.5.14 (2025-06-02)
 
-* [bitnami/mongodb] fix: Modify access modes to match YAML 1.2 schema ([#30512](https://github.com/bitnami/charts/pull/30512))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34034](https://github.com/bitnami/charts/pull/34034))
+
+## <small>16.5.13 (2025-05-30)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34007) ([61b2d82](https://github.com/bitnami/charts/commit/61b2d8292ed87dd51e51ac24bfd6c7ea97d353b6)), closes [#34007](https://github.com/bitnami/charts/issues/34007)
+
+## <small>16.5.12 (2025-05-29)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33969) ([7d6fc66](https://github.com/bitnami/charts/commit/7d6fc669cd8ff35876db19ba007cb82d40918f7d)), closes [#33969](https://github.com/bitnami/charts/issues/33969)
+
+## <small>16.5.11 (2025-05-21)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33819) ([64029c0](https://github.com/bitnami/charts/commit/64029c0851d0edc2e2672dd14faa33346ff6bfdc)), closes [#33819](https://github.com/bitnami/charts/issues/33819)
+
+## <small>16.5.10 (2025-05-21)</small>
+
+* [bitnami/mongodb] Add ability to configure SA for backup (#33112) ([8768d39](https://github.com/bitnami/charts/commit/8768d39c26a27c450d85989f8ee6c4c6b51b7626)), closes [#33112](https://github.com/bitnami/charts/issues/33112)
+
+## <small>16.5.9 (2025-05-20)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33788) ([4fdeeab](https://github.com/bitnami/charts/commit/4fdeeabffdc2d05a3a5343b88ba6ae078cb8b601)), closes [#33788](https://github.com/bitnami/charts/issues/33788)
+
+## <small>16.5.8 (2025-05-16)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33731) ([c2e3866](https://github.com/bitnami/charts/commit/c2e38660de6d95d6f752d0dda14ed17fde173448)), closes [#33731](https://github.com/bitnami/charts/issues/33731)
+
+## <small>16.5.7 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33636) ([1bb5123](https://github.com/bitnami/charts/commit/1bb512381fad37e2b27f686f50bc5aa57243d38d)), closes [#33636](https://github.com/bitnami/charts/issues/33636)
+
+## <small>16.5.6 (2025-05-06)</small>
+
+* [bitnami/mongodb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33405 ([59d21e7](https://github.com/bitnami/charts/commit/59d21e7d2e6fe9785f6960ceb690c72c64e75190)), closes [#33405](https://github.com/bitnami/charts/issues/33405)
+
+## <small>16.5.5 (2025-05-01)</small>
+
+* [bitnami/mongodb] Release 16.5.5 (#33286) ([c084df3](https://github.com/bitnami/charts/commit/c084df377f1cb009a149dd58fa9eb691aa3d635c)), closes [#33286](https://github.com/bitnami/charts/issues/33286)
+
+## <small>16.5.4 (2025-04-30)</small>
+
+* [bitnami/mongodb] Remove extra volumeClaimTemplates fields (#33236) ([3576e85](https://github.com/bitnami/charts/commit/3576e85131e5ee110040f9fa900249a57e35d79d)), closes [#33236](https://github.com/bitnami/charts/issues/33236)
+
+## <small>16.5.3 (2025-04-28)</small>
+
+* [bitnami/mongodb] Release 16.5.3 (#33211) ([8ec0951](https://github.com/bitnami/charts/commit/8ec095186aa934f76bd311a7d734a5eb77f98b58)), closes [#33211](https://github.com/bitnami/charts/issues/33211)
+
+## <small>16.5.2 (2025-04-25)</small>
+
+* [bitnami/mongodb] Fix authentication in mongodump job (#33143) ([3b50d1b](https://github.com/bitnami/charts/commit/3b50d1b1199d31408b26a7b2c71320087a2fd77f)), closes [#33143](https://github.com/bitnami/charts/issues/33143) [#33121](https://github.com/bitnami/charts/issues/33121) [#33140](https://github.com/bitnami/charts/issues/33140)
+
+## <small>16.5.1 (2025-04-14)</small>
+
+* [bitnami/mongodb] Release 16.5.1 (#32996) ([ab86a7f](https://github.com/bitnami/charts/commit/ab86a7fe41187495cbdb2c3bbbb6c179160cca2b)), closes [#32996](https://github.com/bitnami/charts/issues/32996)
+
+## 16.5.0 (2025-04-07)
+
+* [bitnami/mongodb] Set `usePasswordFiles=true` by default (#32800) ([f51db33](https://github.com/bitnami/charts/commit/f51db33f27df9c1242539be2c3a5dedb8a73249c)), closes [#32800](https://github.com/bitnami/charts/issues/32800)
+
+## <small>16.4.12 (2025-04-02)</small>
+
+* [bitnami/mongodb] Release 16.4.12 (#32752) ([a28adbd](https://github.com/bitnami/charts/commit/a28adbd7b634755e6320c2321e37f97be9578cca)), closes [#32752](https://github.com/bitnami/charts/issues/32752)
+
+## <small>16.4.11 (2025-03-28)</small>
+
+* [bitnami/mongodb] backup cronjob time zone variable should be camel case (#32663) ([e5b94bc](https://github.com/bitnami/charts/commit/e5b94bc5c00c2c96d3e8f0fcedf02ad2c020f2a6)), closes [#32663](https://github.com/bitnami/charts/issues/32663)
+
+## <small>16.4.10 (2025-03-25)</small>
+
+* [bitnami/mongodb] fix broken conditional (#32591) ([f98e77e](https://github.com/bitnami/charts/commit/f98e77e989c35d7fa67e3b118bf69e64121d7454)), closes [#32591](https://github.com/bitnami/charts/issues/32591)
+* Update README.md (#32588) ([3c9e14a](https://github.com/bitnami/charts/commit/3c9e14ac3fa81ac439f64a20c284244eadb9481d)), closes [#32588](https://github.com/bitnami/charts/issues/32588)
+
+## <small>16.4.9 (2025-03-24)</small>
+
+* [bitnami/mongodb] #27482 - fix replicaset config handling (#32381) ([5f50d43](https://github.com/bitnami/charts/commit/5f50d43900bd5305b9d83ceddd17354081109641)), closes [#32381](https://github.com/bitnami/charts/issues/32381)
+
+## <small>16.4.8 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mongodb] Release 16.4.8 (#32551) ([07d0b66](https://github.com/bitnami/charts/commit/07d0b664ed13ac2388db93f4369597948f16ee25)), closes [#32551](https://github.com/bitnami/charts/issues/32551)
+
+## <small>16.4.7 (2025-03-12)</small>
+
+* [bitnami/mongodb] Update dns-check init container condition (#32394) ([430e759](https://github.com/bitnami/charts/commit/430e7599e01ab720e67cc6f0fb5098704434ef28)), closes [#32394](https://github.com/bitnami/charts/issues/32394)
+
+## <small>16.4.6 (2025-03-10)</small>
+
+* [bitnami/mongodb] Use actual hostname instead of localhost for mongodb_exporter URI string (#32192) ([cbfec4f](https://github.com/bitnami/charts/commit/cbfec4f962119b505b5c81b6d61448506b7a6216)), closes [#32192](https://github.com/bitnami/charts/issues/32192)
+
+## <small>16.4.5 (2025-02-21)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mongodb] Enable publishNotReadyAddresses for ClusterIP services (#31145) ([0e8c150](https://github.com/bitnami/charts/commit/0e8c150374229c71161e96afe8a6c801060871e2)), closes [#31145](https://github.com/bitnami/charts/issues/31145)
+* [bitnami/mongodb] Release 16.4.5 (#32135) ([3312b24](https://github.com/bitnami/charts/commit/3312b24b28c273ee9ffed1e37d22ca1f55ebac15)), closes [#32135](https://github.com/bitnami/charts/issues/32135)
+
+## <small>16.4.3 (2025-02-03)</small>
+
+* [bitnami/mongodb] Release 16.4.3 (#31699) ([701d9dc](https://github.com/bitnami/charts/commit/701d9dc6b719f9202b60374f8d8855ef717478ca)), closes [#31699](https://github.com/bitnami/charts/issues/31699)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>16.4.2 (2025-01-20)</small>
+
+* [bitnami/mongodb] remove undefined rts key from network policy template (#31356) ([53dc708](https://github.com/bitnami/charts/commit/53dc708eaf3daa0b265b8ed956a1eccaa2f443d7)), closes [#31356](https://github.com/bitnami/charts/issues/31356)
+
+## <small>16.4.1 (2025-01-15)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mongodb] Release 16.4.1 (#31390) ([639b28e](https://github.com/bitnami/charts/commit/639b28e5326003ba369f423c9718f1a6a4b4985c)), closes [#31390](https://github.com/bitnami/charts/issues/31390)
+
+## 16.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mongodb] Detect non-standard images (#30926) ([9b7cdc2](https://github.com/bitnami/charts/commit/9b7cdc25e189dcb8256a4a11aa35bf46fa01b6c7)), closes [#30926](https://github.com/bitnami/charts/issues/30926)
+
+## <small>16.3.3 (2024-12-06)</small>
+
+* [bitnami/mongodb] Release 16.3.3 (#30822) ([83e96a2](https://github.com/bitnami/charts/commit/83e96a2cd17a29f10230af3ec16e0451fc5f4d0c)), closes [#30822](https://github.com/bitnami/charts/issues/30822)
+
+## <small>16.3.2 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mongodb] Release 16.3.2 (#30785) ([38df250](https://github.com/bitnami/charts/commit/38df25008477850e56123c286ff9daa5e28777e4)), closes [#30785](https://github.com/bitnami/charts/issues/30785)
+
+## <small>16.3.1 (2024-11-26)</small>
+
+* [bitnami/mongodb] Modify access modes to match YAML 1.2 schema (#30512) ([7cd0bfa](https://github.com/bitnami/charts/commit/7cd0bfa7a78bb1c97c5658a31ecf3b54d60a1812)), closes [#30512](https://github.com/bitnami/charts/issues/30512)
 
 ## 16.3.0 (2024-11-14)
 
@@ -880,7 +1010,7 @@
 
 ## <small>12.1.17 (2022-06-06)</small>
 
-* [bitnami/mongodb] Fix wrongly named mongodb secret key 'mongodb-passwords' (#10546) ([56a2b5d](https://github.com/bitnami/charts/commit/56a2b5dc53143a6ead1878963dcb330251547628)), closes [#10546](https://github.com/bitnami/charts/issues/10546) [/github.com/bitnami/charts/blob/master/bitnami/mongodb/templates/secrets.yaml#L33](https://github.com//github.com/bitnami/charts/blob/master/bitnami/mongodb/templates/secrets.yaml/issues/L33)
+* [bitnami/mongodb] Fix wrongly named mongodb secret key 'mongodb-passwords' (#10546) ([56a2b5d](https://github.com/bitnami/charts/commit/56a2b5dc53143a6ead1878963dcb330251547628)), closes [#10546](https://github.com/bitnami/charts/issues/10546)
 
 ## <small>12.1.16 (2022-06-01)</small>
 
@@ -1352,7 +1482,7 @@
 
 ## 10.19.0 (2021-06-03)
 
-* [bitnami/mongodb] support https://github.com/combor/k8s-mongo-labeler-sidecar - a very … (#6435) ([8a5cc0d](https://github.com/bitnami/charts/commit/8a5cc0df3279b97bb36aa7617dfaf908f0ffdbe6)), closes [#6435](https://github.com/bitnami/charts/issues/6435)
+* [bitnami/mongodb] support https://github.com/combor/k8s-mongo-labeler-sidecar - a very … (#6435) ([8a5cc0d](https://github.com/bitnami/charts/commit/8a5cc0df3279b97bb36aa7617dfaf908f0ffdbe6))
 
 ## 10.18.0 (2021-06-02)
 
@@ -1533,7 +1663,7 @@
 
 ## 10.5.0 (2021-01-20)
 
-* [bitnami/mongodb] Enable psp for mongodb (#5020) ([d109865](https://github.com/bitnami/charts/commit/d10986573a3a79f1943afcb7315b80e5c69d8543)), closes [#5020](https://github.com/bitnami/charts/issues/5020) [/github.com/bitnami/charts/pull/5020#discussion_r560125253](https://github.com//github.com/bitnami/charts/pull/5020/issues/discussion_r560125253)
+* [bitnami/mongodb] Enable psp for mongodb (#5020) ([d109865](https://github.com/bitnami/charts/commit/d10986573a3a79f1943afcb7315b80e5c69d8543)), closes [#5020](https://github.com/bitnami/charts/issues/5020)
 
 ## <small>10.4.1 (2021-01-19)</small>
 

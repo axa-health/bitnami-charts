@@ -1,8 +1,69 @@
 # Changelog
 
-## 2.2.17 (2024-11-07)
+## 2.3.11 (2025-05-07)
 
-* [bitnami/kiam] Release 2.2.17 ([#30275](https://github.com/bitnami/charts/pull/30275))
+* [bitnami/kiam] Release 2.3.11 ([#33531](https://github.com/bitnami/charts/pull/33531))
+
+## <small>2.3.10 (2025-05-06)</small>
+
+* [bitnami/kiam] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33382) ([8324840](https://github.com/bitnami/charts/commit/8324840d752836cf61399b327951699fb0b82d3a)), closes [#33382](https://github.com/bitnami/charts/issues/33382)
+
+## <small>2.3.9 (2025-05-01)</small>
+
+* [bitnami/kiam] Release 2.3.9 (#33294) ([dbf3c59](https://github.com/bitnami/charts/commit/dbf3c5933390bf9e46eb21810b193ad60f1dda36)), closes [#33294](https://github.com/bitnami/charts/issues/33294)
+
+## <small>2.3.8 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kiam] Release 2.3.8 (#32744) ([e2ffb1f](https://github.com/bitnami/charts/commit/e2ffb1f3034dec24b40b563300a41b8c441c56e9)), closes [#32744](https://github.com/bitnami/charts/issues/32744)
+
+## <small>2.3.7 (2025-03-05)</small>
+
+* [bitnami/kiam] Release 2.3.7 (#32296) ([01fafc1](https://github.com/bitnami/charts/commit/01fafc1e5f5f857e211caf922ee680f63d10ebba)), closes [#32296](https://github.com/bitnami/charts/issues/32296)
+
+## <small>2.3.6 (2025-02-19)</small>
+
+* [bitnami/kiam] Release 2.3.6 (#32008) ([37bb821](https://github.com/bitnami/charts/commit/37bb8216c6d9d9981c3c6f3af78abb190b6b0e04)), closes [#32008](https://github.com/bitnami/charts/issues/32008)
+
+## <small>2.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kiam] Release 2.3.5 (#31893) ([16987ea](https://github.com/bitnami/charts/commit/16987eab7a94e91424e7517417034f8c37dbf749)), closes [#31893](https://github.com/bitnami/charts/issues/31893)
+
+## <small>2.3.4 (2025-02-04)</small>
+
+* [bitnami/kiam] Release 2.3.4 (#31762) ([9a43739](https://github.com/bitnami/charts/commit/9a43739e0c4d8dbedb9816ecc7354c3267bcc3d4)), closes [#31762](https://github.com/bitnami/charts/issues/31762)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>2.3.3 (2025-01-24)</small>
+
+* [bitnami/kiam] Release 2.3.3 (#31561) ([497c4de](https://github.com/bitnami/charts/commit/497c4de2b3461b0e0c13b17b9703c42b7de07443)), closes [#31561](https://github.com/bitnami/charts/issues/31561)
+
+## <small>2.3.2 (2025-01-17)</small>
+
+* [bitnami/kiam] Release 2.3.2 (#31427) ([5eeec24](https://github.com/bitnami/charts/commit/5eeec24f7c3ead3be25eea12e3e4b9b8478721c6)), closes [#31427](https://github.com/bitnami/charts/issues/31427)
+
+## <small>2.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kiam] Release 2.3.1 (#31320) ([394a0bc](https://github.com/bitnami/charts/commit/394a0bcac867e518e407d13e6119d57480bf577b)), closes [#31320](https://github.com/bitnami/charts/issues/31320)
+
+## 2.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kiam] Detect non-standard images (#30900) ([802c8ce](https://github.com/bitnami/charts/commit/802c8ceb740cb29e63465e74929bed881cf68381)), closes [#30900](https://github.com/bitnami/charts/issues/30900)
+
+## <small>2.2.18 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kiam] Release 2.2.18 (#30762) ([654bb09](https://github.com/bitnami/charts/commit/654bb09d1137cb21c52f275da787fecb9a5e818f)), closes [#30762](https://github.com/bitnami/charts/issues/30762)
+
+## <small>2.2.17 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kiam] Release 2.2.17 (#30275) ([d173b06](https://github.com/bitnami/charts/commit/d173b065454e4e92e7a37c2cce3e891f2cecfc9d)), closes [#30275](https://github.com/bitnami/charts/issues/30275)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>2.2.16 (2024-10-10)</small>
 

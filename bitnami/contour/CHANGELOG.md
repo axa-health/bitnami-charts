@@ -1,8 +1,108 @@
 # Changelog
 
-## 19.3.1 (2024-11-07)
+## 21.0.2 (2025-05-30)
 
-* [bitnami/contour] Release 19.3.1 ([#30260](https://github.com/bitnami/charts/pull/30260))
+* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#33996](https://github.com/bitnami/charts/pull/33996))
+
+## <small>21.0.1 (2025-05-29)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#33965) ([7d2860a](https://github.com/bitnami/charts/commit/7d2860ac75579992ae4fd977ed49c53e4920f24a)), closes [#33965](https://github.com/bitnami/charts/issues/33965)
+
+## 21.0.0 (2025-05-27)
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#33898) ([affc8ee](https://github.com/bitnami/charts/commit/affc8eeaf9039e697e5e642d536e8e8d4ab95916)), closes [#33898](https://github.com/bitnami/charts/issues/33898)
+
+## <small>20.0.3 (2025-05-16)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#33739) ([3887b07](https://github.com/bitnami/charts/commit/3887b07d15d33042258f0b9cbd41b783b4f274e4)), closes [#33739](https://github.com/bitnami/charts/issues/33739)
+
+## <small>20.0.2 (2025-05-15)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#33736) ([389434a](https://github.com/bitnami/charts/commit/389434a80b6a894e6498945152b58a1d53665b6c)), closes [#33736](https://github.com/bitnami/charts/issues/33736)
+
+## <small>20.0.1 (2025-05-09)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#33585) ([c9f8262](https://github.com/bitnami/charts/commit/c9f826269ec2ef6c8b94305568bbc1988f7a6929)), closes [#33585](https://github.com/bitnami/charts/issues/33585)
+
+## 20.0.0 (2025-05-09)
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#33581) ([e02ab69](https://github.com/bitnami/charts/commit/e02ab69cba3b503042ad305889855bd66fe332c3)), closes [#33581](https://github.com/bitnami/charts/issues/33581)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>19.5.13 (2025-05-07)</small>
+
+* [bitnami/contour] Release 19.5.13 (#33545) ([a1d1a97](https://github.com/bitnami/charts/commit/a1d1a97564cc8018774a84d35a7c0699e1a8dbe3)), closes [#33545](https://github.com/bitnami/charts/issues/33545)
+
+## <small>19.5.12 (2025-05-06)</small>
+
+* [bitnami/contour] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33350 ([cd58f6a](https://github.com/bitnami/charts/commit/cd58f6afa50404b6de290620e2286871626cb3a3)), closes [#33350](https://github.com/bitnami/charts/issues/33350)
+
+## <small>19.5.11 (2025-04-28)</small>
+
+* [bitnami/contour] Release 19.5.11 (#33207) ([fba4edd](https://github.com/bitnami/charts/commit/fba4edd4b68eee5305e0919743b805da35bdc9f7)), closes [#33207](https://github.com/bitnami/charts/issues/33207)
+
+## <small>19.5.10 (2025-04-01)</small>
+
+* [bitnami/contour] Release 19.5.10 (#32725) ([7ac7a58](https://github.com/bitnami/charts/commit/7ac7a588edc5f1c9e72c0ee57c78c089d3fbd39c)), closes [#32725](https://github.com/bitnami/charts/issues/32725)
+
+## <small>19.5.9 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/contour] Release 19.5.9 (#32605) ([9b43801](https://github.com/bitnami/charts/commit/9b438019afb0599e62400f9a16687af0e2e6b5c0)), closes [#32605](https://github.com/bitnami/charts/issues/32605)
+
+## <small>19.5.8 (2025-03-05)</small>
+
+* [bitnami/contour] Release 19.5.8 (#32285) ([d397ec5](https://github.com/bitnami/charts/commit/d397ec574f2f2cb9b7f915e49275ee4eee1fa26a)), closes [#32285](https://github.com/bitnami/charts/issues/32285)
+
+## <small>19.5.7 (2025-02-19)</small>
+
+* [bitnami/contour] Release 19.5.7 (#31983) ([119f27b](https://github.com/bitnami/charts/commit/119f27b8bdecf8c9ba1ea571e573b87823782799)), closes [#31983](https://github.com/bitnami/charts/issues/31983)
+
+## <small>19.5.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/contour] Release 19.5.6 (#31888) ([a76b314](https://github.com/bitnami/charts/commit/a76b314a3efb72cf274f6b5c6ccb430cef584cea)), closes [#31888](https://github.com/bitnami/charts/issues/31888)
+
+## <small>19.5.5 (2025-02-04)</small>
+
+* [bitnami/contour] Release 19.5.5 (#31749) ([b918b46](https://github.com/bitnami/charts/commit/b918b46ebe197512f0c3a27b148554266b96d87d)), closes [#31749](https://github.com/bitnami/charts/issues/31749)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>19.5.4 (2025-01-24)</small>
+
+* [bitnami/contour] Release 19.5.4 (#31548) ([e8bb5bb](https://github.com/bitnami/charts/commit/e8bb5bba9fd913b86e857058b6805b86a2cddff6)), closes [#31548](https://github.com/bitnami/charts/issues/31548)
+
+## <small>19.5.3 (2025-01-17)</small>
+
+* [bitnami/contour] Release 19.5.3 (#31415) ([9f6c2f3](https://github.com/bitnami/charts/commit/9f6c2f3c9b284832cbe8f5288ad8aaf10e6f700a)), closes [#31415](https://github.com/bitnami/charts/issues/31415)
+
+## <small>19.5.2 (2025-01-13)</small>
+
+* [bitnami/contour] Release 19.5.2 (#31343) ([03e6250](https://github.com/bitnami/charts/commit/03e6250d400f6e3b494727c3e0d447f6d6a9563b)), closes [#31343](https://github.com/bitnami/charts/issues/31343)
+
+## <small>19.5.1 (2025-01-12)</small>
+
+* [bitnami/contour] Release 19.5.1 (#31311) ([6078445](https://github.com/bitnami/charts/commit/6078445d8d73a914d715194ccbe7b2a4fd1aa84b)), closes [#31311](https://github.com/bitnami/charts/issues/31311)
+
+## 19.5.0 (2025-01-07)
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/contour] Allow replacing certgen with cert-manager (#29416) ([63e4a63](https://github.com/bitnami/charts/commit/63e4a6324eff9a9b92322b3df97f97c5009ac410)), closes [#29416](https://github.com/bitnami/charts/issues/29416)
+
+## 19.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/contour] Detect non-standard images (#30874) ([e47bbb4](https://github.com/bitnami/charts/commit/e47bbb4f1f57e1eea55f96f3c5641ce8564930af)), closes [#30874](https://github.com/bitnami/charts/issues/30874)
+
+## <small>19.3.2 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/contour] Release 19.3.2 (#30745) ([10a3f22](https://github.com/bitnami/charts/commit/10a3f22fc74836fcf48e9d4d1bb4b025164d1afe)), closes [#30745](https://github.com/bitnami/charts/issues/30745)
+
+## <small>19.3.1 (2024-11-07)</small>
+
+* [bitnami/contour] Release 19.3.1 (#30260) ([4910a21](https://github.com/bitnami/charts/commit/4910a21b12108eec0195cf6388334d09ad3c81c0)), closes [#30260](https://github.com/bitnami/charts/issues/30260)
 
 ## 19.3.0 (2024-11-06)
 
@@ -589,7 +689,7 @@
 
 ## 10.1.0 (2022-12-01)
 
-* [bitnami/contour] Adding CRDs for Contour 1.23 (#13404) ([1d70327](https://github.com/bitnami/charts/commit/1d7032746053d5cabce07519d93f491bd256c725)), closes [#13404](https://github.com/bitnami/charts/issues/13404) [#22](https://github.com/bitnami/charts/issues/22)
+* [bitnami/contour] Adding CRDs for Contour 1.23 (#13404) ([1d70327](https://github.com/bitnami/charts/commit/1d7032746053d5cabce07519d93f491bd256c725)), closes [#13404](https://github.com/bitnami/charts/issues/13404)
 
 ## <small>10.0.1 (2022-11-30)</small>
 
@@ -623,7 +723,7 @@
 
 ## <small>9.1.3 (2022-09-21)</small>
 
-* [bitnami/contour] Updates Contour CRDs to release 1.22 (https://github.com/projectcontour/contour/bl ([e3f86e3](https://github.com/bitnami/charts/commit/e3f86e3c1945a67191825dd060313d5fcd851189)), closes [#11756](https://github.com/bitnami/charts/issues/11756) [#12308](https://github.com/bitnami/charts/issues/12308)
+* [bitnami/contour] Updates Contour CRDs to release 1.22 (https://github.com/projectcontour/contour/bl ([e3f86e3](https://github.com/bitnami/charts/commit/e3f86e3c1945a67191825dd060313d5fcd851189))
 * [bitnami/contour] Use custom probes if given (#12487) ([81507fe](https://github.com/bitnami/charts/commit/81507fe7f3eae202ec7f98f0f269bd5289d7ce2a)), closes [#12487](https://github.com/bitnami/charts/issues/12487) [#12354](https://github.com/bitnami/charts/issues/12354)
 
 ## <small>9.1.2 (2022-09-08)</small>
@@ -886,7 +986,7 @@
 
 ## <small>6.0.2 (2021-11-09)</small>
 
-* [bitnami/contour] Allow deploying without explicit IngressClass (#8046) ([5d03d2a](https://github.com/bitnami/charts/commit/5d03d2a9a916ac45dd4bbe06c06f274feed20421)), closes [#8046](https://github.com/bitnami/charts/issues/8046) [#8041](https://github.com/bitnami/charts/issues/8041) [#8041](https://github.com/bitnami/charts/issues/8041) [#7668](https://github.com/bitnami/charts/issues/7668) [/github.com/bitnami/charts/pull/8046#discussion_r744552904](https://github.com//github.com/bitnami/charts/pull/8046/issues/discussion_r744552904)
+* [bitnami/contour] Allow deploying without explicit IngressClass (#8046) ([5d03d2a](https://github.com/bitnami/charts/commit/5d03d2a9a916ac45dd4bbe06c06f274feed20421)), closes [#8046](https://github.com/bitnami/charts/issues/8046) [#8041](https://github.com/bitnami/charts/issues/8041) [#8041](https://github.com/bitnami/charts/issues/8041) [#7668](https://github.com/bitnami/charts/issues/7668)
 
 ## <small>6.0.1 (2021-10-22)</small>
 
@@ -908,7 +1008,7 @@
 
 ## 5.6.0 (2021-10-01)
 
-* [bitnami/contour] Make envoy minReadySeconds configurable (#7644) ([2385aa2](https://github.com/bitnami/charts/commit/2385aa21e21f5aed2e21bab46806fb5b2a166cde)), closes [#7644](https://github.com/bitnami/charts/issues/7644) [/github.com/bitnami/charts/pull/7644#discussion_r718239245](https://github.com//github.com/bitnami/charts/pull/7644/issues/discussion_r718239245)
+* [bitnami/contour] Make envoy minReadySeconds configurable (#7644) ([2385aa2](https://github.com/bitnami/charts/commit/2385aa21e21f5aed2e21bab46806fb5b2a166cde)), closes [#7644](https://github.com/bitnami/charts/issues/7644)
 * [bitnami/contour]: Updating Contour configuration link because it was moved (#7561) ([23696cb](https://github.com/bitnami/charts/commit/23696cb4b185f2f2cc4141a3a9cf0efbd9efe566)), closes [#7561](https://github.com/bitnami/charts/issues/7561)
 
 ## <small>5.5.3 (2021-09-23)</small>
@@ -1064,7 +1164,7 @@
 
 ## 4.0.0 (2021-01-26)
 
-* [bitnami/contour] Change CRDs approach to handle CRD upgrades (#3665) ([25e31a0](https://github.com/bitnami/charts/commit/25e31a06445d10d93bb9f07516353b9821b0b9f8)), closes [#3665](https://github.com/bitnami/charts/issues/3665) [/github.com/projectcontour/contour/issues/2050#issuecomment-673722738](https://github.com//github.com/projectcontour/contour/issues/2050/issues/issuecomment-673722738)
+* [bitnami/contour] Change CRDs approach to handle CRD upgrades (#3665) ([25e31a0](https://github.com/bitnami/charts/commit/25e31a06445d10d93bb9f07516353b9821b0b9f8)), closes [#3665](https://github.com/bitnami/charts/issues/3665)
 
 ## <small>3.3.4 (2021-01-25)</small>
 
@@ -1085,7 +1185,7 @@
 
 ## 3.3.0 (2021-01-07)
 
-* [bitnami/contour] Implement a default backend for convenience (#4881) ([02b55a0](https://github.com/bitnami/charts/commit/02b55a0d33c34878d2030a26843c1f7088939bd2)), closes [#4881](https://github.com/bitnami/charts/issues/4881) [/github.com/bitnami/charts/pull/3788#pullrequestreview-516865711](https://github.com//github.com/bitnami/charts/pull/3788/issues/pullrequestreview-516865711)
+* [bitnami/contour] Implement a default backend for convenience (#4881) ([02b55a0](https://github.com/bitnami/charts/commit/02b55a0d33c34878d2030a26843c1f7088939bd2)), closes [#4881](https://github.com/bitnami/charts/issues/4881)
 
 ## 3.2.0 (2020-12-22)
 

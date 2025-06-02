@@ -1,8 +1,71 @@
 # Changelog
 
-## 6.2.21 (2024-11-18)
+## 7.0.4 (2025-05-13)
 
-* [bitnami/aspnet-core] Release 6.2.21 ([#30502](https://github.com/bitnami/charts/pull/30502))
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#33682](https://github.com/bitnami/charts/pull/33682))
+
+## <small>7.0.3 (2025-05-09)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#33591) ([28f779d](https://github.com/bitnami/charts/commit/28f779d47fd7d9c0eaabe1a38b45b163ef20f7a9)), closes [#33591](https://github.com/bitnami/charts/issues/33591)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>7.0.2 (2025-05-06)</small>
+
+* [bitnami/aspnet-core] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3 ([9477aac](https://github.com/bitnami/charts/commit/9477aac5cb8dc0be6fe7fab10a78cc953dc92fa5)), closes [#33339](https://github.com/bitnami/charts/issues/33339)
+
+## <small>7.0.1 (2025-04-30)</small>
+
+* [bitnami/aspnet-core] Release 7.0.1 (#33274) ([c5b6ee8](https://github.com/bitnami/charts/commit/c5b6ee87419e3eee26eab38c37bd5bb84df36c98)), closes [#33274](https://github.com/bitnami/charts/issues/33274)
+
+## 7.0.0 (2025-04-30)
+
+* [bitnami/aspnet-core] Release 7.0.0 (#33266) ([ee7edfe](https://github.com/bitnami/charts/commit/ee7edfeb563ca02927b3878f9dad96c468992b17)), closes [#33266](https://github.com/bitnami/charts/issues/33266)
+
+## <small>6.3.8 (2025-04-09)</small>
+
+* [bitnami/aspnet-core] Release 6.3.8 (#32925) ([cb28cd2](https://github.com/bitnami/charts/commit/cb28cd23289d76cfb853f96fb20b796268dd202d)), closes [#32925](https://github.com/bitnami/charts/issues/32925)
+
+## <small>6.3.7 (2025-04-09)</small>
+
+* [bitnami/aspnet-core] Release 6.3.7 (#32895) ([9403482](https://github.com/bitnami/charts/commit/94034822b0da9edd1896eaddc770387fbda6515d)), closes [#32895](https://github.com/bitnami/charts/issues/32895)
+
+## <small>6.3.6 (2025-04-08)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/aspnet-core] Release 6.3.6 (#32878) ([8420d30](https://github.com/bitnami/charts/commit/8420d30e0560abaa05ab748f2871fcfb905680e2)), closes [#32878](https://github.com/bitnami/charts/issues/32878)
+
+## <small>6.3.5 (2025-03-11)</small>
+
+* [bitnami/aspnet-core] Release 6.3.5 (#32412) ([41101f2](https://github.com/bitnami/charts/commit/41101f2390bdaad02c5b15b9da3d80f287fa60a6)), closes [#32412](https://github.com/bitnami/charts/issues/32412)
+
+## <small>6.3.4 (2025-02-18)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/aspnet-core] Release 6.3.4 (#31973) ([7ba54fc](https://github.com/bitnami/charts/commit/7ba54fc3775106036c813a3819c76feab6deee83)), closes [#31973](https://github.com/bitnami/charts/issues/31973)
+
+## <small>6.3.3 (2025-02-11)</small>
+
+* [bitnami/aspnet-core] Release 6.3.3 (#31874) ([db3c9e4](https://github.com/bitnami/charts/commit/db3c9e400b8152027d120b00eaba06e23f98a562)), closes [#31874](https://github.com/bitnami/charts/issues/31874)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.3.2 (2025-01-14)</small>
+
+* [bitnami/aspnet-core] Release 6.3.2 (#31366) ([512fab2](https://github.com/bitnami/charts/commit/512fab283eed06406546218f56fad376799945c3)), closes [#31366](https://github.com/bitnami/charts/issues/31366)
+
+## <small>6.3.1 (2024-12-28)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/aspnet-core] Release 6.3.1 (#31180) ([55d9d5f](https://github.com/bitnami/charts/commit/55d9d5f9eef1c62c1a126b5262ee78b5ecaa0a2b)), closes [#31180](https://github.com/bitnami/charts/issues/31180)
+
+## 6.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/aspnet-core] Detect non-standard images (#30865) ([1329644](https://github.com/bitnami/charts/commit/13296445b45cfa3c696d0bfbe289f61fafc1467e)), closes [#30865](https://github.com/bitnami/charts/issues/30865)
+
+## <small>6.2.21 (2024-11-18)</small>
+
+* [bitnami/aspnet-core] Release 6.2.21 (#30502) ([29c2afd](https://github.com/bitnami/charts/commit/29c2afd7d4b4f664dc2e6e215ee3d784cb49eae7)), closes [#30502](https://github.com/bitnami/charts/issues/30502)
 
 ## <small>6.2.20 (2024-11-18)</small>
 

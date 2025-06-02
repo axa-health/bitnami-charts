@@ -1,8 +1,87 @@
 # Changelog
 
-## 3.5.2 (2024-10-21)
+## 5.0.1 (2025-05-28)
 
-* [bitnami/apisix] Release 3.5.2 ([#30014](https://github.com/bitnami/charts/pull/30014))
+* feat: [bitnami/apisix] Add dnsPolicy parameter support ([#33926](https://github.com/bitnami/charts/pull/33926))
+
+## 5.0.0 (2025-05-26)
+
+* [bitnami/apisix] Update ETCD subchart (#33878) ([8337a8c](https://github.com/bitnami/charts/commit/8337a8c86a942c0e88553964f7bce5edace0dbc2)), closes [#33878](https://github.com/bitnami/charts/issues/33878)
+
+## <small>4.2.5 (2025-05-13)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#33651) ([60b9da0](https://github.com/bitnami/charts/commit/60b9da0e0543cac807058ac69e398b41b78f84a9)), closes [#33651](https://github.com/bitnami/charts/issues/33651)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>4.2.4 (2025-05-06)</small>
+
+* [bitnami/apisix] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33335) ([21f0df7](https://github.com/bitnami/charts/commit/21f0df7910ce9f5849889a77e6c4923e165153ff)), closes [#33335](https://github.com/bitnami/charts/issues/33335)
+
+## <small>4.2.3 (2025-05-01)</small>
+
+* [bitnami/apisix] Release 4.2.3 (#33277) ([89b5e15](https://github.com/bitnami/charts/commit/89b5e15a29e6dbdcb8582e951ac9b647fbf96f27)), closes [#33277](https://github.com/bitnami/charts/issues/33277)
+
+## <small>4.2.2 (2025-04-01)</small>
+
+* [bitnami/apisix] Release 4.2.2 (#32695) ([1193919](https://github.com/bitnami/charts/commit/11939197e7f7cdb4c366bbb316db96ad54556c12)), closes [#32695](https://github.com/bitnami/charts/issues/32695)
+
+## <small>4.2.1 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/apisix] Release 4.2.1 (#32540) ([740e6c3](https://github.com/bitnami/charts/commit/740e6c318f0cdd53e45a6ad0d9cedeb4a19b7248)), closes [#32540](https://github.com/bitnami/charts/issues/32540)
+
+## 4.2.0 (2025-02-24)
+
+* [bitnami/apisix] Add support for `usePasswordFiles` (#32077) ([cb5df90](https://github.com/bitnami/charts/commit/cb5df905951bede532a1ef73a88a0a66c67e5044)), closes [#32077](https://github.com/bitnami/charts/issues/32077)
+
+## 4.1.0 (2025-02-20)
+
+* [bitnami/apisix] feat: use new helper for checking API versions (#32045) ([c327f4b](https://github.com/bitnami/charts/commit/c327f4ba9cf6889d452e0f3fce495c10c6d1c106)), closes [#32045](https://github.com/bitnami/charts/issues/32045)
+
+## <small>4.0.2 (2025-02-18)</small>
+
+* [bitnami/apisix] Release 4.0.2 (#31972) ([d014094](https://github.com/bitnami/charts/commit/d014094260366d1b17e60bbc9a2aee09542d3147)), closes [#31972](https://github.com/bitnami/charts/issues/31972)
+
+## <small>4.0.1 (2025-02-18)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/apisix] Release 4.0.1 (#31964) ([7870a08](https://github.com/bitnami/charts/commit/7870a082176ef14922db8d72a317ee490ba39747)), closes [#31964](https://github.com/bitnami/charts/issues/31964)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 4.0.0 (2025-01-22)
+
+* [bitnami/apisix] Update ETCD to major 11 (#31508) ([9561660](https://github.com/bitnami/charts/commit/9561660522ef445652d58becbf3a39bf29836464)), closes [#31508](https://github.com/bitnami/charts/issues/31508)
+
+## <small>3.7.2 (2025-01-17)</small>
+
+* [bitnami/apisix] feat: :recycle: Use os-shell for config generation (#31455) ([e808ba0](https://github.com/bitnami/charts/commit/e808ba010c008023c7dfc1c1ee5bafb2f9acf38c)), closes [#31455](https://github.com/bitnami/charts/issues/31455)
+
+## <small>3.7.1 (2025-01-09)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/apisix] Release 3.7.1 (#31272) ([199b715](https://github.com/bitnami/charts/commit/199b7151ef54c3cc81ca09813e28e2b2ade50f2d)), closes [#31272](https://github.com/bitnami/charts/issues/31272)
+
+## 3.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/apisix] Detect non-standard images (#30861) ([0c989ce](https://github.com/bitnami/charts/commit/0c989ce546a26e91a94df349630d1ee3e9fa2a2a)), closes [#30861](https://github.com/bitnami/charts/issues/30861)
+
+## <small>3.6.1 (2024-11-30)</small>
+
+* [bitnami/apisix] Release 3.6.1 (#30695) ([292979c](https://github.com/bitnami/charts/commit/292979cddcab9e5228ff2e52f06f7559530ea7cd)), closes [#30695](https://github.com/bitnami/charts/issues/30695)
+
+## 3.6.0 (2024-11-29)
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 1) (#30660) ([7409ca4](https://github.com/bitnami/charts/commit/7409ca4c21869fabe1532dd4f3ff24895df71c6d)), closes [#30660](https://github.com/bitnami/charts/issues/30660)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/apisix] feat: :sparkles: :memo: Allow password update via values.yaml (#30682) ([e41a46c](https://github.com/bitnami/charts/commit/e41a46c06a70ddfe543c9afa1fd81cd8fd2d97cd)), closes [#30682](https://github.com/bitnami/charts/issues/30682)
+
+## <small>3.5.2 (2024-10-21)</small>
+
+* [bitnami/apisix] Release 3.5.2 (#30014) ([53d7503](https://github.com/bitnami/charts/commit/53d7503654c7179d92e4352fc85d50db202a15f8)), closes [#30014](https://github.com/bitnami/charts/issues/30014)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>3.5.1 (2024-09-29)</small>
 

@@ -1,8 +1,143 @@
 # Changelog
 
-## 1.0.4 (2024-11-21)
+## 2.0.15 (2025-05-30)
 
-* [bitnami/nessie] Release 1.0.4 ([#30555](https://github.com/bitnami/charts/pull/30555))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#34005](https://github.com/bitnami/charts/pull/34005))
+
+## <small>2.0.14 (2025-05-30)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33994) ([64d5255](https://github.com/bitnami/charts/commit/64d5255e3e549e29121c4a2f4709deef1b15de5a)), closes [#33994](https://github.com/bitnami/charts/issues/33994)
+
+## <small>2.0.13 (2025-05-27)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33923) ([96474ff](https://github.com/bitnami/charts/commit/96474ff13d799d95981269fce834c8adac41b6b4)), closes [#33923](https://github.com/bitnami/charts/issues/33923)
+
+## <small>2.0.12 (2025-05-27)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33919) ([65d0ba9](https://github.com/bitnami/charts/commit/65d0ba980a0d588b500d978ad305c52b6aa1bfa1)), closes [#33919](https://github.com/bitnami/charts/issues/33919)
+
+## <small>2.0.11 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33642) ([739257b](https://github.com/bitnami/charts/commit/739257b97477968deb9a19ab0ff32b7f6a973dab)), closes [#33642](https://github.com/bitnami/charts/issues/33642)
+
+## <small>2.0.10 (2025-05-07)</small>
+
+* [bitnami/nessie] Release 2.0.10 (#33549) ([b29bdd1](https://github.com/bitnami/charts/commit/b29bdd190c56330769e17f1c23d3ce471f322926)), closes [#33549](https://github.com/bitnami/charts/issues/33549)
+
+## <small>2.0.9 (2025-05-07)</small>
+
+* [bitnami/nessie] Release 2.0.9 (#33536) ([b3fdd10](https://github.com/bitnami/charts/commit/b3fdd10c0105f2ee69620dcd887731985df76289)), closes [#33536](https://github.com/bitnami/charts/issues/33536)
+
+## <small>2.0.8 (2025-05-06)</small>
+
+* [bitnami/nessie] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33412) ([9f42a65](https://github.com/bitnami/charts/commit/9f42a65f1d468cd16c4892f095b6fad804c71cdc)), closes [#33412](https://github.com/bitnami/charts/issues/33412)
+
+## <small>2.0.7 (2025-05-01)</small>
+
+* [bitnami/nessie] Release 2.0.7 (#33279) ([5299ff5](https://github.com/bitnami/charts/commit/5299ff516e7766cc97eb1a45d9df40dc414185ba)), closes [#33279](https://github.com/bitnami/charts/issues/33279)
+
+## <small>2.0.6 (2025-04-26)</small>
+
+* [bitnami/nessie] Release 2.0.6 (#33191) ([be2cd4b](https://github.com/bitnami/charts/commit/be2cd4bf4e81b4db3698b8c38521cef2b6858855)), closes [#33191](https://github.com/bitnami/charts/issues/33191)
+
+## <small>2.0.5 (2025-04-24)</small>
+
+* [bitnami/nessie] Release 2.0.5 (#33171) ([199b095](https://github.com/bitnami/charts/commit/199b095d8455710813cdaf811060865d412f3809)), closes [#33171](https://github.com/bitnami/charts/issues/33171)
+
+## <small>2.0.4 (2025-04-09)</small>
+
+* [bitnami/nessie] Release 2.0.4 (#32913) ([df901a7](https://github.com/bitnami/charts/commit/df901a7694a3f3159eff40c4e976b5dd9c540ea9)), closes [#32913](https://github.com/bitnami/charts/issues/32913)
+
+## <small>2.0.3 (2025-04-08)</small>
+
+* [bitnami/nessie] Release 2.0.3 (#32872) ([d8de398](https://github.com/bitnami/charts/commit/d8de39855a8f2cbd3bd106eaebe62f212d5f762e)), closes [#32872](https://github.com/bitnami/charts/issues/32872)
+
+## <small>2.0.2 (2025-03-21)</small>
+
+* [bitnami/nessie] Release 2.0.2 (#32552) ([15c0d4f](https://github.com/bitnami/charts/commit/15c0d4fd69a7022e2549f25752a10f40b99cbc14)), closes [#32552](https://github.com/bitnami/charts/issues/32552)
+
+## <small>2.0.1 (2025-03-18)</small>
+
+* [bitnami/nessie] Release 2.0.1 (#32496) ([dcab365](https://github.com/bitnami/charts/commit/dcab3650aeb7690484cdaa85acc1eda2b2f94f29)), closes [#32496](https://github.com/bitnami/charts/issues/32496)
+
+## 2.0.0 (2025-03-13)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nessie] Set `usePasswordFiles=true` by default (#32114) ([7e2e48d](https://github.com/bitnami/charts/commit/7e2e48d97a122ac93bea56a28308acd8ed39b39d)), closes [#32114](https://github.com/bitnami/charts/issues/32114)
+
+## <small>1.2.1 (2025-02-24)</small>
+
+* [bitnami/nessie] Release 1.2.1 (#32144) ([6af5812](https://github.com/bitnami/charts/commit/6af5812bc806e92231e61f263b3da77017661199)), closes [#32144](https://github.com/bitnami/charts/issues/32144)
+
+## 1.2.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/nessie] feat: use new helper for checking API versions (#32060) ([ddd3062](https://github.com/bitnami/charts/commit/ddd30620658739d77770ca05dd98cfa5ca9fb35e)), closes [#32060](https://github.com/bitnami/charts/issues/32060)
+
+## <small>1.1.10 (2025-02-06)</small>
+
+* [bitnami/nessie] Release 1.1.10 (#31800) ([086e2b1](https://github.com/bitnami/charts/commit/086e2b1e0f63b02568e23b4a8020d92d89aa4e1f)), closes [#31800](https://github.com/bitnami/charts/issues/31800)
+
+## <small>1.1.9 (2025-02-03)</small>
+
+* [bitnami/nessie] Release 1.1.9 (#31695) ([4fb4018](https://github.com/bitnami/charts/commit/4fb40180e98e3ac9a5795e3f47452bea5a584e98)), closes [#31695](https://github.com/bitnami/charts/issues/31695)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.1.8 (2025-01-30)</small>
+
+* [bitnami/nessie] Release 1.1.8 (#31676) ([f2d4caa](https://github.com/bitnami/charts/commit/f2d4caa470a6729efecd7c8e8479f75f173b7c53)), closes [#31676](https://github.com/bitnami/charts/issues/31676)
+
+## <small>1.1.7 (2025-01-28)</small>
+
+* [bitnami/nessie] Release 1.1.7 (#31632) ([cbb2262](https://github.com/bitnami/charts/commit/cbb2262339ae8e62e075d2913dcc8151aa29716d)), closes [#31632](https://github.com/bitnami/charts/issues/31632)
+
+## <small>1.1.6 (2025-01-24)</small>
+
+* [bitnami/nessie] Release 1.1.6 (#31575) ([bf4bef9](https://github.com/bitnami/charts/commit/bf4bef9b70a002aaeb888ecaaf60e71684b709f1)), closes [#31575](https://github.com/bitnami/charts/issues/31575)
+
+## <small>1.1.5 (2025-01-22)</small>
+
+* [bitnami/nessie] Release 1.1.5 (#31520) ([62399ed](https://github.com/bitnami/charts/commit/62399ed3863e70775d66f9581e28129026a86e5d)), closes [#31520](https://github.com/bitnami/charts/issues/31520)
+
+## <small>1.1.4 (2025-01-22)</small>
+
+* [bitnami/nessie] Release 1.1.4 (#31504) ([d3408f8](https://github.com/bitnami/charts/commit/d3408f87b35eb20208dc2ded6cb6dc15d6c6d395)), closes [#31504](https://github.com/bitnami/charts/issues/31504)
+
+## <small>1.1.3 (2024-12-26)</small>
+
+* [bitnami/nessie]fix(runtime-parameters.yaml): Set long postgresql password (#31165) ([89f4512](https://github.com/bitnami/charts/commit/89f4512f29baf80919652ba74aa1a8d8fcb47801)), closes [#31165](https://github.com/bitnami/charts/issues/31165)
+
+## <small>1.1.2 (2024-12-18)</small>
+
+* [bitnami/nessie] Release 1.1.2 (#31096) ([31f73fe](https://github.com/bitnami/charts/commit/31f73fe9c561b996028a11550eeaf9292969d4ff)), closes [#31096](https://github.com/bitnami/charts/issues/31096)
+
+## <small>1.1.1 (2024-12-12)</small>
+
+* [bitnami/nessie] Release 1.1.1 (#31003) ([5be4662](https://github.com/bitnami/charts/commit/5be46622e257e418ec703a5a002e0a379cabac99)), closes [#31003](https://github.com/bitnami/charts/issues/31003)
+
+## 1.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/nessie] Detect non-standard images (#30931) ([021372b](https://github.com/bitnami/charts/commit/021372bbc3ef6e718f7b581f335014369f4eb7df)), closes [#30931](https://github.com/bitnami/charts/issues/30931)
+
+## <small>1.0.7 (2024-12-09)</small>
+
+* [bitnami/nessie] Release 1.0.7 (#30845) ([7df0c76](https://github.com/bitnami/charts/commit/7df0c769083e44d8847a9be82ad9731922fafbd4)), closes [#30845](https://github.com/bitnami/charts/issues/30845)
+
+## <small>1.0.6 (2024-12-06)</small>
+
+* [bitnami/nessie] Release 1.0.6 (#30814) ([fec53c6](https://github.com/bitnami/charts/commit/fec53c6b7be4ff4acb3daf670cc27e712bb5cc6a)), closes [#30814](https://github.com/bitnami/charts/issues/30814)
+
+## <small>1.0.5 (2024-12-02)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/nessie] Release 1.0.5 (#30712) ([79b92ab](https://github.com/bitnami/charts/commit/79b92ab8ac3181fbea44acbf26064e87df7ec5f3)), closes [#30712](https://github.com/bitnami/charts/issues/30712)
+
+## <small>1.0.4 (2024-11-21)</small>
+
+* [bitnami/nessie] Release 1.0.4 (#30555) ([180c7ee](https://github.com/bitnami/charts/commit/180c7ee1ca182f89df0ef185f5504428ab956e3d)), closes [#30555](https://github.com/bitnami/charts/issues/30555)
 
 ## <small>1.0.3 (2024-11-12)</small>
 

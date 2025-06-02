@@ -1,8 +1,91 @@
 # Changelog
 
-## 8.0.1 (2024-11-09)
+## 9.0.11 (2025-05-21)
 
-* [bitnami/jupyterhub] Release 8.0.1 ([#30372](https://github.com/bitnami/charts/pull/30372))
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#33815](https://github.com/bitnami/charts/pull/33815))
+
+## <small>9.0.10 (2025-05-21)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#33814) ([d42683e](https://github.com/bitnami/charts/commit/d42683e754eefe34172058de6e35930166dc01ce)), closes [#33814](https://github.com/bitnami/charts/issues/33814)
+
+## <small>9.0.9 (2025-05-13)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#33656) ([89a0ed7](https://github.com/bitnami/charts/commit/89a0ed76c66020d0ab006db4b9dd1d6d6a27531b)), closes [#33656](https://github.com/bitnami/charts/issues/33656)
+
+## <small>9.0.8 (2025-05-12)</small>
+
+* [bitnami/jupyterhub] Init containers can be used with external PostgreSQL (#33582) ([58e80d9](https://github.com/bitnami/charts/commit/58e80d9805f0f6d7f5da29adf35efead9f7b28d9)), closes [#33582](https://github.com/bitnami/charts/issues/33582)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>9.0.7 (2025-05-07)</small>
+
+* [jupyterhub] Fix singleuser image pull secrets (#33176) ([95a3490](https://github.com/bitnami/charts/commit/95a34900e72996e02e0ba14bea719a6f7747e2c2)), closes [#33176](https://github.com/bitnami/charts/issues/33176)
+
+## <small>9.0.6 (2025-05-06)</small>
+
+* [bitnami/jupyterhub] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([4f25ca4](https://github.com/bitnami/charts/commit/4f25ca45071de7b489e3b7dc14d994c64777a069)), closes [#33378](https://github.com/bitnami/charts/issues/33378)
+
+## <small>9.0.5 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.5 (#33304) ([18bc5da](https://github.com/bitnami/charts/commit/18bc5da4bfc5c0b02874b4c13b4f226a00759608)), closes [#33304](https://github.com/bitnami/charts/issues/33304)
+
+## <small>9.0.4 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.4 (#33303) ([5972ed9](https://github.com/bitnami/charts/commit/5972ed96a412ee74df71bc10c7418276744ef6cd)), closes [#33303](https://github.com/bitnami/charts/issues/33303)
+
+## <small>9.0.3 (2025-04-16)</small>
+
+* [bitnami/jupyterhub] Release 9.0.3 (#33046) ([4d95659](https://github.com/bitnami/charts/commit/4d95659a2b163f32ff6623f1c4b70a9df4cd8142)), closes [#33046](https://github.com/bitnami/charts/issues/33046)
+
+## <small>9.0.2 (2025-04-16)</small>
+
+* [bitnami/jupyterhub] Release 9.0.2 (#33044) ([2a6ce7c](https://github.com/bitnami/charts/commit/2a6ce7cf906959f8aeb49cc00172a58961deb8a3)), closes [#33044](https://github.com/bitnami/charts/issues/33044)
+
+## <small>9.0.1 (2025-04-14)</small>
+
+* [bitnami/jupyterhub] Update jupyterhub_config.py and z2hj.py (#32991) ([ff09959](https://github.com/bitnami/charts/commit/ff09959c13f5dcebbc17faf2a496ada9b9f0c1b6)), closes [#32991](https://github.com/bitnami/charts/issues/32991)
+
+## 9.0.0 (2025-04-14)
+
+* [bitnami/jupyterhub] Release 9.0.0 (#32989) ([c9f5654](https://github.com/bitnami/charts/commit/c9f5654d04847f65d61db4cd07266d831df7f127)), closes [#32989](https://github.com/bitnami/charts/issues/32989)
+
+## <small>8.1.5 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jupyterhub] Release 8.1.5 (#32553) ([997d302](https://github.com/bitnami/charts/commit/997d302643d3c2f5aee2f3dceb9bcf989efe80ec)), closes [#32553](https://github.com/bitnami/charts/issues/32553)
+
+## <small>8.1.4 (2025-02-19)</small>
+
+* [bitnami/jupyterhub] Release 8.1.4 (#32006) ([ffc5e85](https://github.com/bitnami/charts/commit/ffc5e85ec7e025ec908a23de823900569d955974)), closes [#32006](https://github.com/bitnami/charts/issues/32006)
+
+## <small>8.1.3 (2025-02-16)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/jupyterhub] Release 8.1.3 (#31941) ([c882833](https://github.com/bitnami/charts/commit/c882833b8e0382c86f22fd511058096bfe073221)), closes [#31941](https://github.com/bitnami/charts/issues/31941)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>8.1.2 (2025-01-07)</small>
+
+* [bitnami/jupyterhub] Release 8.1.2 (#31229) ([f96d50c](https://github.com/bitnami/charts/commit/f96d50c3544e5adccf4e16511b974a65fe0ea654)), closes [#31229](https://github.com/bitnami/charts/issues/31229)
+
+## <small>8.1.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/jupyterhub] Release 8.1.1 (#31107) ([9d2c8b2](https://github.com/bitnami/charts/commit/9d2c8b20accdffd94ca714987cc36b932f4835e7)), closes [#31107](https://github.com/bitnami/charts/issues/31107)
+
+## 8.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/jupyterhub] Detect non-standard images (#30904) ([68c74f9](https://github.com/bitnami/charts/commit/68c74f9cbaf86f0a0434e5d4ff1a309a973e2746)), closes [#30904](https://github.com/bitnami/charts/issues/30904)
+
+## <small>8.0.1 (2024-11-09)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/jupyterhub] Release 8.0.1 (#30372) ([93410df](https://github.com/bitnami/charts/commit/93410df4913539709dce0b1f0ce450ab414650b9)), closes [#30372](https://github.com/bitnami/charts/issues/30372)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## 8.0.0 (2024-10-03)
 

@@ -1,12 +1,12 @@
 <!--- app-name: MongoDB&reg; -->
 
-# MongoDB(R) packaged by Bitnami
+# MongoDB&reg; packaged by Bitnami
 
-MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
+MongoDB&reg; is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 
 [Overview of MongoDB&reg;](http://www.mongodb.org)
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg; is run and maintained by MongoDB, which is a completely separate project from Bitnami.
 
 ## TL;DR
 
@@ -14,13 +14,13 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.mongodb-cnab) to see the listing on Azure Marketplace.
+
 Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
 This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Architecture
 
@@ -121,7 +121,25 @@ The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default conf
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mongodb_exporter](https://github.com/percona/mongodb_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -318,7 +336,7 @@ passwordUpdateJob:
 In the following example we update the password via values.yaml in a MongoDB installation with replication and several usernames and databases (including metrics).
 
 ```yaml
-architecture: "replication"
+architecture: "replicaset"
 
 auth:
   usernames:
@@ -363,7 +381,7 @@ passwordUpdateJob:
 
 You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
 
-### Backup and restore MongoDB(R) deployments
+### Backup and restore
 
 Two different approaches are available to back up and restore Bitnami MongoDB&reg; Helm chart deployments on Kubernetes:
 
@@ -418,7 +436,7 @@ Custom Prometheus rules can be defined for the Prometheus Operator by using the 
               summary: High request latency
 ```
 
-### Enable SSL/TLS
+### Securing traffic using TLS
 
 This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB(&reg;) clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
 
@@ -477,14 +495,15 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`   |
-| `global.namespaceOverride`                            | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride                                                                                                                                                                                                                                              | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.namespaceOverride`                            | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride                                                                                                                                                                                                                                              | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -501,6 +520,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
 | `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
+| `usePasswordFiles`        | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -670,6 +690,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                                                                                                                                            | `None`                    |
 | `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                                                                                                                                                 | `{}`                      |
 | `service.headless.annotations`                                | Annotations for the headless service.                                                                                                                                                                                                                                       | `{}`                      |
+| `service.publishNotReadyAddresses`                            | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready                                                                                                                                                    | `false`                   |
 | `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                                                                                                                                                        | `false`                   |
 | `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                                                                                                                                                          | `false`                   |
 | `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                                                                                                                                                | `REGISTRY_NAME`           |
@@ -810,6 +831,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                                                                                                 | `""`                |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                                                                                                           | `OnFailure`         |
 | `backup.cronjob.backoffLimit`                                      | Set the cronjob parameter backoffLimit                                                                                                                                                                            | `6`                 |
+| `backup.cronjob.serviceAccount.name`                               | Set the cronjob parameter serviceAccountName. If you change from the default values make sure that the SA already exists.                                                                                         | `default`           |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`              |
 | `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`                |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`              |
@@ -1151,6 +1173,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 If authentication is enabled, it's necessary to set the `auth.rootPassword` (also `auth.replicaSetKey` when using a replicaset architecture) when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
@@ -1288,7 +1314,7 @@ extraDeploy:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

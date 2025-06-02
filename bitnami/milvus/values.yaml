@@ -19,6 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -34,6 +39,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
@@ -57,6 +65,9 @@ extraDeploy: []
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: false
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -87,7 +98,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.4.17-debian-12-r0
+    tag: 2.5.12-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -167,7 +178,7 @@ milvus:
         {{- if .Values.kafka.enabled  }}
           {{- $brokerReplicas := $.Values.kafka.broker.replicaCount | int }}
           {{- $controllerReplicas := 0 }}
-          {{- if or (not .Values.kafka.kraft.enabled) (not .Values.kafka.controller.controllerOnly)}}
+          {{- if not .Values.kafka.controller.controllerOnly }}
           {{- $controllerReplicas = $.Values.kafka.controller.replicaCount | int }}
           {{- end }}
           {{- range $i, $_e := until $brokerReplicas }}
@@ -267,7 +278,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.4.9-debian-12-r1
+    tag: 2.5.10-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4599,7 +4610,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.4.12-debian-12-r0
+    tag: 2.5.10-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5157,7 +5168,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r33
+    tag: 12-debian-12-r45
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -5430,10 +5441,10 @@ kafka:
   service:
     ports:
       client: 9092
-  ## @param kafka.extraConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
+  ## @param kafka.overrideConfiguration [object] Kafka common configuration override
   ##
-  extraConfig: |-
-    offsets.topic.replication.factor=1
+  overrideConfiguration:
+    offsets.topic.replication.factor: 1
   ## @param kafka.listeners.client.protocol Kafka authentication protocol for the client listener
   ##
   listeners:

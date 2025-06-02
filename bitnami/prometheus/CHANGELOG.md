@@ -1,8 +1,97 @@
 # Changelog
 
-## 1.3.28 (2024-11-19)
+## 2.1.2 (2025-05-31)
 
-* [bitnami/prometheus] Release 1.3.28 ([#30518](https://github.com/bitnami/charts/pull/30518))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34020](https://github.com/bitnami/charts/pull/34020))
+
+## <small>2.0.8 (2025-05-19)</small>
+
+* [bitnami/prometheus] Added variable whether to include the default cluster role rules in rbac (#3372 ([cd9a26e](https://github.com/bitnami/charts/commit/cd9a26e5119370b678e18aa05582bc46dc22850f)), closes [#33722](https://github.com/bitnami/charts/issues/33722)
+
+## <small>2.0.7 (2025-05-17)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#33764) ([df99230](https://github.com/bitnami/charts/commit/df992300dad78b876d90f9dd597796ea80b2c2d7)), closes [#33764](https://github.com/bitnami/charts/issues/33764)
+
+## <small>2.0.6 (2025-05-12)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map ob ([ed61248](https://github.com/bitnami/charts/commit/ed61248fa488374a95716a98775ba4de813bb215)), closes [#33525](https://github.com/bitnami/charts/issues/33525)
+
+## <small>2.0.5 (2025-05-08)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#33570) ([4e3ea1e](https://github.com/bitnami/charts/commit/4e3ea1ed5d632e3b82904d6a77f672fd50139831)), closes [#33570](https://github.com/bitnami/charts/issues/33570)
+
+## <small>2.0.4 (2025-05-07)</small>
+
+* [bitnami/prometheus] Release 2.0.4 (#33515) ([39c09bf](https://github.com/bitnami/charts/commit/39c09bf5150bef220d06b059195e16d1b40c65df)), closes [#33515](https://github.com/bitnami/charts/issues/33515)
+
+## <small>2.0.3 (2025-05-06)</small>
+
+* [bitnami/prometheus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([7d7df6c](https://github.com/bitnami/charts/commit/7d7df6ceef66dcef17177b54154c7bad85e3adb7)), closes [#33424](https://github.com/bitnami/charts/issues/33424)
+
+## <small>2.0.2 (2025-05-02)</small>
+
+* [bitnami/prometheus] Release 2.0.0 (#33240) ([123eb4e](https://github.com/bitnami/charts/commit/123eb4e36bb3852dc166ebfa53738cf0be581058)), closes [#33240](https://github.com/bitnami/charts/issues/33240)
+* [bitnami/prometheus] Release 2.0.1 (#33311) ([4e0c474](https://github.com/bitnami/charts/commit/4e0c474059d9f1ee163f9e315df0874978c9768e)), closes [#33311](https://github.com/bitnami/charts/issues/33311)
+* [bitnami/prometheus] Release 2.0.2 (#33312) ([a62fc07](https://github.com/bitnami/charts/commit/a62fc075b2e7428c8624cf2725180deeef12099a)), closes [#33312](https://github.com/bitnami/charts/issues/33312)
+
+## <small>1.4.10 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/prometheus] Release 1.4.10 (#32760) ([7e61b38](https://github.com/bitnami/charts/commit/7e61b38f61e3fa35e6b86b7319e9c1c4c7bba88e)), closes [#32760](https://github.com/bitnami/charts/issues/32760)
+
+## <small>1.4.9 (2025-03-10)</small>
+
+* [bitnami/prometheus] Fix RBAC for Prometheus endpointslices role (#31924) ([79b584d](https://github.com/bitnami/charts/commit/79b584d0f2447fafce69fb2643e54732156d91cb)), closes [#31924](https://github.com/bitnami/charts/issues/31924)
+
+## <small>1.4.8 (2025-03-05)</small>
+
+* [bitnami/prometheus] Release 1.4.8 (#32314) ([13fdecf](https://github.com/bitnami/charts/commit/13fdecf57b33168f4d07b5e6185b40c23931ea3e)), closes [#32314](https://github.com/bitnami/charts/issues/32314)
+
+## <small>1.4.7 (2025-02-20)</small>
+
+* [bitnami/prometheus] Release 1.4.7 (#32031) ([03acf9e](https://github.com/bitnami/charts/commit/03acf9e455bbd0acd679fa0714e3727a68a79245)), closes [#32031](https://github.com/bitnami/charts/issues/32031)
+
+## <small>1.4.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/prometheus] Release 1.4.6 (#31900) ([89f7e53](https://github.com/bitnami/charts/commit/89f7e53a19af293a4ce2fcd1261abcb5c0803feb)), closes [#31900](https://github.com/bitnami/charts/issues/31900)
+
+## <small>1.4.5 (2025-02-05)</small>
+
+* [bitnami/prometheus] Release 1.4.5 (#31776) ([8d72f34](https://github.com/bitnami/charts/commit/8d72f34addc80047ac7fdf2dc5035b74f8f1d51d)), closes [#31776](https://github.com/bitnami/charts/issues/31776)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.4.4 (2025-01-24)</small>
+
+* [bitnami/prometheus] Release 1.4.4 (#31580) ([67f0ae3](https://github.com/bitnami/charts/commit/67f0ae3dc65683ccd661c84a66177d0839cc65b0)), closes [#31580](https://github.com/bitnami/charts/issues/31580)
+
+## <small>1.4.3 (2025-01-22)</small>
+
+* [bitnami/prometheus] Remove GOSS duplicated command (#31513) ([433437c](https://github.com/bitnami/charts/commit/433437cf7c5dca688668de467173382963febe1c)), closes [#31513](https://github.com/bitnami/charts/issues/31513)
+
+## <small>1.4.2 (2025-01-17)</small>
+
+* [bitnami/prometheus] Release 1.4.2 (#31446) ([8d5a3a8](https://github.com/bitnami/charts/commit/8d5a3a81abd654712bdddeec3f7263890dabe9b8)), closes [#31446](https://github.com/bitnami/charts/issues/31446)
+
+## <small>1.4.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/prometheus] Release 1.4.1 (#31324) ([074a131](https://github.com/bitnami/charts/commit/074a1318cbcb9063e83927d585e12475431cc93c)), closes [#31324](https://github.com/bitnami/charts/issues/31324)
+
+## 1.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/prometheus] Detect non-standard images (#30938) ([492b79e](https://github.com/bitnami/charts/commit/492b79e3b1e75d12d57d7d4881faf01c682a4ec8)), closes [#30938](https://github.com/bitnami/charts/issues/30938)
+
+## <small>1.3.29 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/prometheus] Release 1.3.29 (#30774) ([f1b557c](https://github.com/bitnami/charts/commit/f1b557c5e48a6a6195353d2827922638f91cd250)), closes [#30774](https://github.com/bitnami/charts/issues/30774)
+
+## <small>1.3.28 (2024-11-19)</small>
+
+* [bitnami/prometheus] Release 1.3.28 (#30518) ([8a90ea8](https://github.com/bitnami/charts/commit/8a90ea87706d89c78bcaa0bb08ca6a0d96512b5c)), closes [#30518](https://github.com/bitnami/charts/issues/30518)
 
 ## <small>1.3.27 (2024-11-08)</small>
 

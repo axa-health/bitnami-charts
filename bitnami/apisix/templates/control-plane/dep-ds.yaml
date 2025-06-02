@@ -47,6 +47,9 @@ spec:
       {{- if .Values.controlPlane.hostNetwork }}
       hostNetwork: {{ .Values.controlPlane.hostNetwork }}
       {{- end }}
+      {{- if .Values.controlPlane.dnsPolicy }}
+      dnsPolicy: {{ .Values.controlPlane.dnsPolicy | quote }} 
+      {{- end }}   
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.controlPlane.automountServiceAccountToken }}
       {{- if .Values.controlPlane.hostAliases }}
@@ -83,6 +86,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "apisix.waitForETCDInitContainer" . | nindent 8 }}
+        {{- include "apisix.renderConfInitContainer" (dict "component" "control-plane" "context" $) | nindent 8 }}
         {{- include "apisix.prepareApisixInitContainer" (dict "component" "control-plane" "context" $) | nindent 8 }}
         {{- if .Values.controlPlane.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.initContainers "context" $) | nindent 8 }}
@@ -191,6 +195,17 @@ spec:
         - name: config
           configMap:
             name: {{ include "apisix.control-plane.defaultConfigmapName" . }}
+        {{- if .Values.usePasswordFiles }}
+        - name: apisix-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "apisix.control-plane.secretName" . }}
+              {{- if (include "apisix.etcd.authEnabled" .) }}
+              - secret:
+                  name:  {{ include "apisix.etcd.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.controlPlane.extraConfig .Values.controlPlane.extraConfigExistingConfigMap }}
         - name: extra-config
           configMap:

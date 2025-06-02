@@ -1,8 +1,108 @@
 # Changelog
 
-## 9.0.4 (2024-11-09)
+## 12.0.0 (2025-05-07)
 
-* [bitnami/mastodon] Release 9.0.4 ([#30383](https://github.com/bitnami/charts/pull/30383))
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33505](https://github.com/bitnami/charts/pull/33505))
+
+## <small>11.0.2 (2025-05-06)</small>
+
+* [bitnami/mastodon] Release 11.0.2 (#33463) ([336ac7a](https://github.com/bitnami/charts/commit/336ac7a11f3751e2c1570b084530007e68cc708c)), closes [#33463](https://github.com/bitnami/charts/issues/33463)
+
+## <small>11.0.1 (2025-05-06)</small>
+
+* [bitnami/mastodon] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3339 ([94c9020](https://github.com/bitnami/charts/commit/94c902008f4dda66063d6820e443afadf72fce95)), closes [#33395](https://github.com/bitnami/charts/issues/33395)
+
+## 11.0.0 (2025-04-30)
+
+* [bitnami/mastodon] major: Upgrade elasticsearch subchart to 22.x.x (ES 9.x) (#33264) ([ffb165a](https://github.com/bitnami/charts/commit/ffb165a2535d93a78333d01aaea1a37bb7141490)), closes [#33264](https://github.com/bitnami/charts/issues/33264)
+
+## <small>10.1.1 (2025-04-09)</small>
+
+* [bitnami/mastodon] Release 10.1.1 (#32909) ([42032e2](https://github.com/bitnami/charts/commit/42032e24c96811e5809ba6991bd1b59d43c075fb)), closes [#32909](https://github.com/bitnami/charts/issues/32909)
+
+## 10.1.0 (2025-04-04)
+
+* [bitnami/mastodon] Set `usePasswordFiles=true` by default (#32367) ([410b9a2](https://github.com/bitnami/charts/commit/410b9a27153710a4fae9a1eeb1ca182c63e76118)), closes [#32367](https://github.com/bitnami/charts/issues/32367)
+
+## <small>10.0.1 (2025-04-03)</small>
+
+* [bitnami/mastodon] Release 10.0.1 (#32803) ([41f62c8](https://github.com/bitnami/charts/commit/41f62c8333b88d11169ca08f7f1c8ce9b3a1ed73)), closes [#32803](https://github.com/bitnami/charts/issues/32803)
+
+## 10.0.0 (2025-04-03)
+
+* [bitnami/mastodon] Bump MinIO major version 16.x.x (#32700) ([dfd61a0](https://github.com/bitnami/charts/commit/dfd61a00e9e7ac67251f68b3a273e7b6368e84ff)), closes [#32700](https://github.com/bitnami/charts/issues/32700)
+
+## <small>9.2.9 (2025-04-02)</small>
+
+* [bitnami/mastodon] Release 9.2.9 (#32785) ([14e9623](https://github.com/bitnami/charts/commit/14e96230f82d5a26ae12bd381a43819fd1ec2847)), closes [#32785](https://github.com/bitnami/charts/issues/32785)
+
+## <small>9.2.8 (2025-04-01)</small>
+
+* [bitnami/mastodon] Release 9.2.8 (#32711) ([256efe8](https://github.com/bitnami/charts/commit/256efe8969ab8f46739d15b8d25ccf42988521c2)), closes [#32711](https://github.com/bitnami/charts/issues/32711)
+
+## <small>9.2.7 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mastodon] Release 9.2.7 (#32447) ([9e82185](https://github.com/bitnami/charts/commit/9e8218519bb1197509174b5c88f1dff86e8daea4)), closes [#32447](https://github.com/bitnami/charts/issues/32447)
+
+## <small>9.2.6 (2025-03-10)</small>
+
+* [bitnami/mastodon] Release 9.2.6 (#32380) ([bb410bc](https://github.com/bitnami/charts/commit/bb410bc61d3e15edb683b5c264b8388628968ee0)), closes [#32380](https://github.com/bitnami/charts/issues/32380)
+
+## <small>9.2.5 (2025-02-27)</small>
+
+* [bitnami/mastodon] Release 9.2.5 (#32205) ([d84356d](https://github.com/bitnami/charts/commit/d84356dc0c4fac089b3cfc2c9a189e228e3f7809)), closes [#32205](https://github.com/bitnami/charts/issues/32205)
+
+## <small>9.2.4 (2025-02-27)</small>
+
+* [bitnami/mastodon] Release 9.2.4 (#32199) ([dd96507](https://github.com/bitnami/charts/commit/dd965077cbfcedbb6998d5a56eee410fa6e0e6f3)), closes [#32199](https://github.com/bitnami/charts/issues/32199)
+
+## <small>9.2.3 (2025-02-14)</small>
+
+* [bitnami/mastodon] Release 9.2.3 (#31933) ([82aa57f](https://github.com/bitnami/charts/commit/82aa57ff62a509052831636fad761932a744a678)), closes [#31933](https://github.com/bitnami/charts/issues/31933)
+
+## <small>9.2.2 (2025-02-13)</small>
+
+* [bitnami/mastodon] Release 9.2.2 (#31920) ([7d7cc5b](https://github.com/bitnami/charts/commit/7d7cc5bb02f8d539f3e4e2b32f0f0ec4c59d8631)), closes [#31920](https://github.com/bitnami/charts/issues/31920)
+
+## <small>9.2.1 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mastodon] Release 9.2.1 (#31916) ([27d24fb](https://github.com/bitnami/charts/commit/27d24fbec625ce5c4ca93018e618da004a4df131)), closes [#31916](https://github.com/bitnami/charts/issues/31916)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## 9.2.0 (2025-01-29)
+
+* [bitnami/mastodon] feature(minio): Bump MinIO subchart (#31660) ([fcdd884](https://github.com/bitnami/charts/commit/fcdd88475b946b0a56e1738dc8d4c3d775416dba)), closes [#31660](https://github.com/bitnami/charts/issues/31660)
+
+## <small>9.1.3 (2025-01-16)</small>
+
+* [bitnami/mastodon] Release 9.1.3 (#31400) ([a5b97a0](https://github.com/bitnami/charts/commit/a5b97a0c64ce4cabccde11f94e3a641d63cd125b)), closes [#31400](https://github.com/bitnami/charts/issues/31400)
+
+## <small>9.1.2 (2025-01-12)</small>
+
+* [bitnami/mastodon] Release 9.1.2 (#31308) ([712bf25](https://github.com/bitnami/charts/commit/712bf2565a95cc41b01448f2551d19f40ea12898)), closes [#31308](https://github.com/bitnami/charts/issues/31308)
+
+## <small>9.1.1 (2024-12-30)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mastodon] Avoid mkdir issue when restarting (#31183) ([3e3b679](https://github.com/bitnami/charts/commit/3e3b6794ef9d0fa28a953d0c7932d46788b6d7a9)), closes [#31183](https://github.com/bitnami/charts/issues/31183)
+
+## 9.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mastodon] Detect non-standard images (#30921) ([eea0814](https://github.com/bitnami/charts/commit/eea08143bfe95dfbd356d5f5fa8eb663b9bf130e)), closes [#30921](https://github.com/bitnami/charts/issues/30921)
+
+## <small>9.0.5 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mastodon] Release 9.0.5 (#30738) ([aec6ca5](https://github.com/bitnami/charts/commit/aec6ca52a4f822a7f7ccfa26187d413e2acb3ffe)), closes [#30738](https://github.com/bitnami/charts/issues/30738)
+
+## <small>9.0.4 (2024-11-09)</small>
+
+* [bitnami/mastodon] Release 9.0.4 (#30383) ([61061fc](https://github.com/bitnami/charts/commit/61061fc59a391e70de4782d64ce5e4a17d2115f1)), closes [#30383](https://github.com/bitnami/charts/issues/30383)
 
 ## <small>9.0.3 (2024-11-08)</small>
 

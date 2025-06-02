@@ -1,8 +1,97 @@
 # Changelog
 
+## 9.3.9 (2025-05-29)
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#33972](https://github.com/bitnami/charts/pull/33972))
+
+## <small>9.3.8 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#33637) ([9efe4a6](https://github.com/bitnami/charts/commit/9efe4a68614e249bd6b5361470cb7e08ab8df842)), closes [#33637](https://github.com/bitnami/charts/issues/33637)
+
+## <small>9.3.7 (2025-05-07)</small>
+
+* [bitnami/matomo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33396) ([e267482](https://github.com/bitnami/charts/commit/e2674820eb9e6e0a9442e52212c601119ff18ca7)), closes [#33396](https://github.com/bitnami/charts/issues/33396)
+
+## <small>9.3.6 (2025-05-03)</small>
+
+* [bitnami/matomo] Release 9.3.6 (#33314) ([5976be1](https://github.com/bitnami/charts/commit/5976be1ecb807f0fd3a13b8a889da4054d7c84bf)), closes [#33314](https://github.com/bitnami/charts/issues/33314)
+
+## <small>9.3.5 (2025-05-03)</small>
+
+* [bitnami/matomo] Release 9.3.5 (#33313) ([6e5c37f](https://github.com/bitnami/charts/commit/6e5c37f30ab452838d1c3486bc45e69ca598de7c)), closes [#33313](https://github.com/bitnami/charts/issues/33313)
+
+## <small>9.3.4 (2025-04-17)</small>
+
+* [bitnami/matomo] Release 9.3.4 (#33067) ([b471948](https://github.com/bitnami/charts/commit/b4719488b3fcd5037216469b249aaab9ca05d386)), closes [#33067](https://github.com/bitnami/charts/issues/33067)
+
+## <small>9.3.3 (2025-04-17)</small>
+
+* [bitnami/matomo] fix mount path for `matomo-secrets` volume on cronjobs (#32773) ([3d41af6](https://github.com/bitnami/charts/commit/3d41af63611985ef47dc67d28202cc8f2ff2b75c)), closes [#32773](https://github.com/bitnami/charts/issues/32773)
+
+## <small>9.3.2 (2025-04-14)</small>
+
+* [bitnami/matomo] Adds matomo-secrets volume to matomo-archive cronjob (#32924) ([3505304](https://github.com/bitnami/charts/commit/350530478550b5b300b06fee2493fbd64050f9b0)), closes [#32924](https://github.com/bitnami/charts/issues/32924)
+
+## <small>9.3.1 (2025-04-09)</small>
+
+* [bitnami/matomo] Add missing `app.kubernetes.io/component` label to deployment and pdb (#32774) ([eacfbe1](https://github.com/bitnami/charts/commit/eacfbe1d77a27ad59168aef51ddcf7a2c220dea8)), closes [#32774](https://github.com/bitnami/charts/issues/32774)
+
+## 9.3.0 (2025-03-31)
+
+* [bitnami/matomo] Set `usePasswordFiles=true` by default (#32363) ([ceca10c](https://github.com/bitnami/charts/commit/ceca10c0dcd20d46bebf5f3fd9abea9b7a4144ef)), closes [#32363](https://github.com/bitnami/charts/issues/32363)
+
+## <small>9.2.7 (2025-03-24)</small>
+
+* [bitnami/matomo] Fix typo in SMTP authentication value for CRAM-MD5 (#32354) ([3e8ed41](https://github.com/bitnami/charts/commit/3e8ed41b493b1c92d2dea76d09e5e63c39a006e3)), closes [#32354](https://github.com/bitnami/charts/issues/32354)
+
+## <small>9.2.6 (2025-03-18)</small>
+
+* [bitnami/matomo] Release 9.2.6 (#32503) ([1d91b5e](https://github.com/bitnami/charts/commit/1d91b5ec19f2299c60784bc35827cb4c2e2e072e)), closes [#32503](https://github.com/bitnami/charts/issues/32503)
+
+## <small>9.2.5 (2025-03-14)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/matomo] Release 9.2.5 (#32452) ([07c6216](https://github.com/bitnami/charts/commit/07c6216527f19cdf7467a0676a111987d60d251f)), closes [#32452](https://github.com/bitnami/charts/issues/32452)
+
+## <small>9.2.4 (2025-02-23)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/matomo] Release 9.2.4 (#32138) ([a276308](https://github.com/bitnami/charts/commit/a2763082856d2e1eb93f4adc9ed26c36b3e13156)), closes [#32138](https://github.com/bitnami/charts/issues/32138)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>9.2.3 (2025-01-24)</small>
+
+* [bitnami/matomo] Release 9.2.3 (#31589) ([73a1abc](https://github.com/bitnami/charts/commit/73a1abcac62e24a371d1916c960f342a93b8f81b)), closes [#31589](https://github.com/bitnami/charts/issues/31589)
+
+## <small>9.2.2 (2025-01-15)</small>
+
+* [bitnami/matomo] Release 9.2.2 (#31382) ([fdbdfdf](https://github.com/bitnami/charts/commit/fdbdfdfc90f8fa6f2f55569d48359e6c29c67111)), closes [#31382](https://github.com/bitnami/charts/issues/31382)
+
+## <small>9.2.1 (2024-12-23)</small>
+
+* [bitnami/matomo] Release 9.2.1 (#31134) ([c0307c7](https://github.com/bitnami/charts/commit/c0307c7717372da54334ff98d4e8ac1155cb035d)), closes [#31134](https://github.com/bitnami/charts/issues/31134)
+
+## 9.2.0 (2024-12-17)
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/matomo] add initContainers parameter to CronJob pods (#31065) ([27feba9](https://github.com/bitnami/charts/commit/27feba938379638644aae8e61f8f90c30d331b79)), closes [#31065](https://github.com/bitnami/charts/issues/31065)
+
+## <small>9.1.1 (2024-12-12)</small>
+
+* [bitnami/matomo] Release 9.1.1 (#31005) ([a55802f](https://github.com/bitnami/charts/commit/a55802f34fa18246dcc5337c1428033485068e9a)), closes [#31005](https://github.com/bitnami/charts/issues/31005)
+
+## 9.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/matomo] Detect non-standard images (#30957) ([5d1a731](https://github.com/bitnami/charts/commit/5d1a731a820afcddaf91e9f2596e0e752795e134)), closes [#30957](https://github.com/bitnami/charts/issues/30957)
+
 ## 9.0.0 (2024-11-12)
 
-* [bitnami/matomo] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 ([#30354](https://github.com/bitnami/charts/pull/30354))
+* [bitnami/matomo] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30354) ([a9c658d](https://github.com/bitnami/charts/commit/a9c658dc5fce8487df2a207fdb75baadd2b976b4)), closes [#30354](https://github.com/bitnami/charts/issues/30354)
 
 ## <small>8.0.14 (2024-11-04)</small>
 

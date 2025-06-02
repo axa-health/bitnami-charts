@@ -47,6 +47,9 @@ spec:
       {{- if .Values.dataPlane.hostNetwork }}
       hostNetwork: {{ .Values.dataPlane.hostNetwork }}
       {{- end }}
+      {{- if .Values.controlPlane.dnsPolicy }}
+      dnsPolicy: {{ .Values.dataPlane.dnsPolicy | quote }} 
+      {{- end }}  
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.dataPlane.automountServiceAccountToken }}
       {{- if .Values.dataPlane.hostAliases }}
@@ -85,6 +88,7 @@ spec:
         {{- if .Values.controlPlane.enabled }}
         {{- include "apisix.waitForControlPlaneInitContainer" . | nindent 8 }}
         {{- end }}
+        {{- include "apisix.renderConfInitContainer" (dict "component" "data-plane" "context" $) | nindent 8 }}
         {{- include "apisix.prepareApisixInitContainer" (dict "component" "data-plane" "context" $) | nindent 8 }}
         {{- if .Values.dataPlane.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.initContainers "context" $) | nindent 8 }}
@@ -195,6 +199,19 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dataPlane.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if and .Values.usePasswordFiles (or .Values.controlPlane.enabled (include "apisix.etcd.authEnabled" .)) }}
+        - name: apisix-secrets
+          projected:
+            sources:
+              {{- if (include "apisix.etcd.authEnabled" .) }}
+              - secret:
+                  name:  {{ include "apisix.etcd.secretName" . }}
+              {{- end }}
+              {{- if .Values.controlPlane.enabled }}
+              - secret:
+                  name: {{ include "apisix.control-plane.secretName" . }}
+              {{- end }}
+        {{- end }}
         - name: config
           configMap:
             name: {{ include "apisix.data-plane.defaultConfigmapName" . }}

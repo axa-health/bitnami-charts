@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,11 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -36,6 +39,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -57,6 +63,9 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -84,7 +93,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.11.0-debian-12-r0
+  tag: 3.12.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -116,6 +125,12 @@ dataPlane:
   ## @param dataPlane.hostNetwork Use hostNetwork
   ##
   hostNetwork: false
+  ## @param dataPlane.dnsPolicy DNS policy for APISIX pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-policies
+  ## NOTE: If you set hostNetwork=true, you must set dnsPolicy=ClusterFirstWithHostNet
+  ##
+  dnsPolicy: ClusterFirst
+
   ## @param dataPlane.containerPorts.http APISIX HTTP container port
   ## @param dataPlane.containerPorts.https APISIX HTTPS container port
   ## @param dataPlane.containerPorts.control APISIX control container port
@@ -884,6 +899,11 @@ controlPlane:
   ## @param controlPlane.hostNetwork Use hostNetwork
   ##
   hostNetwork: false
+  ## @param controlPlane.dnsPolicy DNS policy for APISIX Admin pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-policies
+  ## NOTE: If you set hostNetwork=true, you must set dnsPolicy=ClusterFirstWithHostNet
+  ##
+  dnsPolicy: ClusterFirst
   ## @param controlPlane.useDaemonSet Deploy as DaemonSet
   ##
   useDaemonSet: false
@@ -1684,7 +1704,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r46
+    tag: 3.0.1-debian-12-r71
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1837,7 +1857,7 @@ dashboard:
       - ai
       - cas-auth
       - multi-auth
-      
+
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}
@@ -2430,7 +2450,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.3-debian-12-r0
+    tag: 1.8.4-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3149,7 +3169,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r31
+    tag: 12-debian-12-r43
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

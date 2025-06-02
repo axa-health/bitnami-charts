@@ -1,8 +1,78 @@
 # Changelog
 
-## 7.5.2 (2024-10-21)
+## 7.8.4 (2025-05-28)
 
-* [bitnami/memcached] Release 7.5.2 ([#30004](https://github.com/bitnami/charts/pull/30004))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#33947](https://github.com/bitnami/charts/pull/33947))
+
+## <small>7.8.3 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#33635) ([a4d8554](https://github.com/bitnami/charts/commit/a4d855426d3a7bd89dc1b3d3a6e24b82e1d96b7d)), closes [#33635](https://github.com/bitnami/charts/issues/33635)
+
+## <small>7.8.2 (2025-05-06)</small>
+
+* [bitnami/memcached] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([3fa01d8](https://github.com/bitnami/charts/commit/3fa01d8c491ceac5fad378ec61dabc9327c0b566)), closes [#33397](https://github.com/bitnami/charts/issues/33397)
+
+## <small>7.8.1 (2025-04-18)</small>
+
+* [bitnami/memcached] Release 7.8.1 (#33078) ([658218b](https://github.com/bitnami/charts/commit/658218b21d9c670c31a1002a729755515067de5c)), closes [#33078](https://github.com/bitnami/charts/issues/33078)
+
+## 7.8.0 (2025-03-31)
+
+* [bitnami/memcached] Set `usePasswordFiles=true` by default (#32362) ([1e9a38b](https://github.com/bitnami/charts/commit/1e9a38b0e51a48f37b1768dcecbad9d4c11f1dae)), closes [#32362](https://github.com/bitnami/charts/issues/32362)
+
+## <small>7.7.1 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/memcached] Release 7.7.1 (#32526) ([8d5d1bf](https://github.com/bitnami/charts/commit/8d5d1bfdb67a25630b430d06dc0e1caca6f9f043)), closes [#32526](https://github.com/bitnami/charts/issues/32526)
+
+## 7.7.0 (2025-03-12)
+
+* [bitnami/memcached] Enables the ability to specify podTargetLabels on ServiceMonitor for memcached ( ([bba58fd](https://github.com/bitnami/charts/commit/bba58fd79eb67be53adca12e9c3ba5068023f54c)), closes [#32387](https://github.com/bitnami/charts/issues/32387)
+
+## <small>7.6.5 (2025-02-20)</small>
+
+* [bitnami/memcached] Release 7.6.5 (#32095) ([e720816](https://github.com/bitnami/charts/commit/e7208161c5d9284d15baf184dc846dd32ed0db8b)), closes [#32095](https://github.com/bitnami/charts/issues/32095)
+
+## <small>7.6.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/memcached] Release 7.6.4 (#32015) ([ab78084](https://github.com/bitnami/charts/commit/ab780848530f132440643bda0577062b2342660d)), closes [#32015](https://github.com/bitnami/charts/issues/32015)
+
+## <small>7.6.3 (2025-02-05)</small>
+
+* [bitnami/memcached] Release 7.6.3 (#31777) ([61aaceb](https://github.com/bitnami/charts/commit/61aacebb1669870f55d8e19f0a4207c5e12c3853)), closes [#31777](https://github.com/bitnami/charts/issues/31777)
+
+## <small>7.6.2 (2025-02-03)</small>
+
+* [bitnami/memcached] Release 7.6.2 (#31709) ([f210fa1](https://github.com/bitnami/charts/commit/f210fa1b5aec282e7565cfe3d43583106feea06b)), closes [#31709](https://github.com/bitnami/charts/issues/31709)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>7.6.1 (2024-12-23)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/memcached] Release 7.6.1 (#31142) ([a0056eb](https://github.com/bitnami/charts/commit/a0056ebac6b52ff17a6e57244c79acacc58d134e)), closes [#31142](https://github.com/bitnami/charts/issues/31142)
+
+## 7.6.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/memcached] Detect non-standard images (#30922) ([954239f](https://github.com/bitnami/charts/commit/954239fbde6ee74fb40dc8341b4cfb4ea243ced7)), closes [#30922](https://github.com/bitnami/charts/issues/30922)
+
+## <small>7.5.4 (2024-12-05)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/memcached] Release 7.5.4 (#30797) ([567544f](https://github.com/bitnami/charts/commit/567544f75d5058b7c4ea239146942c0bd56e1848)), closes [#30797](https://github.com/bitnami/charts/issues/30797)
+
+## <small>7.5.3 (2024-11-30)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/memcached] Release 7.5.3 (#30694) ([2a6f5eb](https://github.com/bitnami/charts/commit/2a6f5eb1586274de78127fa11a8b7824f1d4f5c9)), closes [#30694](https://github.com/bitnami/charts/issues/30694)
+
+## <small>7.5.2 (2024-10-21)</small>
+
+* [bitnami/memcached] Release 7.5.2 (#30004) ([e6b0940](https://github.com/bitnami/charts/commit/e6b0940f88502e985ca8ceda3c2c3e427da60f1b)), closes [#30004](https://github.com/bitnami/charts/issues/30004)
 
 ## <small>7.5.1 (2024-10-17)</small>
 
@@ -368,7 +438,7 @@
 
 ## <small>6.3.4 (2023-01-10)</small>
 
-* [bitnami/memcached] Correct typo in README.md (#14186) ([906cfcb](https://github.com/bitnami/charts/commit/906cfcba5079863ae3ed9e5af2b7cca64cf190da)), closes [#14186](https://github.com/bitnami/charts/issues/14186) [1#L330-L348](https://github.com/1/issues/L330-L348)
+* [bitnami/memcached] Correct typo in README.md (#14186) ([906cfcb](https://github.com/bitnami/charts/commit/906cfcba5079863ae3ed9e5af2b7cca64cf190da)), closes [#14186](https://github.com/bitnami/charts/issues/14186)
 * [bitnami/memcached] Release 6.3.4 (#14253) ([0f5d20b](https://github.com/bitnami/charts/commit/0f5d20b6695179c7fa86ff7915c8a7e0c6893117)), closes [#14253](https://github.com/bitnami/charts/issues/14253)
 
 ## <small>6.3.3 (2023-01-04)</small>
@@ -1104,7 +1174,7 @@
 ## <small>1.5.7 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

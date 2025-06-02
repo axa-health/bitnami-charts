@@ -1,8 +1,141 @@
 # Changelog
 
-## 24.0.7 (2024-11-21)
+## 24.2.7 (2025-05-29)
 
-* [bitnami/wordpress] Release 24.0.7 ([#30571](https://github.com/bitnami/charts/pull/30571))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#33976](https://github.com/bitnami/charts/pull/33976))
+
+## <small>24.2.6 (2025-05-08)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#33556) ([69c79f3](https://github.com/bitnami/charts/commit/69c79f39b0852eb690a91cf960eaaaef8dfffa29)), closes [#33556](https://github.com/bitnami/charts/issues/33556)
+
+## <small>24.2.5 (2025-05-06)</small>
+
+* [bitnami/wordpress] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#334 ([2c523ed](https://github.com/bitnami/charts/commit/2c523ed14d02778383a5727c557cfda22e670808)), closes [#33449](https://github.com/bitnami/charts/issues/33449)
+
+## <small>24.2.4 (2025-04-30)</small>
+
+* [bitnami/wordpress] Release 24.2.4 (#33275) ([91e8cda](https://github.com/bitnami/charts/commit/91e8cda781e3c04f9692cb0e76e2dc76c28e352c)), closes [#33275](https://github.com/bitnami/charts/issues/33275)
+
+## <small>24.2.3 (2025-04-23)</small>
+
+* [bitnami/wordpress] Release 24.2.3 (#33041) ([c0c23ae](https://github.com/bitnami/charts/commit/c0c23ae555f97fc416e7563c85aa76cae5a328f9)), closes [#33041](https://github.com/bitnami/charts/issues/33041)
+
+## <small>24.2.2 (2025-04-09)</small>
+
+* [bitnami/wordpress] Release 24.2.2 (#32921) ([fd3b5b0](https://github.com/bitnami/charts/commit/fd3b5b045fd0a9fd3c4fbbb012d9f460a011ac6b)), closes [#32921](https://github.com/bitnami/charts/issues/32921)
+
+## <small>24.2.1 (2025-04-05)</small>
+
+* [bitnami/wordpress] Release 24.2.1 (#32824) ([1f14bb1](https://github.com/bitnami/charts/commit/1f14bb10870b4cd30fe1d6d2e7d9e8c32eaf9a8f)), closes [#32824](https://github.com/bitnami/charts/issues/32824)
+
+## 24.2.0 (2025-04-04)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/wordpress] Set `usePasswordFiles=true` by default (#32770) ([d31ec15](https://github.com/bitnami/charts/commit/d31ec15591a7ed93fdb9087a87a87ec436084ac4)), closes [#32770](https://github.com/bitnami/charts/issues/32770)
+
+## <small>24.1.18 (2025-03-07)</small>
+
+* [bitnami/wordpress] fix network policy when metrics enabled (#32338) ([ddcee74](https://github.com/bitnami/charts/commit/ddcee74411ab886e7ff1831e248392cf6dfed668)), closes [#32338](https://github.com/bitnami/charts/issues/32338)
+
+## <small>24.1.17 (2025-03-06)</small>
+
+* [bitnami/wordpress] Release 24.1.17 (#32335) ([1dec218](https://github.com/bitnami/charts/commit/1dec21880650c8b459025016068493a9fa063e01)), closes [#32335](https://github.com/bitnami/charts/issues/32335)
+
+## <small>24.1.16 (2025-03-04)</small>
+
+* [bitnami/wordpress] Release 24.1.16 (#32272) ([87d4450](https://github.com/bitnami/charts/commit/87d44507ee9c84e14779123f158ec1b76eb9f997)), closes [#32272](https://github.com/bitnami/charts/issues/32272)
+
+## <small>24.1.15 (2025-03-03)</small>
+
+* [bitnami/wordpress] Release 24.1.15 (#32241) ([dc71572](https://github.com/bitnami/charts/commit/dc715729ccc1a46759da07ab0c4f927e47eb5850)), closes [#32241](https://github.com/bitnami/charts/issues/32241)
+
+## <small>24.1.14 (2025-02-27)</small>
+
+* [bitnami/wordpress] Release 24.1.14 (#32198) ([2898255](https://github.com/bitnami/charts/commit/28982556c1d3fee68bc88faf4e951789ca29738e)), closes [#32198](https://github.com/bitnami/charts/issues/32198)
+
+## <small>24.1.13 (2025-02-24)</small>
+
+* [bitnami/wordpress] Release 24.1.13 (#32142) ([81907c7](https://github.com/bitnami/charts/commit/81907c74f7d63f829091ba25273317d4cea034d5)), closes [#32142](https://github.com/bitnami/charts/issues/32142)
+
+## <small>24.1.12 (2025-02-21)</small>
+
+* [bitnami/wordpress] Release 24.1.12 (#32098) ([d2eec31](https://github.com/bitnami/charts/commit/d2eec3130d51f8beb35168378ae1671009cc17d1)), closes [#32098](https://github.com/bitnami/charts/issues/32098)
+
+## <small>24.1.11 (2025-02-13)</small>
+
+* [bitnami/wordpress] Release 24.1.11 updating components versions (#31911) ([d96d1a4](https://github.com/bitnami/charts/commit/d96d1a448cdc7aacf111b991f53d9158ccc6a421)), closes [#31911](https://github.com/bitnami/charts/issues/31911)
+
+## <small>24.1.10 (2025-02-13)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/wordpress] Release 24.1.10 updating components versions (#31811) ([c45f515](https://github.com/bitnami/charts/commit/c45f515c1c2a84aa8a1cf6dacef25768a3aa6eca)), closes [#31811](https://github.com/bitnami/charts/issues/31811)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>24.1.9 (2025-01-27)</small>
+
+* [bitnami/wordpress] Release 24.1.9 (#31604) ([ca40161](https://github.com/bitnami/charts/commit/ca40161f5ce8c3c4ccbb658f2f84f3005d3b14f2)), closes [#31604](https://github.com/bitnami/charts/issues/31604)
+
+## <small>24.1.8 (2025-01-27)</small>
+
+* [bitnami/wordpress] Release 24.1.8 (#31601) ([2c1bd0f](https://github.com/bitnami/charts/commit/2c1bd0f142ad34d74c1419a97784f903a6cacec1)), closes [#31601](https://github.com/bitnami/charts/issues/31601)
+
+## <small>24.1.7 (2025-01-20)</small>
+
+* [bitnami/wordpress] Release 24.1.7 (#31481) ([0895c88](https://github.com/bitnami/charts/commit/0895c88a2a096dd9fc5dd729e4ebaecab945389a)), closes [#31481](https://github.com/bitnami/charts/issues/31481)
+
+## <small>24.1.6 (2025-01-13)</small>
+
+* [bitnami/wordpress] Release 24.1.6 (#31344) ([936309d](https://github.com/bitnami/charts/commit/936309de796b64a5d613605047bd4b4e7b42c968)), closes [#31344](https://github.com/bitnami/charts/issues/31344)
+
+## <small>24.1.5 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/wordpress] Release 24.1.5 (#31076) ([32ceeab](https://github.com/bitnami/charts/commit/32ceeab08da1b5072e6619f5e8b6717fdd897e99)), closes [#31076](https://github.com/bitnami/charts/issues/31076)
+
+## <small>24.1.4 (2024-12-13)</small>
+
+* [bitnami/wordpress] Release 24.1.4 (#31037) ([2407487](https://github.com/bitnami/charts/commit/24074879b1d65dbeff3092709cb8bb63254888e2)), closes [#31037](https://github.com/bitnami/charts/issues/31037)
+
+## <small>24.1.3 (2024-12-12)</small>
+
+* [bitnami/wordpress] Release 24.1.3 (#31016) ([af976a5](https://github.com/bitnami/charts/commit/af976a5be70dd87d3d44ba434d2747c6233f4eb2)), closes [#31016](https://github.com/bitnami/charts/issues/31016)
+
+## <small>24.1.2 (2024-12-12)</small>
+
+* [bitnami/wordpress] Release 24.1.2 (#31015) ([466c686](https://github.com/bitnami/charts/commit/466c6867645488a9fda96a27c217b7cac28d81b8)), closes [#31015](https://github.com/bitnami/charts/issues/31015)
+
+## <small>24.1.1 (2024-12-11)</small>
+
+* [bitnami/wordpress] Release 24.1.1 (#30996) ([18847ae](https://github.com/bitnami/charts/commit/18847ae04d1cde44a580b5100833caa416ffd6e3)), closes [#30996](https://github.com/bitnami/charts/issues/30996)
+
+## 24.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/wordpress] Detect non-standard images (#30970) ([423508a](https://github.com/bitnami/charts/commit/423508afbe78836b00b4c672b526a576ad936bdd)), closes [#30970](https://github.com/bitnami/charts/issues/30970)
+
+## <small>24.0.11 (2024-12-09)</small>
+
+* [bitnami/wordpress] Release 24.0.11 (#30846) ([7940dc2](https://github.com/bitnami/charts/commit/7940dc2203aedd08e40afd739b749f4732f81a16)), closes [#30846](https://github.com/bitnami/charts/issues/30846)
+
+## <small>24.0.10 (2024-12-04)</small>
+
+* [bitnami/wordpress] Release 24.0.10 (#30788) ([af92a10](https://github.com/bitnami/charts/commit/af92a103ee153a2b03700c1b129a059f897998ab)), closes [#30788](https://github.com/bitnami/charts/issues/30788)
+
+## <small>24.0.9 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/wordpress] Release 24.0.9 (#30734) ([8db9c0b](https://github.com/bitnami/charts/commit/8db9c0b5561bb5e8f8001cbb9d50659125a1d796)), closes [#30734](https://github.com/bitnami/charts/issues/30734)
+
+## <small>24.0.8 (2024-11-28)</small>
+
+* [bitnami/wordpress] Release 24.0.8 (#30671) ([992a24e](https://github.com/bitnami/charts/commit/992a24e499238f5b5f315bb37498f41eb5775aa5)), closes [#30671](https://github.com/bitnami/charts/issues/30671)
+
+## <small>24.0.7 (2024-11-21)</small>
+
+* [bitnami/wordpress] Release 24.0.7 (#30571) ([89b8b6f](https://github.com/bitnami/charts/commit/89b8b6fa607c7d1ef2804575a931cde070d53135)), closes [#30571](https://github.com/bitnami/charts/issues/30571)
 
 ## <small>24.0.6 (2024-11-19)</small>
 

@@ -1,8 +1,106 @@
 # Changelog
 
-## 1.2.19 (2024-11-07)
+## 1.4.12 (2025-05-28)
 
-* [bitnami/kuberay] Release 1.2.19 ([#30278](https://github.com/bitnami/charts/pull/30278))
+* fix(kuberay): wrong indentation in nodeAffinity element ([#33929](https://github.com/bitnami/charts/pull/33929))
+
+## <small>1.4.11 (2025-05-26)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/kuberay] Release 1.4.11 (#33481) ([5b3a24b](https://github.com/bitnami/charts/commit/5b3a24bb0bb33c11f7839bb793bf8ea82129bc75)), closes [#33481](https://github.com/bitnami/charts/issues/33481)
+
+## <small>1.4.10 (2025-05-06)</small>
+
+* [bitnami/kuberay] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33390 ([bcdcba5](https://github.com/bitnami/charts/commit/bcdcba5f33b36b87b7e4640c13d1c7540e01e697)), closes [#33390](https://github.com/bitnami/charts/issues/33390)
+
+## <small>1.4.9 (2025-04-14)</small>
+
+* [bitnami/kuberay] match upstream clusterrole (#32829) ([2e22964](https://github.com/bitnami/charts/commit/2e22964831c0891af097e780ff19b41a6883a10a)), closes [#32829](https://github.com/bitnami/charts/issues/32829)
+
+## <small>1.4.8 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.8 (#32932) ([2824293](https://github.com/bitnami/charts/commit/28242930c9814f6c46f0a0268d4a036324f5ba33)), closes [#32932](https://github.com/bitnami/charts/issues/32932)
+
+## <small>1.4.7 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.7 (#32928) ([54e904c](https://github.com/bitnami/charts/commit/54e904c954a3fc599f97efe62d12874d676ad5a6)), closes [#32928](https://github.com/bitnami/charts/issues/32928)
+
+## <small>1.4.6 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.6 (#32902) ([22bb26e](https://github.com/bitnami/charts/commit/22bb26ee4c4ab1c7052a4ac5e1a2918c198edb8d)), closes [#32902](https://github.com/bitnami/charts/issues/32902)
+
+## <small>1.4.5 (2025-04-03)</small>
+
+* [bitnami/kuberay] Release 1.4.5 (#32789) ([0b3b4e0](https://github.com/bitnami/charts/commit/0b3b4e0cb956609edc8d17557f4cba8e5f7a8a27)), closes [#32789](https://github.com/bitnami/charts/issues/32789)
+
+## <small>1.4.4 (2025-04-02)</small>
+
+* [bitnami/kuberay] Release 1.4.4 (#32743) ([2f6fb6e](https://github.com/bitnami/charts/commit/2f6fb6e3a68d97be7924ea84af67a25e47313168)), closes [#32743](https://github.com/bitnami/charts/issues/32743)
+
+## <small>1.4.3 (2025-03-18)</small>
+
+* [bitnami/kuberay] Release 1.4.3 (#32495) ([e5716fd](https://github.com/bitnami/charts/commit/e5716fd11e0d994973d026685004123b1d1a1451)), closes [#32495](https://github.com/bitnami/charts/issues/32495)
+
+## <small>1.4.2 (2025-03-15)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kuberay] Release 1.4.2 (#32468) ([1f302b9](https://github.com/bitnami/charts/commit/1f302b9decbd0890deb6a3b4c975b25fc9c8ec0b)), closes [#32468](https://github.com/bitnami/charts/issues/32468)
+
+## <small>1.4.1 (2025-03-05)</small>
+
+* [bitnami/kuberay] Release 1.4.1 (#32301) ([5eb8620](https://github.com/bitnami/charts/commit/5eb8620ccac939584ea24923e404d79b6efa1409)), closes [#32301](https://github.com/bitnami/charts/issues/32301)
+
+## 1.4.0 (2025-02-20)
+
+* [bitnami/kuberay] feat: use new helper for checking API versions (#32054) ([f81c75f](https://github.com/bitnami/charts/commit/f81c75f8bdd65bcf72b06556622aad5b9d1166fe)), closes [#32054](https://github.com/bitnami/charts/issues/32054)
+
+## <small>1.3.7 (2025-02-19)</small>
+
+* [bitnami/kuberay] Release 1.3.7 (#32012) ([3a282d6](https://github.com/bitnami/charts/commit/3a282d6e4d9a70037d7c4cde9bc7b009d113741c)), closes [#32012](https://github.com/bitnami/charts/issues/32012)
+
+## <small>1.3.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kuberay] Release 1.3.6 (#31895) ([9502a06](https://github.com/bitnami/charts/commit/9502a066497ae0aa77223e5d2733dcdde129230f)), closes [#31895](https://github.com/bitnami/charts/issues/31895)
+
+## <small>1.3.5 (2025-02-05)</small>
+
+* [bitnami/kuberay] Release 1.3.5 (#31766) ([4cee30e](https://github.com/bitnami/charts/commit/4cee30e10cb7ee2c57e38b6ffad000f685e05b95)), closes [#31766](https://github.com/bitnami/charts/issues/31766)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.3.4 (2025-01-24)</small>
+
+* [bitnami/kuberay] Release 1.3.4 (#31566) ([2e9f322](https://github.com/bitnami/charts/commit/2e9f32244b3da94655726be429e0603396b37433)), closes [#31566](https://github.com/bitnami/charts/issues/31566)
+
+## <small>1.3.3 (2025-01-20)</small>
+
+* [bitnami/kuberay] Adding the list and watch for endpoints resource to the cluster role to solve #306 ([173f920](https://github.com/bitnami/charts/commit/173f9209b057ea150870a867258e8cbc345a3c3e)), closes [#30648](https://github.com/bitnami/charts/issues/30648) [#31226](https://github.com/bitnami/charts/issues/31226) [#30648](https://github.com/bitnami/charts/issues/30648)
+
+## <small>1.3.2 (2025-01-17)</small>
+
+* [bitnami/kuberay] Release 1.3.2 (#31429) ([e444d5f](https://github.com/bitnami/charts/commit/e444d5fd384a6f6191f6dd2234752f4fd4b40230)), closes [#31429](https://github.com/bitnami/charts/issues/31429)
+
+## <small>1.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kuberay] Release 1.3.1 (#31319) ([83e9735](https://github.com/bitnami/charts/commit/83e9735310a4599d4da2f070e4fbd8934a4a04da)), closes [#31319](https://github.com/bitnami/charts/issues/31319)
+
+## 1.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kuberay] Detect non-standard images (#30918) ([a9558bc](https://github.com/bitnami/charts/commit/a9558bc475d78cbb012de01d09b04df980a7aec9)), closes [#30918](https://github.com/bitnami/charts/issues/30918)
+
+## <small>1.2.20 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kuberay] Release 1.2.20 (#30760) ([957d8a1](https://github.com/bitnami/charts/commit/957d8a193b23382675b451452ce0197ff03f081c)), closes [#30760](https://github.com/bitnami/charts/issues/30760)
+
+## <small>1.2.19 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kuberay] Release 1.2.19 (#30278) ([f923bc9](https://github.com/bitnami/charts/commit/f923bc9d4a3120b8787da2e1d1db712e132897bc)), closes [#30278](https://github.com/bitnami/charts/issues/30278)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
 
 ## <small>1.2.18 (2024-10-02)</small>
 

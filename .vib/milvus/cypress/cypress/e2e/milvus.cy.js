@@ -25,18 +25,6 @@ it('allows to create a collection', () => {
     cy.get('div[class*="MuiTextField"]').contains('div','Vector Field').within(() => {
       cy.get('input').type(`${c.collection.vectorName}${random}{enter}`);
     });
-    // Create collection index and load
-    cy.get(`[href$="${c.collection.name}${random}/overview"]`).click({force: true});
-    // Reload and wait for DOM content load
-    cy.wait(50000);
-    cy.get('button').contains('Create Index').click({force: true});
-    cy.get('[data-cy="index_name"]').type(`${c.collection.idName}{enter}`);
-    cy.wait(25000);
-    cy.contains('unloaded').click({force: true});
-    cy.get('button').contains('Load').click({force: true});
-    cy.contains('loaded');
-    // Add sample data
-    cy.reload();
     cy.wait(50000);
     cy.get('button[class*=MuiTab-root]').contains('Data').click({force: true});
     cy.get('span').contains('Insert Sample Data').click({force: true});

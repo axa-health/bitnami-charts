@@ -14,6 +14,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-prometheus
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.prometheus-operator-cnab) to see the listing on Azure Marketplace.
+
 Looking to use Prometheus Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
@@ -29,8 +31,6 @@ In the default configuration the chart deploys the following components on the K
 > **:warning: IMPORTANT**
 
 Only one instance of the Prometheus Operator component should be running in the cluster. If you wish to deploy this chart to **manage multiple instances** of Prometheus in your Kubernetes cluster, you **have to disable** the installation of the Prometheus Operator component using the `operator.enabled=false` chart installation argument.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ The command deploys kube-prometheus on the Kubernetes cluster in the default con
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
@@ -111,6 +111,10 @@ prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus
 prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Set Pod affinity
 
 This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -121,12 +125,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -294,6 +299,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                            | `""`                         |
 | `prometheus.image.pullPolicy`                                         | Prometheus image pull policy                                                                                                                                                                                                                          | `IfNotPresent`               |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                         |
+| `prometheus.defaultRules.create`                                      | Create default rules for Prometheus                                                                                                                                                                                                                   | `true`                       |
+| `prometheus.defaultRules.rules`                                       | Set of default rules for Prometheus that can be enabled/disabled                                                                                                                                                                                      | `{}`                         |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                                                                                                                                             | `true`                       |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                                                                                                                                              | `""`                         |
 | `prometheus.serviceAccount.annotations`                               | Additional annotations for created Prometheus ServiceAccount                                                                                                                                                                                          | `{}`                         |
@@ -428,6 +435,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.shards`                                                   | Number of Prometheus shards desired                                                                                                                                                                                                                   | `1`                          |
 | `prometheus.logLevel`                                                 | Log level for Prometheus                                                                                                                                                                                                                              | `info`                       |
 | `prometheus.logFormat`                                                | Log format for Prometheus                                                                                                                                                                                                                             | `logfmt`                     |
+| `prometheus.nameValidationScheme`                                     | Specifies the validation scheme for metric and label names                                                                                                                                                                                            | `UTF8`                       |
 | `prometheus.podMetadata`                                              | Standard object's metadata                                                                                                                                                                                                                            | `{}`                         |
 | `prometheus.remoteRead`                                               | The remote_read spec configuration for Prometheus                                                                                                                                                                                                     | `[]`                         |
 | `prometheus.remoteWrite`                                              | The remote_write spec configuration for Prometheus                                                                                                                                                                                                    | `[]`                         |
@@ -930,6 +938,14 @@ While upgrading a chart, please note that there are certain limitations to upgra
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the kube-state-metrics subchart to its newest major, 5.0.0. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-500).
+
+### To 10.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ```console
 helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
 ```
@@ -1090,7 +1106,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://REGISTRY_NAME/
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

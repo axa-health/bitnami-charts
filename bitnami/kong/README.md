@@ -22,8 +22,6 @@ This chart bootstraps a [kong](https://github.com/bitnami/containers/tree/main/b
 
 Extra functionalities beyond the Kong core are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -50,13 +48,31 @@ These commands deploy kong on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will enable Kong native prometheus port in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Database backend
 
@@ -113,6 +129,10 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
 
 Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://legacy-gateway--kongdocs.netlify.app/gateway-oss/1.1.x/db-less-and-declarative-config/)).
 As is said in step 4 of [kong official docker installation](https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/#declarative-configuration), just add the env variable "KONG_DATABASE=off".
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 #### How to enable it
 
@@ -207,24 +227,27 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                     | Description                                                                                               | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                                                | `[]`            |
 | `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
 | `commonAnnotations`      | Common annotations to add to all Kong resources (sub-charts are not considered). Evaluated as a template  | `{}`            |
 | `commonLabels`           | Common labels to add to all Kong resources (sub-charts are not considered). Evaluated as a template       | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain                                                                                 | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).                              | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the daemonset/deployment                                            | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the daemonset/deployment                                               | `["infinity"]`  |
@@ -458,7 +481,6 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `postgresql.auth.password`                      | Password for the custom user to create                                                                                                                                                                                     | `""`         |
 | `postgresql.auth.database`                      | Name for a custom database to create                                                                                                                                                                                       | `kong`       |
 | `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials                                                                                                                                                                  | `""`         |
-| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable                                                                                                                                                      | `false`      |
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                                                                                                                                    | `standalone` |
 | `postgresql.primary.resourcesPreset`            | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `nano`       |
 | `postgresql.primary.resources`                  | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`         |
@@ -478,7 +500,6 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `cassandra.dbUser.user`                        | Cassandra admin user                                                                                                                                                                                       | `kong`  |
 | `cassandra.dbUser.password`                    | Password for `cassandra.dbUser.user`. Randomly generated if empty                                                                                                                                          | `""`    |
 | `cassandra.dbUser.existingSecret`              | Name of existing secret to use for Cassandra credentials                                                                                                                                                   | `""`    |
-| `cassandra.usePasswordFile`                    | Mount credentials as a files instead of using an environment variable                                                                                                                                      | `false` |
 | `cassandra.replicaCount`                       | Number of Cassandra replicas                                                                                                                                                                               | `1`     |
 | `cassandra.external.hosts`                     | List of Cassandra hosts                                                                                                                                                                                    | `[]`    |
 | `cassandra.external.port`                      | Cassandra port number                                                                                                                                                                                      | `9042`  |
@@ -537,6 +558,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
@@ -688,7 +713,7 @@ In order to properly migrate your data to this new version:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
